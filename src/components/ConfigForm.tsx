@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
+import { AIIcon } from '@/lib/icons';
 
 interface ConfigFormProps {
   onConfigChange: (config: ButtonConfig) => void;
@@ -22,6 +23,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     { value: 'claude', label: 'Claude' },
     { value: 'perplexity', label: 'Perplexity' },
     { value: 'gemini', label: 'Gemini' },
+    { value: 'grok', label: 'Grok' },
   ] as const;
 
   const handleAIToggle = (aiValue: typeof aiOptions[number]['value']) => {
@@ -95,7 +97,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           {aiOptions.map((option) => (
             <label
               key={option.value}
-              className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+              className="flex items-center space-x-3 cursor-pointer p-2 rounded-md hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
             >
               <input
                 type="checkbox"
@@ -103,6 +105,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                 onChange={() => handleAIToggle(option.value)}
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
               />
+              <AIIcon ai={option.value} className="w-5 h-5 text-gray-700 dark:text-slate-300" />
               <span className="text-sm text-gray-900 dark:text-slate-100 transition-colors">
                 {option.label}
               </span>

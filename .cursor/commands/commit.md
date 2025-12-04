@@ -1,3 +1,3 @@
 # commit
 
-Provide professional commit message.
+Provide professional concise commit message.

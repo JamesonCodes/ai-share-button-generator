@@ -1,4 +1,4 @@
-export type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini';
+export type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'grok';
 
 export interface ButtonConfig {
   style: 'minimal' | 'icon' | 'pill';
@@ -27,10 +27,10 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
   if (config.ai) {
     if (Array.isArray(config.ai)) {
       aiArray = config.ai.filter((a): a is AIDestination => 
-        ['chatgpt', 'claude', 'perplexity', 'gemini'].includes(a)
+        ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
       );
       if (aiArray.length === 0) aiArray = defaultConfig.ai;
-    } else if (typeof config.ai === 'string' && ['chatgpt', 'claude', 'perplexity', 'gemini'].includes(config.ai)) {
+    } else if (typeof config.ai === 'string' && ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(config.ai)) {
       // Legacy support: single string
       aiArray = [config.ai as AIDestination];
     }

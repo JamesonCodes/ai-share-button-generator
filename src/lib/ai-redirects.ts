@@ -1,4 +1,4 @@
-export type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini';
+export type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'grok';
 
 export interface RedirectParams {
   url: string;
@@ -88,6 +88,26 @@ export function buildGeminiUrl(params: RedirectParams): string {
 }
 
 /**
+ * Builds a Grok URL with pre-filled prompt
+ */
+export function buildGrokUrl(params: RedirectParams): string {
+  const { url, text, actionText } = params;
+  let prompt = `Analyze the following content from this URL: ${url}`;
+  
+  if (text) {
+    prompt += `. Text selection: ${text}`;
+  }
+  
+  if (actionText) {
+    prompt += `. ${actionText}`;
+  }
+  
+  // Grok (X/Twitter) web interface
+  const encodedPrompt = encodeURIComponent(prompt);
+  return `https://x.com/i/grok?q=${encodedPrompt}`;
+}
+
+/**
  * Builds redirect URL based on AI destination
  */
 export function buildAIRedirectUrl(
@@ -103,6 +123,8 @@ export function buildAIRedirectUrl(
       return buildPerplexityUrl(params);
     case 'gemini':
       return buildGeminiUrl(params);
+    case 'grok':
+      return buildGrokUrl(params);
     default:
       return buildChatGPTUrl(params);
   }

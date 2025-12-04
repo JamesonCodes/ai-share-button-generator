@@ -1,6 +1,7 @@
 'use client';
 
 import type { ButtonConfig } from '@/lib/config-validator';
+import { AIIcon } from '@/lib/icons';
 
 interface PreviewButtonProps {
   config: ButtonConfig;
@@ -26,6 +27,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     claude: 'Claude',
     perplexity: 'Perplexity',
     gemini: 'Gemini',
+    grok: 'Grok',
   };
 
   return (
@@ -35,25 +37,11 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
         {config.ai.map((ai) => (
           <button
             key={ai}
-            className={`${baseClasses} ${sizeClasses} ${styleClasses}`}
+            className={`${baseClasses} ${sizeClasses} ${styleClasses} gap-1.5`}
             style={buttonStyle}
             disabled
           >
-            {config.style === 'icon' && (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="mr-1.5"
-              >
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5"></path>
-                <path d="M2 12l10 5 10-5"></path>
-              </svg>
-            )}
+            <AIIcon ai={ai} className="w-4 h-4" />
             {config.action || 'Share'} with {aiLabels[ai] || ai}
           </button>
         ))}
