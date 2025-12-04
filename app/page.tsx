@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import ConfigForm from '@/components/ConfigForm';
-import PreviewButton from '@/components/PreviewButton';
 import CodeOutput from '@/components/CodeOutput';
 import ThemeToggle from '@/components/ThemeToggle';
 import { generateCodeSnippets } from '@/lib/button-generator';
@@ -45,18 +44,10 @@ export default function Home() {
             </p>
           </header>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Configuration Panel */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Configuration</h2>
-              <ConfigForm onConfigChange={handleConfigChange} />
-            </div>
-
-            {/* Preview Panel */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Preview</h2>
-              <PreviewButton config={config} />
-            </div>
+          {/* Configuration Panel */}
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Configuration</h2>
+            <ConfigForm onConfigChange={handleConfigChange} />
           </div>
 
           {/* Code Output */}
