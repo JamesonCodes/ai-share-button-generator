@@ -4,12 +4,11 @@
 type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'grok';
 
 interface ButtonConfig {
-  style: 'minimal' | 'icon' | 'pill';
-  color: string;
-  size: 'small' | 'medium' | 'large';
+  url: string;
+  brandName: string;
   ai: AIDestination[];
-  action: string;
-  placement: 'floating' | 'inline';
+  promptTemplate?: string;
+  contentType?: string;
 }
 
 function getConfig(): ButtonConfig {
@@ -21,73 +20,59 @@ function getConfig(): ButtonConfig {
   // Parse AI destinations (comma-separated)
   const aiAttr = script.getAttribute('data-ai') || 'chatgpt';
   const aiArray = aiAttr.split(',').map(a => a.trim()).filter((a): a is AIDestination => 
-    ['chatgpt', 'claude', 'perplexity', 'gemini'].includes(a)
+    ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
   );
   const ai = aiArray.length > 0 ? aiArray : ['chatgpt'];
 
   return {
-    style: (script.getAttribute('data-style') as any) || 'minimal',
-    color: script.getAttribute('data-color') || '#3b82f6',
-    size: (script.getAttribute('data-size') as any) || 'medium',
+    url: script.getAttribute('data-url') || '',
+    brandName: script.getAttribute('data-brand') || '',
     ai,
-    action: script.getAttribute('data-action') || 'Summarize',
-    placement: (script.getAttribute('data-placement') as any) || 'floating',
+    promptTemplate: script.getAttribute('data-prompt-template') || undefined,
+    contentType: script.getAttribute('data-content-type') || undefined,
   };
 }
 
 function getDefaultConfig(): ButtonConfig {
   return {
-    style: 'minimal',
-    color: '#3b82f6',
-    size: 'medium',
+    url: '',
+    brandName: '',
     ai: ['chatgpt'],
-    action: 'Summarize',
-    placement: 'floating',
   };
 }
 
-function findArticleContainer(): HTMLElement | null {
-  // Check for manual marker first
-  const manualMarker = document.querySelector('[data-ai-share-button]');
-  if (manualMarker) {
-    return manualMarker as HTMLElement;
+function replacePromptPlaceholders(
+  template: string,
+  url: string,
+  brandName?: string
+): string {
+  let prompt = template;
+  
+  // Replace {URL} with actual URL
+  prompt = prompt.replace(/{URL}/g, url);
+  
+  // Replace {BRAND} with brand name or remove placeholder
+  if (brandName) {
+    prompt = prompt.replace(/{BRAND}/g, brandName);
+  } else {
+    prompt = prompt.replace(/\s*\{BRAND\}/g, '');
   }
-
-  // Check for article element
-  const article = document.querySelector('article');
-  if (article) {
-    return article;
-  }
-
-  // Check common blog selectors
-  const selectors = [
-    '.post-content',
-    '.blog-article',
-    '.prose',
-    '[role="article"]',
-    '.entry-content',
-    '.article-content',
-    '.content',
-  ];
-
-  for (const selector of selectors) {
-    const element = document.querySelector(selector);
-    if (element) {
-      return element as HTMLElement;
-    }
-  }
-
-  return null;
+  
+  return prompt.trim();
 }
 
-function buildAIRedirectUrl(destination: string, url: string, text: string, action: string): string {
-  let prompt = `Analyze the following content from this URL: ${url}`;
-  if (text) {
-    prompt += `. Text selection: ${text}`;
-  }
-  if (action) {
-    prompt += `. ${action}`;
-  }
+function buildAIRedirectUrl(
+  destination: string,
+  config: ButtonConfig
+): string {
+  const defaultTemplate = `Analyze the following content from this URL: {URL}`;
+  const template = config.promptTemplate || defaultTemplate;
+  
+  const prompt = replacePromptPlaceholders(
+    template,
+    config.url,
+    config.brandName
+  );
 
   const encodedPrompt = encodeURIComponent(prompt);
 
@@ -107,64 +92,43 @@ function buildAIRedirectUrl(destination: string, url: string, text: string, acti
   }
 }
 
-function getSelectedText(): string {
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) {
-    return '';
-  }
-  return selection.toString().trim();
-}
-
-function getButtonStyles(config: ButtonConfig): string {
-  const sizeMap = {
-    small: { padding: '6px 12px', fontSize: '12px' },
-    medium: { padding: '8px 16px', fontSize: '14px' },
-    large: { padding: '12px 24px', fontSize: '16px' },
-  };
-
-  const size = sizeMap[config.size];
-  const baseStyles = `
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: ${size.padding};
-    font-size: ${size.fontSize};
-    font-weight: 500;
-    color: white;
-    background-color: ${config.color};
-    border: none;
-    border-radius: ${config.style === 'pill' ? '9999px' : '6px'};
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  `;
-
-  const hoverStyles = `
-    opacity: 0.9;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  `;
-
+function getButtonStyles(): string {
   return `
     .ai-share-button {
-      ${baseStyles}
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      background-color: #3b82f6;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
     .ai-share-button:hover {
-      ${hoverStyles}
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     .ai-share-button:active {
       transform: translateY(0);
     }
-    .ai-share-button-floating {
+    .ai-share-button-container {
       position: fixed;
       bottom: 20px;
       right: 20px;
       z-index: 9999;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     @media (max-width: 768px) {
-      .ai-share-button-floating {
+      .ai-share-button-container {
         bottom: 16px;
         right: 16px;
       }
@@ -192,12 +156,7 @@ function createButton(config: ButtonConfig, aiDestination: AIDestination): HTMLB
   const button = document.createElement('button');
   button.className = 'ai-share-button';
   
-  if (config.placement === 'floating') {
-    button.classList.add('ai-share-button-floating');
-  }
-
-  const actionText = config.action || 'Share';
-  const buttonText = `${actionText} with ${aiLabels[aiDestination] || aiDestination}`;
+  const buttonText = `Share with ${aiLabels[aiDestination] || aiDestination}`;
   
   // Add AI logo icon
   const iconSvg = aiIconSvgs[aiDestination];
@@ -209,12 +168,11 @@ function createButton(config: ButtonConfig, aiDestination: AIDestination): HTMLB
   }
   
   // Add button text
-  button.appendChild(document.createTextNode(buttonText));
+  const textNode = document.createTextNode(buttonText);
+  button.appendChild(textNode);
 
+  const redirectUrl = buildAIRedirectUrl(aiDestination, config);
   button.addEventListener('click', () => {
-    const url = window.location.href;
-    const selectedText = getSelectedText();
-    const redirectUrl = buildAIRedirectUrl(aiDestination, url, selectedText, config.action);
     window.open(redirectUrl, '_blank', 'noopener,noreferrer');
   });
 
@@ -235,60 +193,33 @@ function injectStyles(css: string): void {
 
 function init(): void {
   const config = getConfig();
-  const container = findArticleContainer();
 
-  if (!container && config.placement === 'inline') {
-    // Can't find container for inline placement, skip
+  if (!config.url) {
+    console.warn('AI Share Button: data-url attribute is required');
     return;
   }
 
-  // Inject styles
-  const styles = getButtonStyles(config);
+  if (!config.brandName) {
+    console.warn('AI Share Button: data-brand attribute is required');
+    return;
+  }
+
+  // Inject default styles
+  const styles = getButtonStyles();
   injectStyles(styles);
 
   // Create buttons for each AI destination
   const buttons = config.ai.map(ai => createButton(config, ai));
 
-  if (config.placement === 'floating') {
-    // Create a container for floating buttons
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'ai-share-button-container';
-    buttonContainer.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px;';
-    
-    // Add responsive styles for mobile
-    const mobileStyles = `
-      @media (max-width: 768px) {
-        .ai-share-button-container {
-          bottom: 16px;
-          right: 16px;
-        }
-      }
-    `;
-    const existingStyle = document.getElementById('ai-share-button-styles');
-    if (existingStyle) {
-      existingStyle.textContent += mobileStyles;
-    }
-
-    buttons.forEach(button => {
-      button.classList.remove('ai-share-button-floating');
-      buttonContainer.appendChild(button);
-    });
-    document.body.appendChild(buttonContainer);
-  } else if (container) {
-    // For inline placement, create a wrapper div
-    const buttonWrapper = document.createElement('div');
-    buttonWrapper.className = 'ai-share-button-wrapper';
-    buttonWrapper.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;';
-    
-    buttons.forEach(button => buttonWrapper.appendChild(button));
-
-    // Replace manual marker or append to container
-    if (container.hasAttribute('data-ai-share-button')) {
-      container.replaceWith(buttonWrapper);
-    } else {
-      container.appendChild(buttonWrapper);
-    }
-  }
+  // Create a container for floating buttons
+  const buttonContainer = document.createElement('div');
+  buttonContainer.className = 'ai-share-button-container';
+  buttonContainer.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px;';
+  
+  buttons.forEach(button => {
+    buttonContainer.appendChild(button);
+  });
+  document.body.appendChild(buttonContainer);
 }
 
 // Run when DOM is ready
@@ -297,4 +228,3 @@ if (document.readyState === 'loading') {
 } else {
   init();
 }
-

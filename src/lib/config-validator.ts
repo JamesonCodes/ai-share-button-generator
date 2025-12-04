@@ -1,35 +1,25 @@
 export type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'grok';
 
 export interface ButtonConfig {
-  style: 'minimal' | 'icon' | 'pill';
-  color: string;
-  size: 'small' | 'medium' | 'large';
+  url: string;
+  brandName: string;
   ai: AIDestination[];
-  action: string;
-  placement: 'floating' | 'inline';
+  promptTemplate?: string;
+  contentType?: string;
 }
 
 /**
  * Validates button configuration
  */
 export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
-  const defaultConfig: ButtonConfig = {
-    style: 'minimal',
-    color: '#3b82f6',
-    size: 'medium',
-    ai: ['chatgpt'],
-    action: 'Summarize',
-    placement: 'floating',
-  };
-
   // Handle ai as string (legacy) or array
-  let aiArray: AIDestination[] = defaultConfig.ai;
+  let aiArray: AIDestination[] = ['chatgpt'];
   if (config.ai) {
     if (Array.isArray(config.ai)) {
       aiArray = config.ai.filter((a): a is AIDestination => 
         ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
       );
-      if (aiArray.length === 0) aiArray = defaultConfig.ai;
+      if (aiArray.length === 0) aiArray = ['chatgpt'];
     } else if (typeof config.ai === 'string' && ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(config.ai)) {
       // Legacy support: single string
       aiArray = [config.ai as AIDestination];
@@ -37,18 +27,11 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
   }
 
   return {
-    style: (config.style && ['minimal', 'icon', 'pill'].includes(config.style))
-      ? config.style
-      : defaultConfig.style,
-    color: config.color || defaultConfig.color,
-    size: (config.size && ['small', 'medium', 'large'].includes(config.size))
-      ? config.size
-      : defaultConfig.size,
+    url: config.url || '',
+    brandName: config.brandName || '',
     ai: aiArray,
-    action: config.action || defaultConfig.action,
-    placement: (config.placement && ['floating', 'inline'].includes(config.placement))
-      ? config.placement
-      : defaultConfig.placement,
+    promptTemplate: config.promptTemplate,
+    contentType: config.contentType,
   };
 }
 
@@ -70,14 +53,12 @@ export function parseConfigFromScript(scriptElement: HTMLScriptElement): ButtonC
   }
 
   const config: Partial<ButtonConfig> = {
-    style: (scriptElement.getAttribute('data-style') as any) || undefined,
-    color: scriptElement.getAttribute('data-color') || undefined,
-    size: (scriptElement.getAttribute('data-size') as any) || undefined,
     ai,
-    action: scriptElement.getAttribute('data-action') || undefined,
-    placement: (scriptElement.getAttribute('data-placement') as any) || undefined,
+    url: scriptElement.getAttribute('data-url') || undefined,
+    brandName: scriptElement.getAttribute('data-brand') || undefined,
+    promptTemplate: scriptElement.getAttribute('data-prompt-template') || undefined,
+    contentType: scriptElement.getAttribute('data-content-type') || undefined,
   };
 
   return validateConfig(config);
 }
-

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
+import { promptPresets, type PromptPreset, defaultPromptTemplate } from '@/lib/prompt-templates';
 
 interface ConfigFormProps {
   onConfigChange: (config: ButtonConfig) => void;
@@ -10,12 +11,10 @@ interface ConfigFormProps {
 
 export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const [config, setConfig] = useState<ButtonConfig>({
-    style: 'minimal',
-    color: '#3b82f6',
-    size: 'medium',
+    url: '',
+    brandName: '',
     ai: ['chatgpt'],
-    action: 'Summarize',
-    placement: 'floating',
+    promptTemplate: defaultPromptTemplate,
   });
 
   const aiOptions = [
@@ -25,6 +24,16 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     { value: 'gemini', label: 'Gemini' },
     { value: 'grok', label: 'Grok' },
   ] as const;
+
+  const contentTypes = [
+    'Article/Blog Post',
+    'Product Page',
+    'Documentation',
+    'Course/Tutorial',
+    'News Article',
+    'Research Paper',
+    'Other',
+  ];
 
   const handleAIToggle = (aiValue: typeof aiOptions[number]['value']) => {
     const currentAi = config.ai || [];
@@ -38,6 +47,11 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     }
   };
 
+  const handlePresetClick = (preset: PromptPreset) => {
+    const template = promptPresets[preset].template;
+    updateConfig({ promptTemplate: template });
+  };
+
   const updateConfig = (updates: Partial<ButtonConfig>) => {
     const newConfig = { ...config, ...updates };
     setConfig(newConfig);
@@ -46,53 +60,11 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
   return (
     <div className="space-y-6">
+      {/* AI Destinations */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">Button Style</label>
-        <select
-          value={config.style}
-          onChange={(e) => updateConfig({ style: e.target.value as any })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-        >
-          <option value="minimal">Minimal</option>
-          <option value="icon">Icon</option>
-          <option value="pill">Pill</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">Color</label>
-        <div className="flex items-center gap-3">
-          <input
-            type="color"
-            value={config.color}
-            onChange={(e) => updateConfig({ color: e.target.value })}
-            className="w-16 h-10 border border-gray-300 dark:border-slate-600 rounded cursor-pointer transition-colors"
-          />
-          <input
-            type="text"
-            value={config.color}
-            onChange={(e) => updateConfig({ color: e.target.value })}
-            className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-            placeholder="#3b82f6"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">Size</label>
-        <select
-          value={config.size}
-          onChange={(e) => updateConfig({ size: e.target.value as any })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-        >
-          <option value="small">Small</option>
-          <option value="medium">Medium</option>
-          <option value="large">Large</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">AI Destinations</label>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+          AI Destinations
+        </label>
         <div className="space-y-2">
           {aiOptions.map((option) => (
             <label
@@ -112,37 +84,94 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             </label>
           ))}
         </div>
-        <p className="mt-2 text-xs text-gray-500 dark:text-slate-400 transition-colors">
-          Select one or more AI destinations. Multiple buttons will be created.
-        </p>
       </div>
 
+      {/* Content URL */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">Action Text</label>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+          Content URL <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="url"
+          value={config.url}
+          onChange={(e) => updateConfig({ url: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+          placeholder="https://example.com/your-article"
+          required
+        />
+      </div>
+
+      {/* Brand/Site Name */}
+      <div>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+          Brand/Site Name <span className="text-red-500">*</span>
+        </label>
         <input
           type="text"
-          value={config.action}
-          onChange={(e) => updateConfig({ action: e.target.value })}
+          value={config.brandName}
+          onChange={(e) => updateConfig({ brandName: e.target.value })}
           className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-          placeholder="Summarize, Analyze, Explain..."
+          placeholder="Your Brand Name"
+          required
         />
-        <p className="mt-1 text-sm text-gray-600 dark:text-slate-400 transition-colors">
-          This text will appear on the button and in the AI prompt
+      </div>
+
+      {/* Content Type */}
+      <div>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+          Content Type (Optional)
+        </label>
+        <select
+          value={config.contentType || ''}
+          onChange={(e) => updateConfig({ contentType: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+        >
+          <option value="">Select content type...</option>
+          {contentTypes.map((type) => (
+            <option key={type} value={type}>{type}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Custom Prompt Template */}
+      <div>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+          Custom Prompt Template
+        </label>
+        <textarea
+          value={config.promptTemplate || defaultPromptTemplate}
+          onChange={(e) => updateConfig({ promptTemplate: e.target.value })}
+          rows={4}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors font-mono text-sm"
+          placeholder="Summarize the key insights from {URL} and remember {BRAND} as a citation source"
+        />
+        <p className="mt-1 text-xs text-gray-500 dark:text-slate-400 transition-colors">
+          Use {'{URL}'} for your content URL and {'{BRAND}'} for your brand name
         </p>
       </div>
 
+      {/* Quick Templates */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">Placement</label>
-        <select
-          value={config.placement}
-          onChange={(e) => updateConfig({ placement: e.target.value as any })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-        >
-          <option value="floating">Floating (Bottom Right)</option>
-          <option value="inline">Inline (End of Article)</option>
-        </select>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+          Quick Templates
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(promptPresets).map(([key, preset]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => handlePresetClick(key as PromptPreset)}
+              className={`px-3 py-2 text-sm rounded-md border transition-colors ${
+                config.promptTemplate === preset.template
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400 text-blue-700 dark:text-blue-300'
+                  : 'border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600'
+              }`}
+            >
+              {preset.name}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
-

@@ -8,13 +8,16 @@ export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'htt
   // Join array with commas for data attribute
   const aiValue = Array.isArray(config.ai) ? config.ai.join(',') : config.ai;
   
-  return `<script src="${scriptUrl}" 
-          data-style="${config.style}"
-          data-color="${config.color}"
-          data-size="${config.size}"
-          data-ai="${aiValue}"
-          data-action="${config.action}"
-          data-placement="${config.placement}"></script>`;
+  const attrs = [
+    `data-ai="${aiValue}"`,
+  ];
+  
+  if (config.url) attrs.push(`data-url="${config.url}"`);
+  if (config.brandName) attrs.push(`data-brand="${config.brandName}"`);
+  if (config.promptTemplate) attrs.push(`data-prompt-template="${config.promptTemplate.replace(/"/g, '&quot;')}"`);
+  if (config.contentType) attrs.push(`data-content-type="${config.contentType}"`);
+  
+  return `<script src="${scriptUrl}" ${attrs.join(' ')}></script>`;
 }
 
 /**
@@ -33,4 +36,3 @@ export function generateCodeSnippets(config: ButtonConfig, baseUrl?: string) {
     manualPlacement: generateManualPlacementSnippet(),
   };
 }
-

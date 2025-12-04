@@ -10,12 +10,9 @@ import type { ButtonConfig } from '@/lib/config-validator';
 
 export default function Home() {
   const [config, setConfig] = useState<ButtonConfig>({
-    style: 'minimal',
-    color: '#3b82f6',
-    size: 'medium',
+    url: '',
+    brandName: '',
     ai: ['chatgpt'],
-    action: 'Summarize',
-    placement: 'floating',
   });
 
   const [baseUrl, setBaseUrl] = useState('');
@@ -31,7 +28,7 @@ export default function Home() {
     setConfig(newConfig);
   };
 
-  const { embedScript, manualPlacement } = generateCodeSnippets(config, baseUrl);
+  const { embedScript } = generateCodeSnippets(config, baseUrl);
 
   return (
     <>
@@ -65,18 +62,19 @@ export default function Home() {
           {/* Code Output */}
           <div className="mt-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
             <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Embed Code</h2>
-            <CodeOutput embedScript={embedScript} manualPlacement={manualPlacement} />
+            <CodeOutput embedScript={embedScript} />
           </div>
 
           {/* Instructions */}
           <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800 transition-colors">
             <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-3 transition-colors">How to Use</h3>
             <ol className="list-decimal list-inside space-y-2 text-blue-800 dark:text-blue-200 transition-colors">
-              <li>Configure your button style, color, size, and AI destination above</li>
-              <li>Copy the &quot;Global Header Script&quot; code</li>
-              <li>Paste it into your site&apos;s global header or footer (WordPress: Header & Footer plugin, Webflow: Site Settings → Custom Code)</li>
-              <li>The button will automatically appear on pages with blog post content</li>
-              <li>For manual placement, use the &quot;Manual Placement&quot; snippet in your template</li>
+              <li>Enter your content URL and brand name</li>
+              <li>Customize your prompt template or use a preset (Summarize, Analyze, etc.)</li>
+              <li>Select which AI platforms you want to share to</li>
+              <li>Copy the generated script code</li>
+              <li>Paste it into the HTML of the specific page where you want the share button</li>
+              <li>The button will share that specific URL with your custom prompt</li>
             </ol>
           </div>
         </div>
@@ -84,4 +82,3 @@ export default function Home() {
     </>
   );
 }
-
