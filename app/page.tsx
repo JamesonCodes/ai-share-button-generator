@@ -48,20 +48,20 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Configuration Panel */}
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold mb-6">Configuration</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Configuration</h2>
             <ConfigForm onConfigChange={handleConfigChange} />
           </div>
 
           {/* Preview Panel */}
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold mb-6">Preview</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-6">Preview</h2>
             <PreviewButton config={config} />
           </div>
         </div>
 
         {/* Code Output */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-semibold mb-6">Embed Code</h2>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Embed Code</h2>
           <CodeOutput embedScript={embedScript} manualPlacement={manualPlacement} />
         </div>
 

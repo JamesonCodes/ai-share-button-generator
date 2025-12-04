@@ -24,7 +24,7 @@ export default function CodeOutput({ embedScript, manualPlacement }: CodeOutputP
     <div className="space-y-6">
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-medium">Global Header Script (Auto-detection)</label>
+          <label className="block text-sm font-medium text-gray-900">Global Header Script (Auto-detection)</label>
           <button
             onClick={() => copyToClipboard(embedScript, 'embed')}
             className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
@@ -42,7 +42,7 @@ export default function CodeOutput({ embedScript, manualPlacement }: CodeOutputP
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-medium">Manual Placement (Optional)</label>
+          <label className="block text-sm font-medium text-gray-900">Manual Placement (Optional)</label>
           <button
             onClick={() => copyToClipboard(manualPlacement, 'manual')}
             className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
