@@ -24,36 +24,36 @@ export default function CodeOutput({ embedScript, manualPlacement }: CodeOutputP
     <div className="space-y-6">
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-medium text-gray-900">Global Header Script (Auto-detection)</label>
+                  <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 transition-colors">Global Header Script (Auto-detection)</label>
           <button
             onClick={() => copyToClipboard(embedScript, 'embed')}
-            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            className="px-3 py-1 text-sm bg-blue-500 dark:bg-blue-600 text-white rounded hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
           >
             {copied === 'embed' ? 'Copied!' : 'Copy'}
           </button>
         </div>
-        <pre className="p-4 bg-gray-900 text-gray-100 rounded-md overflow-x-auto text-sm">
+        <pre className="p-4 bg-gray-900 dark:bg-slate-950 text-gray-100 dark:text-slate-200 rounded-md overflow-x-auto text-sm border border-gray-800 dark:border-slate-700 transition-colors">
           <code>{embedScript}</code>
         </pre>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-gray-600 dark:text-slate-400 transition-colors">
           Paste this script tag in your site&apos;s global header or footer
         </p>
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-medium text-gray-900">Manual Placement (Optional)</label>
+          <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 transition-colors">Manual Placement (Optional)</label>
           <button
             onClick={() => copyToClipboard(manualPlacement, 'manual')}
-            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            className="px-3 py-1 text-sm bg-blue-500 dark:bg-blue-600 text-white rounded hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
           >
             {copied === 'manual' ? 'Copied!' : 'Copy'}
           </button>
         </div>
-        <pre className="p-4 bg-gray-900 text-gray-100 rounded-md overflow-x-auto text-sm">
+        <pre className="p-4 bg-gray-900 dark:bg-slate-950 text-gray-100 dark:text-slate-200 rounded-md overflow-x-auto text-sm border border-gray-800 dark:border-slate-700 transition-colors">
           <code>{manualPlacement}</code>
         </pre>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-gray-600 dark:text-slate-400 transition-colors">
           Place this HTML where you want the button to appear (requires the script tag above)
         </p>
       </div>

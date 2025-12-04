@@ -22,8 +22,8 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
   };
 
   return (
-    <div className="p-8 bg-gray-50 rounded-lg border border-gray-200">
-      <p className="text-sm text-gray-600 mb-4">Preview:</p>
+    <div className="p-8 bg-gray-50 dark:bg-slate-900/50 rounded-lg border border-gray-200 dark:border-slate-700 transition-colors">
+      <p className="text-sm text-gray-600 dark:text-slate-400 mb-4 transition-colors">Preview:</p>
       <button
         className={`${baseClasses} ${sizeClasses} ${styleClasses}`}
         style={buttonStyle}
