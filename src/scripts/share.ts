@@ -1,11 +1,13 @@
 // AI Share Button Embed Script
 // This script is bundled and minified to public/share.js
 
+type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini';
+
 interface ButtonConfig {
   style: 'minimal' | 'icon' | 'pill';
   color: string;
   size: 'small' | 'medium' | 'large';
-  ai: 'chatgpt' | 'claude' | 'perplexity' | 'gemini';
+  ai: AIDestination[];
   action: string;
   placement: 'floating' | 'inline';
 }
@@ -16,11 +18,18 @@ function getConfig(): ButtonConfig {
     return getDefaultConfig();
   }
 
+  // Parse AI destinations (comma-separated)
+  const aiAttr = script.getAttribute('data-ai') || 'chatgpt';
+  const aiArray = aiAttr.split(',').map(a => a.trim()).filter((a): a is AIDestination => 
+    ['chatgpt', 'claude', 'perplexity', 'gemini'].includes(a)
+  );
+  const ai = aiArray.length > 0 ? aiArray : ['chatgpt'];
+
   return {
     style: (script.getAttribute('data-style') as any) || 'minimal',
     color: script.getAttribute('data-color') || '#3b82f6',
     size: (script.getAttribute('data-size') as any) || 'medium',
-    ai: (script.getAttribute('data-ai') as any) || 'chatgpt',
+    ai,
     action: script.getAttribute('data-action') || 'Summarize',
     placement: (script.getAttribute('data-placement') as any) || 'floating',
   };
@@ -31,7 +40,7 @@ function getDefaultConfig(): ButtonConfig {
     style: 'minimal',
     color: '#3b82f6',
     size: 'medium',
-    ai: 'chatgpt',
+    ai: ['chatgpt'],
     action: 'Summarize',
     placement: 'floating',
   };
@@ -161,7 +170,14 @@ function getButtonStyles(config: ButtonConfig): string {
   `;
 }
 
-function createButton(config: ButtonConfig): HTMLButtonElement {
+const aiLabels: Record<AIDestination, string> = {
+  chatgpt: 'ChatGPT',
+  claude: 'Claude',
+  perplexity: 'Perplexity',
+  gemini: 'Gemini',
+};
+
+function createButton(config: ButtonConfig, aiDestination: AIDestination): HTMLButtonElement {
   const button = document.createElement('button');
   button.className = 'ai-share-button';
   
@@ -169,7 +185,8 @@ function createButton(config: ButtonConfig): HTMLButtonElement {
     button.classList.add('ai-share-button-floating');
   }
 
-  const buttonText = config.action || 'Share with AI';
+  const actionText = config.action || 'Share';
+  const buttonText = `${actionText} with ${aiLabels[aiDestination] || aiDestination}`;
   
   if (config.style === 'icon') {
     // Create SVG element safely
@@ -204,7 +221,7 @@ function createButton(config: ButtonConfig): HTMLButtonElement {
   button.addEventListener('click', () => {
     const url = window.location.href;
     const selectedText = getSelectedText();
-    const redirectUrl = buildAIRedirectUrl(config.ai, url, selectedText, config.action);
+    const redirectUrl = buildAIRedirectUrl(aiDestination, url, selectedText, config.action);
     window.open(redirectUrl, '_blank', 'noopener,noreferrer');
   });
 
@@ -236,17 +253,47 @@ function init(): void {
   const styles = getButtonStyles(config);
   injectStyles(styles);
 
-  // Create button
-  const button = createButton(config);
+  // Create buttons for each AI destination
+  const buttons = config.ai.map(ai => createButton(config, ai));
 
   if (config.placement === 'floating') {
-    document.body.appendChild(button);
+    // Create a container for floating buttons
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'ai-share-button-container';
+    buttonContainer.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px;';
+    
+    // Add responsive styles for mobile
+    const mobileStyles = `
+      @media (max-width: 768px) {
+        .ai-share-button-container {
+          bottom: 16px;
+          right: 16px;
+        }
+      }
+    `;
+    const existingStyle = document.getElementById('ai-share-button-styles');
+    if (existingStyle) {
+      existingStyle.textContent += mobileStyles;
+    }
+
+    buttons.forEach(button => {
+      button.classList.remove('ai-share-button-floating');
+      buttonContainer.appendChild(button);
+    });
+    document.body.appendChild(buttonContainer);
   } else if (container) {
+    // For inline placement, create a wrapper div
+    const buttonWrapper = document.createElement('div');
+    buttonWrapper.className = 'ai-share-button-wrapper';
+    buttonWrapper.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px;';
+    
+    buttons.forEach(button => buttonWrapper.appendChild(button));
+
     // Replace manual marker or append to container
     if (container.hasAttribute('data-ai-share-button')) {
-      container.replaceWith(button);
+      container.replaceWith(buttonWrapper);
     } else {
-      container.appendChild(button);
+      container.appendChild(buttonWrapper);
     }
   }
 }

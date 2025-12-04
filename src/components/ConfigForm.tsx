@@ -12,10 +12,29 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     style: 'minimal',
     color: '#3b82f6',
     size: 'medium',
-    ai: 'chatgpt',
+    ai: ['chatgpt'],
     action: 'Summarize',
     placement: 'floating',
   });
+
+  const aiOptions = [
+    { value: 'chatgpt', label: 'ChatGPT' },
+    { value: 'claude', label: 'Claude' },
+    { value: 'perplexity', label: 'Perplexity' },
+    { value: 'gemini', label: 'Gemini' },
+  ] as const;
+
+  const handleAIToggle = (aiValue: typeof aiOptions[number]['value']) => {
+    const currentAi = config.ai || [];
+    const newAi = currentAi.includes(aiValue)
+      ? currentAi.filter(a => a !== aiValue)
+      : [...currentAi, aiValue];
+    
+    // Ensure at least one is selected
+    if (newAi.length > 0) {
+      updateConfig({ ai: newAi });
+    }
+  };
 
   const updateConfig = (updates: Partial<ButtonConfig>) => {
     const newConfig = { ...config, ...updates };
@@ -71,17 +90,28 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">AI Destination</label>
-        <select
-          value={config.ai}
-          onChange={(e) => updateConfig({ ai: e.target.value as any })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
-        >
-          <option value="chatgpt">ChatGPT</option>
-          <option value="claude">Claude</option>
-          <option value="perplexity">Perplexity</option>
-          <option value="gemini">Gemini</option>
-        </select>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">AI Destinations</label>
+        <div className="space-y-2">
+          {aiOptions.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
+            >
+              <input
+                type="checkbox"
+                checked={config.ai.includes(option.value)}
+                onChange={() => handleAIToggle(option.value)}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
+              />
+              <span className="text-sm text-gray-900 dark:text-slate-100 transition-colors">
+                {option.label}
+              </span>
+            </label>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-gray-500 dark:text-slate-400 transition-colors">
+          Select one or more AI destinations. Multiple buttons will be created.
+        </p>
       </div>
 
       <div>

@@ -13,7 +13,7 @@ export default function Home() {
     style: 'minimal',
     color: '#3b82f6',
     size: 'medium',
-    ai: 'chatgpt',
+    ai: ['chatgpt'],
     action: 'Summarize',
     placement: 'floating',
   });
