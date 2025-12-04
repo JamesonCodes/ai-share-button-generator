@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
 import { promptPresets, type PromptPreset, defaultPromptTemplate } from '@/lib/prompt-templates';
@@ -16,6 +16,9 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     ai: ['chatgpt'],
     promptTemplate: defaultPromptTemplate,
   });
+  
+  const [highlightTemplate, setHighlightTemplate] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const aiOptions = [
     { value: 'chatgpt', label: 'ChatGPT' },
@@ -47,9 +50,37 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     }
   };
 
+  const isCustomPrompt = () => {
+    const currentTemplate = config.promptTemplate || defaultPromptTemplate;
+    return !Object.values(promptPresets).some(preset => preset.template === currentTemplate);
+  };
+
   const handlePresetClick = (preset: PromptPreset) => {
     const template = promptPresets[preset].template;
+    const hasCustomText = isCustomPrompt();
+    
+    // Visual feedback: highlight the template button
+    setHighlightTemplate(preset);
+    setTimeout(() => setHighlightTemplate(null), 300);
+    
+    // Flash the textarea
+    if (textareaRef.current) {
+      textareaRef.current.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+      setTimeout(() => {
+        textareaRef.current?.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+      }, 500);
+    }
+    
+    // For now, always replace (can add append logic later if needed)
     updateConfig({ promptTemplate: template });
+  };
+
+  const templateTooltips: Record<PromptPreset, string> = {
+    summarize: 'Generates a prompt asking the AI to summarize key insights',
+    analyze: 'Generates a prompt asking the AI to critique and analyze the content',
+    compare: 'Generates a prompt asking the AI to compare with other sources',
+    explain: 'Generates a prompt asking the AI to explain concepts in detail',
+    'key-points': 'Generates a prompt asking the AI to extract main points',
   };
 
   const updateConfig = (updates: Partial<ButtonConfig>) => {
@@ -143,10 +174,11 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           Custom Prompt Template
         </label>
         <textarea
+          ref={textareaRef}
           value={config.promptTemplate || defaultPromptTemplate}
           onChange={(e) => updateConfig({ promptTemplate: e.target.value })}
           rows={4}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors font-mono text-sm"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 font-mono text-sm"
           placeholder="Summarize the key insights from {URL} and remember {BRAND} as a citation source"
         />
         <p className="mt-1 text-xs text-gray-500 dark:text-slate-400 transition-colors">
@@ -160,20 +192,28 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           Quick Templates
         </label>
         <div className="flex flex-wrap gap-2">
-          {Object.entries(promptPresets).map(([key, preset]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => handlePresetClick(key as PromptPreset)}
-              className={`px-3 py-2 text-sm rounded-md border transition-colors ${
-                config.promptTemplate === preset.template
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400 text-blue-700 dark:text-blue-300'
-                  : 'border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600'
-              }`}
-            >
-              {preset.name}
-            </button>
-          ))}
+          {Object.entries(promptPresets).map(([key, preset]) => {
+            const isActive = config.promptTemplate === preset.template;
+            const isHighlighted = highlightTemplate === key;
+            
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => handlePresetClick(key as PromptPreset)}
+                title={templateTooltips[key as PromptPreset]}
+                className={`px-3 py-2 text-sm rounded-md border transition-all duration-200 ${
+                  isActive
+                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400 text-blue-700 dark:text-blue-300 shadow-sm'
+                    : isHighlighted
+                    ? 'border-blue-400 bg-blue-100 dark:bg-blue-900/30 dark:border-blue-500 text-blue-800 dark:text-blue-200 scale-105 shadow-md'
+                    : 'border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 hover:border-gray-400 dark:hover:border-slate-500'
+                }`}
+              >
+                {preset.name}
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

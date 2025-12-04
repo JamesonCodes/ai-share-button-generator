@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ConfigForm from '@/components/ConfigForm';
+import PreviewButton from '@/components/PreviewButton';
 import CodeOutput from '@/components/CodeOutput';
 import ThemeToggle from '@/components/ThemeToggle';
 import { generateCodeSnippets } from '@/lib/button-generator';
@@ -27,13 +28,13 @@ export default function Home() {
     setConfig(newConfig);
   };
 
-  const { embedScript } = generateCodeSnippets(config, baseUrl);
+  const { embedScript, reactSnippet, vueSnippet } = generateCodeSnippets(config, baseUrl);
 
   return (
     <>
       <ThemeToggle />
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-200">
-        <div className="container mx-auto px-4 py-12 max-w-6xl">
+        <div className="container mx-auto px-4 py-12 max-w-7xl">
           <header className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-4 transition-colors">
               AI Share Button Generator
@@ -44,16 +45,28 @@ export default function Home() {
             </p>
           </header>
 
-          {/* Configuration Panel */}
-          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Configuration</h2>
-            <ConfigForm onConfigChange={handleConfigChange} />
-          </div>
+          {/* Two-Column Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Column: Configuration */}
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Configuration</h2>
+              <ConfigForm onConfigChange={handleConfigChange} />
+            </div>
 
-          {/* Code Output */}
-          <div className="mt-8 bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Embed Code</h2>
-            <CodeOutput embedScript={embedScript} />
+            {/* Right Column: Preview and Code */}
+            <div className="space-y-6">
+              {/* Live Preview */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Preview</h2>
+                <PreviewButton config={config} />
+              </div>
+
+              {/* Embed Code */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Embed Code</h2>
+                <CodeOutput embedScript={embedScript} reactSnippet={reactSnippet} vueSnippet={vueSnippet} />
+              </div>
+            </div>
           </div>
 
           {/* Instructions */}
