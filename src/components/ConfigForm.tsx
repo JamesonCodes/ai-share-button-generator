@@ -60,32 +60,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
   return (
     <div className="space-y-6">
-      {/* AI Destinations */}
-      <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
-          AI Destinations
-        </label>
-        <div className="space-y-2">
-          {aiOptions.map((option) => (
-            <label
-              key={option.value}
-              className="flex items-center space-x-3 cursor-pointer p-2 rounded-md hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
-            >
-              <input
-                type="checkbox"
-                checked={config.ai.includes(option.value)}
-                onChange={() => handleAIToggle(option.value)}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600"
-              />
-              <AIIcon ai={option.value} className="w-5 h-5 text-gray-700 dark:text-slate-300" />
-              <span className="text-sm text-gray-900 dark:text-slate-100 transition-colors">
-                {option.label}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
       {/* Content URL */}
       <div>
         <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
@@ -131,6 +105,36 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             <option key={type} value={type}>{type}</option>
           ))}
         </select>
+      </div>
+
+      {/* AI Destinations */}
+      <div>
+        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-3 transition-colors">
+          Select AI Platforms
+        </label>
+        <div className="grid grid-cols-2 gap-3">
+          {aiOptions.map((option) => (
+            <label
+              key={option.value}
+              className={`relative flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                config.ai.includes(option.value)
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400'
+                  : 'border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 hover:border-gray-300 dark:hover:border-slate-600'
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={config.ai.includes(option.value)}
+                onChange={() => handleAIToggle(option.value)}
+                className="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600 checked:border-blue-500 checked:bg-blue-500"
+              />
+              <AIIcon ai={option.value} className="w-6 h-6 text-gray-900 dark:text-slate-100 flex-shrink-0" />
+              <span className="text-sm font-medium text-gray-900 dark:text-slate-100 transition-colors">
+                {option.label}
+              </span>
+            </label>
+          ))}
+        </div>
       </div>
 
       {/* Custom Prompt Template */}
