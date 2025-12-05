@@ -32,24 +32,66 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
 
   const actionName = getActionName();
 
-  // Get brand color or default to accent color
-  const buttonColor = config.brandColor || 'var(--accent)';
+  // Official brand colors for AI platforms
+  const brandColors: Record<string, string> = {
+    chatgpt: '#10A37F', // OpenAI/ChatGPT bright green
+    perplexity: '#8B5CF6', // Perplexity purple/blue
+    gemini: '#4285F4', // Google blue
+  };
 
-  // OpenAI-inspired button style
-  const buttonStyle = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px 20px',
-    fontSize: '14px',
-    fontWeight: 500,
-    color: '#FFFFFF',
-    backgroundColor: buttonColor,
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 200ms ease',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif',
+  const buttonStyle = config.buttonStyle || 'solid';
+
+  // Helper function to convert hex to rgba with opacity
+  const hexToRgba = (hex: string, opacity: number): string => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+
+  // Get button style based on selected style mode and platform brand color
+  const getButtonStyle = (ai: string) => {
+    const brandColor = brandColors[ai] || 'var(--accent)';
+    
+    if (buttonStyle === 'outline') {
+      // High-Contrast Outline style with increased visibility
+      const backgroundColor = brandColor.startsWith('#') 
+        ? hexToRgba(brandColor, 0.1) 
+        : brandColor; // Fallback for CSS variables
+      
+      return {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '10px 20px',
+        fontSize: '14px',
+        fontWeight: 500,
+        color: brandColor,
+        backgroundColor: backgroundColor,
+        border: `2px solid ${brandColor}`,
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'all 200ms ease',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif',
+      };
+    } else {
+      // Solid Fill (Default) style
+      return {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '10px 20px',
+        fontSize: '14px',
+        fontWeight: 500,
+        color: '#FFFFFF',
+        backgroundColor: brandColor,
+        border: 'none',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        transition: 'all 200ms ease',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif',
+      };
+    }
   };
 
   const handleButtonClick = (ai: string) => {
@@ -118,11 +160,18 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                   key={ai}
                   onClick={() => handleButtonClick(ai)}
                   disabled={!config.url}
-                  style={buttonStyle}
+                  style={getButtonStyle(ai)}
                   className="transition-smooth hover:opacity-90 active:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: '8px' }}>
-                    <AIIcon ai={ai} className="w-4 h-4 text-white" />
+                  <span 
+                    style={{ 
+                      display: 'inline-flex', 
+                      alignItems: 'center', 
+                      marginRight: '8px',
+                      color: buttonStyle === 'outline' ? brandColors[ai] || 'var(--accent)' : '#FFFFFF'
+                    }}
+                  >
+                    <AIIcon ai={ai} className="w-4 h-4" />
                   </span>
                   {aiLabels[ai] || ai}
                 </button>

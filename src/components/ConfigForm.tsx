@@ -17,6 +17,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     brandName: '',
     ai: ['chatgpt'],
     promptTemplate: defaultPromptTemplate,
+    buttonStyle: 'solid',
   });
   
   const [highlightTemplate, setHighlightTemplate] = useState<string | null>(null);
@@ -135,44 +136,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
         />
       </div>
 
-      {/* Brand Color */}
-      <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
-          Brand Color (Optional)
-        </label>
-        <div className="flex items-center gap-3">
-          <input
-            type="color"
-            value={config.brandColor || '#10A37F'}
-            onChange={(e) => updateConfig({ brandColor: e.target.value })}
-            className="w-16 h-10 rounded-soft cursor-pointer transition-smooth"
-            style={{
-              border: 'none',
-              padding: 0,
-              WebkitAppearance: 'none',
-              MozAppearance: 'none',
-              appearance: 'none',
-            }}
-          />
-          <input
-            type="text"
-            value={config.brandColor || ''}
-            onChange={(e) => updateConfig({ brandColor: e.target.value || undefined })}
-            className={`${inputBaseStyles} ${inputFocusStyles} flex-1`}
-            style={{
-              backgroundColor: 'var(--background)',
-              border: '1px solid var(--border)',
-              color: 'var(--text-primary)',
-            }}
-            placeholder="#10A37F (default green)"
-            pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
-          />
-        </div>
-        <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-          Customize button color to match your brand. Leave empty to use default green.
-        </p>
-      </div>
-
       {/* Content Type */}
       <div>
         <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
@@ -203,11 +166,29 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
         <div className="flex flex-wrap gap-2">
           {aiOptions.map((option) => {
             const isSelected = config.ai.includes(option.value);
-            // Get accent color RGB values for rgba opacity based on theme
-            // Light mode: #10A37F = rgb(16, 163, 127), Dark mode: #19C37D = rgb(25, 195, 125)
-            const accentRgba = theme === 'dark'
-              ? 'rgba(25, 195, 125, 0.15)' // 15% opacity green for dark mode
-              : 'rgba(16, 163, 127, 0.15)'; // 15% opacity green for light mode
+            
+            // Official brand colors for AI platforms (outline + subtle fill)
+            const brandColors: Record<string, { color: string; rgba: string }> = {
+              chatgpt: {
+                color: '#10A37F', // OpenAI/ChatGPT bright green
+                rgba: 'rgba(16, 163, 127, 0.15)', // 15% opacity
+              },
+              perplexity: {
+                color: '#8B5CF6', // Perplexity purple/blue
+                rgba: 'rgba(139, 92, 246, 0.15)', // 15% opacity
+              },
+              gemini: {
+                color: '#4285F4', // Google blue
+                rgba: 'rgba(66, 133, 244, 0.15)', // 15% opacity
+              },
+            };
+            
+            const brandColor = brandColors[option.value] || {
+              color: 'var(--accent)',
+              rgba: theme === 'dark'
+                ? 'rgba(25, 195, 125, 0.15)'
+                : 'rgba(16, 163, 127, 0.15)',
+            };
             
             return (
               <label
@@ -216,8 +197,8 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                   isSelected ? '' : 'hover:opacity-80'
                 }`}
                 style={{
-                  backgroundColor: isSelected ? accentRgba : 'transparent',
-                  border: `1px solid ${isSelected ? 'var(--accent)' : 'var(--border)'}`,
+                  backgroundColor: isSelected ? brandColor.rgba : 'transparent',
+                  border: `1px solid ${isSelected ? brandColor.color : 'var(--border)'}`,
                 }}
               >
                 <input
@@ -242,6 +223,29 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             );
           })}
         </div>
+      </div>
+
+      {/* Embed Button Style */}
+      <div>
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+          Embed Button Style
+        </label>
+        <select
+          value={config.buttonStyle || 'solid'}
+          onChange={(e) => updateConfig({ buttonStyle: e.target.value as 'solid' | 'outline' })}
+          className={`${inputBaseStyles} ${inputFocusStyles}`}
+          style={{
+            backgroundColor: 'var(--background)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-primary)',
+          }}
+        >
+          <option value="solid">Solid Fill (Default)</option>
+          <option value="outline">High-Contrast Outline</option>
+        </select>
+        <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+          Choose between solid fill or outline style for better visibility on different backgrounds
+        </p>
       </div>
 
       {/* Custom Prompt Template */}

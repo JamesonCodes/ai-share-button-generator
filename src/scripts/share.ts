@@ -2,6 +2,7 @@
 // This script is bundled and minified to public/share.js
 
 type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'grok';
+type ButtonStyle = 'solid' | 'outline';
 
 interface ButtonConfig {
   url: string;
@@ -9,7 +10,7 @@ interface ButtonConfig {
   ai: AIDestination[];
   promptTemplate?: string;
   contentType?: string;
-  brandColor?: string;
+  buttonStyle?: ButtonStyle;
 }
 
 function getConfig(): ButtonConfig {
@@ -39,7 +40,7 @@ function getConfig(): ButtonConfig {
     ai,
     promptTemplate: script.getAttribute('data-prompt-template') || undefined,
     contentType: script.getAttribute('data-content-type') || undefined,
-    brandColor: script.getAttribute('data-brand-color') || undefined,
+    buttonStyle: (script.getAttribute('data-button-style') as ButtonStyle) || 'solid',
   };
 }
 
@@ -102,8 +103,7 @@ function buildAIRedirectUrl(
   }
 }
 
-function getButtonStyles(brandColor?: string): string {
-  const buttonColor = brandColor || '#10A37F'; // Default to OpenAI green
+function getButtonStyles(): string {
   return `
     .ai-share-button {
       display: inline-flex;
@@ -112,9 +112,6 @@ function getButtonStyles(brandColor?: string): string {
       padding: 8px 16px;
       font-size: 14px;
       font-weight: 500;
-      color: white;
-      background-color: ${buttonColor};
-      border: none;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -167,6 +164,64 @@ function createButton(config: ButtonConfig, aiDestination: AIDestination): HTMLB
   const button = document.createElement('button');
   button.className = 'ai-share-button';
   
+  // Official brand colors for AI platforms
+  const brandColors: Record<AIDestination, string> = {
+    chatgpt: '#10A37F', // OpenAI/ChatGPT bright green
+    perplexity: '#8B5CF6', // Perplexity purple/blue
+    gemini: '#4285F4', // Google blue
+    claude: '#10A37F', // Fallback
+    grok: '#10A37F', // Fallback
+  };
+  
+  const brandColor = brandColors[aiDestination] || '#10A37F';
+  const buttonStyle = config.buttonStyle || 'solid';
+  
+  // Helper function to convert hex to rgba with opacity
+  const hexToRgba = (hex: string, opacity: number): string => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  };
+  
+  // Apply button style based on selection
+  if (buttonStyle === 'outline') {
+    // High-Contrast Outline style with increased visibility
+    const backgroundColor = hexToRgba(brandColor, 0.1);
+    button.style.cssText = `
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: ${brandColor};
+      background-color: ${backgroundColor};
+      border: 2px solid ${brandColor};
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    `;
+  } else {
+    // Solid Fill (Default) style
+    button.style.cssText = `
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      background-color: ${brandColor};
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    `;
+  }
+  
   const buttonText = `Share with ${aiLabels[aiDestination] || aiDestination}`;
   
   // Add AI logo icon
@@ -216,7 +271,7 @@ function init(): void {
   }
 
   // Inject default styles
-  const styles = getButtonStyles(config.brandColor);
+  const styles = getButtonStyles();
   injectStyles(styles);
 
   // Create buttons for each AI destination
