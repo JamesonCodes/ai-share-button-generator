@@ -24,10 +24,8 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
   const aiOptions = [
     { value: 'chatgpt', label: 'ChatGPT' },
-    { value: 'claude', label: 'Claude' },
     { value: 'perplexity', label: 'Perplexity' },
-    { value: 'gemini', label: 'Gemini' },
-    { value: 'grok', label: 'Grok' },
+    { value: 'gemini', label: 'Google AI' },
   ] as const;
 
   const contentTypes = [
@@ -191,11 +189,12 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                   onChange={() => handleAIToggle(option.value)}
                   className="sr-only"
                 />
-                <AIIcon 
-                  ai={option.value} 
-                  className="w-5 h-5 flex-shrink-0 transition-smooth" 
+                <span 
+                  className="w-5 h-5 flex-shrink-0 transition-smooth"
                   style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
-                />
+                >
+                  <AIIcon ai={option.value} />
+                </span>
                 <span 
                   className="text-sm font-medium transition-smooth"
                   style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}

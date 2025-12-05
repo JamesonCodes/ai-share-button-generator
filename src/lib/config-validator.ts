@@ -13,16 +13,26 @@ export interface ButtonConfig {
  */
 export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
   // Handle ai as string (legacy) or array
+  // Filter to only supported platforms: chatgpt, perplexity, gemini
+  // Keep backward compatibility for old embeds with claude/grok
+  const supportedPlatforms: AIDestination[] = ['chatgpt', 'perplexity', 'gemini'];
+  const allPlatforms: AIDestination[] = ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'];
+  
   let aiArray: AIDestination[] = ['chatgpt'];
   if (config.ai) {
     if (Array.isArray(config.ai)) {
+      // Filter to supported platforms, but allow all for backward compatibility
       aiArray = config.ai.filter((a): a is AIDestination => 
-        ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
-      );
+        allPlatforms.includes(a)
+      ).filter(a => supportedPlatforms.includes(a)); // Only keep supported ones
       if (aiArray.length === 0) aiArray = ['chatgpt'];
-    } else if (typeof config.ai === 'string' && ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(config.ai)) {
-      // Legacy support: single string
-      aiArray = [config.ai as AIDestination];
+    } else if (typeof config.ai === 'string' && allPlatforms.includes(config.ai as AIDestination)) {
+      // Legacy support: single string, but filter to supported
+      if (supportedPlatforms.includes(config.ai as AIDestination)) {
+        aiArray = [config.ai as AIDestination];
+      } else {
+        aiArray = ['chatgpt']; // Fallback if unsupported platform
+      }
     }
   }
 
@@ -40,20 +50,22 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
  */
 export function parseConfigFromScript(scriptElement: HTMLScriptElement): ButtonConfig {
   const aiAttr = scriptElement.getAttribute('data-ai');
-  let ai: AIDestination[] | string | undefined;
+  let aiArray: AIDestination[] = ['chatgpt'];
   if (aiAttr) {
-    // Support comma-separated list: "chatgpt,claude"
+    // Support comma-separated list: "chatgpt,perplexity"
     const aiList = aiAttr.split(',').map(a => a.trim()).filter(Boolean);
     if (aiList.length > 0) {
-      ai = aiList as AIDestination[];
-    } else {
-      // Legacy: single value
-      ai = aiAttr as AIDestination;
+      // Filter to supported platforms only
+      const supportedPlatforms: AIDestination[] = ['chatgpt', 'perplexity', 'gemini'];
+      aiArray = aiList.filter((a): a is AIDestination => 
+        ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
+      ).filter(a => supportedPlatforms.includes(a)) as AIDestination[];
+      if (aiArray.length === 0) aiArray = ['chatgpt'];
     }
   }
 
   const config: Partial<ButtonConfig> = {
-    ai,
+    ai: aiArray,
     url: scriptElement.getAttribute('data-url') || undefined,
     brandName: scriptElement.getAttribute('data-brand') || undefined,
     promptTemplate: scriptElement.getAttribute('data-prompt-template') || undefined,

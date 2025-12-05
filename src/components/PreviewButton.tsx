@@ -11,10 +11,8 @@ interface PreviewButtonProps {
 export default function PreviewButton({ config }: PreviewButtonProps) {
   const aiLabels: Record<string, string> = {
     chatgpt: 'ChatGPT',
-    claude: 'Claude',
     perplexity: 'Perplexity',
-    gemini: 'Gemini',
-    grok: 'Grok',
+    gemini: 'Google AI',
   };
 
   // Get the preset name from the current prompt template
@@ -75,17 +73,11 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
       case 'chatgpt':
         redirectUrl = `https://chat.openai.com/?q=${encodedPrompt}`;
         break;
-      case 'claude':
-        redirectUrl = `https://claude.ai/new?prompt=${encodedPrompt}`;
-        break;
       case 'perplexity':
         redirectUrl = `https://www.perplexity.ai/?q=${encodedPrompt}`;
         break;
       case 'gemini':
-        redirectUrl = `https://gemini.google.com/?prompt=${encodedPrompt}`;
-        break;
-      case 'grok':
-        redirectUrl = `https://x.com/i/grok?q=${encodedPrompt}`;
+        redirectUrl = `https://www.google.com/search?udm=50&aep=11&q=${encodedPrompt}`;
         break;
       default:
         redirectUrl = `https://chat.openai.com/?q=${encodedPrompt}`;

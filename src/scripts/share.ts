@@ -19,10 +19,18 @@ function getConfig(): ButtonConfig {
 
   // Parse AI destinations (comma-separated)
   const aiAttr = script.getAttribute('data-ai') || 'chatgpt';
-  const aiArray = aiAttr.split(',').map(a => a.trim()).filter((a): a is AIDestination => 
-    ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
-  );
-  const ai = aiArray.length > 0 ? aiArray : ['chatgpt'];
+  // Filter to only supported platforms: chatgpt, perplexity, gemini
+  // Keep backward compatibility for old embeds
+  const supportedPlatforms: readonly AIDestination[] = ['chatgpt', 'perplexity', 'gemini'] as const;
+  const allPlatforms: readonly AIDestination[] = ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'] as const;
+  
+  const aiArray: AIDestination[] = aiAttr
+    .split(',')
+    .map(a => a.trim())
+    .filter((a): a is AIDestination => 
+      allPlatforms.includes(a as AIDestination) && supportedPlatforms.includes(a as AIDestination)
+    );
+  const ai: AIDestination[] = aiArray.length > 0 ? aiArray : ['chatgpt'];
 
   return {
     url: script.getAttribute('data-url') || '',
@@ -84,7 +92,7 @@ function buildAIRedirectUrl(
     case 'perplexity':
       return `https://www.perplexity.ai/?q=${encodedPrompt}`;
     case 'gemini':
-      return `https://gemini.google.com/?prompt=${encodedPrompt}`;
+      return `https://www.google.com/search?udm=50&aep=11&q=${encodedPrompt}`;
     case 'grok':
       return `https://x.com/i/grok?q=${encodedPrompt}`;
     default:
