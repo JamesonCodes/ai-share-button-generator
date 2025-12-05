@@ -107,7 +107,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           onChange={(e) => updateConfig({ url: e.target.value })}
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
-            backgroundColor: 'var(--surface)',
+            backgroundColor: 'var(--background)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -146,7 +146,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           onChange={(e) => updateConfig({ contentType: e.target.value })}
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
-            backgroundColor: 'var(--surface)',
+            backgroundColor: 'var(--background)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -235,7 +235,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           onChange={(e) => updateConfig({ buttonStyle: e.target.value as 'solid' | 'outline' })}
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
-            backgroundColor: 'var(--surface)',
+            backgroundColor: 'var(--background)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -260,7 +260,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           rows={5}
           className={`${inputBaseStyles} ${inputFocusStyles} font-mono text-sm resize-none`}
           style={{
-            backgroundColor: 'var(--surface)',
+            backgroundColor: 'var(--background)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
