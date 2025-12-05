@@ -69,17 +69,19 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
   return (
     <div>
       {/* Framework Tabs */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex gap-2 border-b border-gray-200 dark:border-slate-700">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex gap-1 transition-smooth" style={{ borderBottom: '1px solid var(--border)' }}>
           {(['html', 'react', 'vue'] as Framework[]).map((framework) => (
             <button
               key={framework}
               onClick={() => setActiveFramework(framework)}
-              className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px ${
-                activeFramework === framework
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400 dark:border-blue-400'
-                  : 'border-transparent text-gray-500 dark:text-slate-400 hover:text-gray-700 dark:hover:text-slate-300'
+              className={`px-4 py-2 text-sm font-medium transition-smooth border-b-2 -mb-px ${
+                activeFramework === framework ? '' : 'opacity-60 hover:opacity-80'
               }`}
+              style={{
+                borderBottomColor: activeFramework === framework ? 'var(--accent)' : 'transparent',
+                color: activeFramework === framework ? 'var(--accent)' : 'var(--text-secondary)',
+              }}
             >
               {framework.charAt(0).toUpperCase() + framework.slice(1)}
             </button>
@@ -87,46 +89,49 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
         </div>
         <button
           onClick={() => copyToClipboard(currentCode)}
-          className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
-            copied
-              ? 'bg-green-500 dark:bg-green-600 text-white shadow-lg scale-105'
-              : 'bg-blue-500 dark:bg-blue-600 text-white hover:bg-blue-600 dark:hover:bg-blue-700 shadow-md hover:shadow-lg'
+          className={`px-5 py-2.5 text-sm font-medium rounded-soft transition-smooth flex items-center gap-2 ${
+            copied ? 'scale-105' : 'hover:opacity-90 active:opacity-95'
           }`}
+          style={{
+            backgroundColor: copied ? '#10A37F' : 'var(--accent)',
+            color: '#FFFFFF',
+          }}
         >
           {copied ? (
-            <span className="flex items-center gap-2">
+            <>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
               Copied!
-            </span>
+            </>
           ) : (
-            <span className="flex items-center gap-2">
+            <>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
               Copy
-            </span>
+            </>
           )}
         </button>
       </div>
 
       {/* Code Display */}
-      <div className="rounded-md overflow-hidden border border-gray-800 dark:border-slate-700">
+      <div className="rounded-soft overflow-hidden transition-smooth" style={{ border: '1px solid var(--border)' }}>
         <SyntaxHighlighter
           language={getLanguage()}
           style={isDark ? vscDarkPlus : oneLight}
           customStyle={{
             margin: 0,
-            padding: '1rem',
+            padding: '1.25rem',
             fontSize: '0.875rem',
-            lineHeight: '1.5',
+            lineHeight: '1.6',
+            backgroundColor: isDark ? '#1E1E1E' : '#FAFAFA',
           }}
         >
           {currentCode}
         </SyntaxHighlighter>
       </div>
-      <p className="mt-2 text-sm text-gray-600 dark:text-slate-400 transition-colors">
+      <p className="mt-3 text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
         {getHelperText()}
       </p>
     </div>

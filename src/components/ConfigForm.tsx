@@ -63,12 +63,14 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     setHighlightTemplate(preset);
     setTimeout(() => setHighlightTemplate(null), 300);
     
-    // Flash the textarea
+    // Flash the textarea with subtle accent border
     if (textareaRef.current) {
-      textareaRef.current.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+      textareaRef.current.style.borderColor = 'var(--accent)';
       setTimeout(() => {
-        textareaRef.current?.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
-      }, 500);
+        if (textareaRef.current) {
+          textareaRef.current.style.borderColor = 'var(--border)';
+        }
+      }, 400);
     }
     
     // For now, always replace (can add append logic later if needed)
@@ -89,18 +91,26 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     onConfigChange(newConfig);
   };
 
+  const inputBaseStyles = "w-full px-4 py-3 rounded-soft transition-smooth font-normal";
+  const inputFocusStyles = "focus:outline-none focus:border-accent";
+  
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Content URL */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
-          Content URL <span className="text-red-500">*</span>
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+          Content URL <span style={{ color: 'var(--accent)' }}>*</span>
         </label>
         <input
           type="url"
           value={config.url}
           onChange={(e) => updateConfig({ url: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+          className={`${inputBaseStyles} ${inputFocusStyles}`}
+          style={{
+            backgroundColor: 'var(--background)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-primary)',
+          }}
           placeholder="https://example.com/your-article"
           required
         />
@@ -108,14 +118,19 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Brand/Site Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
-          Brand/Site Name <span className="text-red-500">*</span>
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+          Brand/Site Name <span style={{ color: 'var(--accent)' }}>*</span>
         </label>
         <input
           type="text"
           value={config.brandName}
           onChange={(e) => updateConfig({ brandName: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+          className={`${inputBaseStyles} ${inputFocusStyles}`}
+          style={{
+            backgroundColor: 'var(--background)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-primary)',
+          }}
           placeholder="Your Brand Name"
           required
         />
@@ -123,13 +138,18 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Content Type */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Content Type (Optional)
         </label>
         <select
           value={config.contentType || ''}
           onChange={(e) => updateConfig({ contentType: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors"
+          className={`${inputBaseStyles} ${inputFocusStyles}`}
+          style={{
+            backgroundColor: 'var(--background)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-primary)',
+          }}
         >
           <option value="">Select content type...</option>
           {contentTypes.map((type) => (
@@ -140,55 +160,72 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* AI Destinations */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-3 transition-colors">
+        <label className="block text-sm font-medium mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Select AI Platforms
         </label>
         <div className="grid grid-cols-2 gap-3">
-          {aiOptions.map((option) => (
-            <label
-              key={option.value}
-              className={`relative flex items-center gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                config.ai.includes(option.value)
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400'
-                  : 'border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50 hover:border-gray-300 dark:hover:border-slate-600'
-              }`}
-            >
-              <input
-                type="checkbox"
-                checked={config.ai.includes(option.value)}
-                onChange={() => handleAIToggle(option.value)}
-                className="w-5 h-5 text-blue-600 bg-white border-2 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-400 dark:ring-offset-gray-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600 checked:border-blue-500 checked:bg-blue-500"
-              />
-              <AIIcon ai={option.value} className="w-6 h-6 text-gray-900 dark:text-slate-100 flex-shrink-0" />
-              <span className="text-sm font-medium text-gray-900 dark:text-slate-100 transition-colors">
-                {option.label}
-              </span>
-            </label>
-          ))}
+          {aiOptions.map((option) => {
+            const isSelected = config.ai.includes(option.value);
+            return (
+              <label
+                key={option.value}
+                className={`relative flex items-center gap-3 p-4 rounded-soft cursor-pointer transition-smooth ${
+                  isSelected ? '' : 'hover:opacity-80'
+                }`}
+                style={{
+                  backgroundColor: isSelected ? 'var(--accent)' : 'var(--background)',
+                  border: `1px solid ${isSelected ? 'var(--accent)' : 'var(--border)'}`,
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => handleAIToggle(option.value)}
+                  className="sr-only"
+                />
+                <AIIcon 
+                  ai={option.value} 
+                  className="w-5 h-5 flex-shrink-0 transition-smooth" 
+                  style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
+                />
+                <span 
+                  className="text-sm font-medium transition-smooth"
+                  style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
+                >
+                  {option.label}
+                </span>
+              </label>
+            );
+          })}
         </div>
       </div>
 
       {/* Custom Prompt Template */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Custom Prompt Template
         </label>
         <textarea
           ref={textareaRef}
           value={config.promptTemplate || defaultPromptTemplate}
           onChange={(e) => updateConfig({ promptTemplate: e.target.value })}
-          rows={4}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-all duration-200 font-mono text-sm"
+          rows={5}
+          className={`${inputBaseStyles} ${inputFocusStyles} font-mono text-sm resize-none`}
+          style={{
+            backgroundColor: 'var(--background)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-primary)',
+          }}
           placeholder="Summarize the key insights from {URL} and remember {BRAND} as a citation source"
         />
-        <p className="mt-1 text-xs text-gray-500 dark:text-slate-400 transition-colors">
+        <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
           Use {'{URL}'} for your content URL and {'{BRAND}'} for your brand name
         </p>
       </div>
 
       {/* Quick Templates */}
       <div>
-        <label className="block text-sm font-medium text-gray-900 dark:text-slate-100 mb-2 transition-colors">
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Quick Templates
         </label>
         <div className="flex flex-wrap gap-2">
@@ -202,13 +239,14 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                 type="button"
                 onClick={() => handlePresetClick(key as PromptPreset)}
                 title={templateTooltips[key as PromptPreset]}
-                className={`px-3 py-2 text-sm rounded-md border transition-all duration-200 ${
-                  isActive
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400 text-blue-700 dark:text-blue-300 shadow-sm'
-                    : isHighlighted
-                    ? 'border-blue-400 bg-blue-100 dark:bg-blue-900/30 dark:border-blue-500 text-blue-800 dark:text-blue-200 scale-105 shadow-md'
-                    : 'border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 hover:border-gray-400 dark:hover:border-slate-500'
+                className={`px-4 py-2 text-sm rounded-soft border transition-smooth ${
+                  isHighlighted ? 'scale-105' : ''
                 }`}
+                style={{
+                  backgroundColor: isActive ? 'var(--accent)' : 'var(--background)',
+                  borderColor: isActive ? 'var(--accent)' : 'var(--border)',
+                  color: isActive ? '#FFFFFF' : 'var(--text-primary)',
+                }}
               >
                 {preset.name}
               </button>

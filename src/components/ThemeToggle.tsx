@@ -8,7 +8,11 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-4 right-4 z-50 p-2 rounded-lg bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110"
+      className="fixed top-6 right-6 z-50 p-3 rounded-soft transition-smooth hover:opacity-80 active:opacity-90"
+      style={{
+        backgroundColor: 'var(--surface)',
+        border: '1px solid var(--border)',
+      }}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
     >
@@ -16,7 +20,8 @@ export default function ThemeToggle() {
         // Moon icon for dark mode
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 text-gray-700 dark:text-slate-300"
+          className="h-5 w-5 transition-smooth"
+          style={{ color: 'var(--text-primary)' }}
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -26,7 +31,8 @@ export default function ThemeToggle() {
         // Sun icon for light mode
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5 text-gray-700 dark:text-slate-300"
+          className="h-5 w-5 transition-smooth"
+          style={{ color: 'var(--text-primary)' }}
           viewBox="0 0 20 20"
           fill="currentColor"
         >

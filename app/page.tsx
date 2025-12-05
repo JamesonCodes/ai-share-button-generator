@@ -33,46 +33,70 @@ export default function Home() {
   return (
     <>
       <ThemeToggle />
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-200">
-        <div className="container mx-auto px-4 py-12 max-w-7xl">
-          <header className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-slate-100 mb-4 transition-colors">
+      <div className="min-h-screen transition-smooth" style={{ backgroundColor: 'var(--background)' }}>
+        <div className="container mx-auto px-6 py-16 md:px-8 md:py-20 max-w-6xl">
+          <header className="text-center mb-16 md:mb-20">
+            <h1 className="mb-6 transition-smooth" style={{ color: 'var(--text-primary)' }}>
               AI Share Button Generator
             </h1>
-            <p className="text-lg text-gray-600 dark:text-slate-300 max-w-2xl mx-auto transition-colors">
+            <p className="text-lg md:text-xl max-w-2xl mx-auto transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               Create embeddable AI share buttons for your blog or website. 
               Let readers send articles to ChatGPT, Claude, or other AI models with one click.
             </p>
           </header>
 
           {/* Two-Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
             {/* Left Column: Configuration */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Configuration</h2>
+            <div 
+              className="rounded-softer p-8 md:p-10 transition-smooth" 
+              style={{ 
+                backgroundColor: 'var(--surface)', 
+                border: '1px solid var(--border)'
+              }}
+            >
+              <h2 className="mb-8 transition-smooth" style={{ color: 'var(--text-primary)' }}>Configuration</h2>
               <ConfigForm onConfigChange={handleConfigChange} />
             </div>
 
             {/* Right Column: Preview and Code */}
-            <div className="space-y-6">
+            <div className="space-y-8">
               {/* Live Preview */}
-              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Preview</h2>
+              <div 
+                className="rounded-softer p-8 md:p-10 transition-smooth" 
+                style={{ 
+                  backgroundColor: 'var(--surface)', 
+                  border: '1px solid var(--border)'
+                }}
+              >
+                <h2 className="mb-8 transition-smooth" style={{ color: 'var(--text-primary)' }}>Preview</h2>
                 <PreviewButton config={config} />
               </div>
 
               {/* Embed Code */}
-              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg dark:shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-colors">
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-slate-100 mb-6 transition-colors">Embed Code</h2>
+              <div 
+                className="rounded-softer p-8 md:p-10 transition-smooth" 
+                style={{ 
+                  backgroundColor: 'var(--surface)', 
+                  border: '1px solid var(--border)'
+                }}
+              >
+                <h2 className="mb-8 transition-smooth" style={{ color: 'var(--text-primary)' }}>Embed Code</h2>
                 <CodeOutput embedScript={embedScript} reactSnippet={reactSnippet} vueSnippet={vueSnippet} />
               </div>
             </div>
           </div>
 
           {/* Instructions */}
-          <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800 transition-colors">
-            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-200 mb-3 transition-colors">How to Use</h3>
-            <ol className="list-decimal list-inside space-y-2 text-blue-800 dark:text-blue-200 transition-colors">
+          <div 
+            className="mt-12 md:mt-16 rounded-softer p-8 md:p-10 transition-smooth" 
+            style={{ 
+              backgroundColor: 'var(--surface)', 
+              border: '1px solid var(--border)'
+            }}
+          >
+            <h3 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>How to Use</h3>
+            <ol className="list-decimal list-inside space-y-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li>Enter your content URL and brand name</li>
               <li>Customize your prompt template or use a preset (Summarize, Analyze, etc.)</li>
               <li>Select which AI platforms you want to share to</li>
