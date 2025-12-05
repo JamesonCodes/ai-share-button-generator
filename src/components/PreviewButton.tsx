@@ -2,6 +2,7 @@
 
 import type { ButtonConfig } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
+import { replacePromptPlaceholders } from '@/lib/prompt-templates';
 
 interface PreviewButtonProps {
   config: ButtonConfig;
@@ -33,6 +34,50 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif',
   };
 
+  const handleButtonClick = (ai: string) => {
+    if (!config.url) {
+      return; // Don't redirect if URL is not set
+    }
+
+    const defaultTemplate = 'Analyze the following content from this URL: {URL}';
+    const template = config.promptTemplate || defaultTemplate;
+    
+    // Replace placeholders in the prompt template
+    const prompt = replacePromptPlaceholders(
+      template,
+      config.url,
+      config.brandName
+    );
+
+    // Encode the prompt for URL
+    const encodedPrompt = encodeURIComponent(prompt);
+
+    // Build redirect URL based on AI destination (matching share.ts logic)
+    let redirectUrl: string;
+    switch (ai) {
+      case 'chatgpt':
+        redirectUrl = `https://chat.openai.com/?q=${encodedPrompt}`;
+        break;
+      case 'claude':
+        redirectUrl = `https://claude.ai/new?prompt=${encodedPrompt}`;
+        break;
+      case 'perplexity':
+        redirectUrl = `https://www.perplexity.ai/?q=${encodedPrompt}`;
+        break;
+      case 'gemini':
+        redirectUrl = `https://gemini.google.com/?prompt=${encodedPrompt}`;
+        break;
+      case 'grok':
+        redirectUrl = `https://x.com/i/grok?q=${encodedPrompt}`;
+        break;
+      default:
+        redirectUrl = `https://chat.openai.com/?q=${encodedPrompt}`;
+    }
+
+    // Open in new window
+    window.open(redirectUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -49,9 +94,10 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
               config.ai.map((ai) => (
                 <button
                   key={ai}
+                  onClick={() => handleButtonClick(ai)}
+                  disabled={!config.url}
                   style={buttonStyle}
-                  disabled
-                  className="transition-smooth hover:opacity-90 active:opacity-95"
+                  className="transition-smooth hover:opacity-90 active:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: '8px' }}>
                     <AIIcon ai={ai} className="w-4 h-4 text-white" />
