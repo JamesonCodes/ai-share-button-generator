@@ -1,4 +1,4 @@
-# AI Share Button Generator
+2# AI Share Button Generator
 
 A lightweight, embeddable share button that lets readers send articles to ChatGPT, Perplexity, or Google AI with pre-filled prompts. Perfect for content creators who want to make their articles easily shareable with AI assistants.
 

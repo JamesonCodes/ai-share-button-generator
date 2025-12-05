@@ -6,6 +6,8 @@ import { isValidUrl } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
 import { promptPresets, type PromptPreset, defaultPromptTemplate } from '@/lib/prompt-templates';
 import { useTheme } from '@/contexts/ThemeContext';
+import PremiumFeatures from '@/components/PremiumFeatures';
+import PremiumModal from '@/components/PremiumModal';
 
 interface ConfigFormProps {
   onConfigChange: (config: ButtonConfig) => void;
@@ -24,6 +26,8 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   
   const [highlightTemplate, setHighlightTemplate] = useState<string | null>(null);
   const [urlError, setUrlError] = useState<string>('');
+  const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
+  const [selectedPremiumFeature, setSelectedPremiumFeature] = useState<{ id: string; name: string; description: string } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const aiOptions = [
@@ -335,8 +339,23 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
-            checked={config.showAttribution !== false}
-            onChange={(e) => updateConfig({ showAttribution: e.target.checked })}
+            checked={true}
+            onChange={(e) => {
+              // If user tries to uncheck, intercept and show premium modal
+              if (!e.target.checked) {
+                e.preventDefault();
+                e.stopPropagation();
+                const whiteLabelFeature = {
+                  id: 'white-label',
+                  name: 'White Label',
+                  description: 'Remove attribution and add custom branding',
+                };
+                setSelectedPremiumFeature(whiteLabelFeature);
+                setIsPremiumModalOpen(true);
+                // Attribution stays ON - don't update config
+              }
+              // If checked, do nothing (it's always checked now)
+            }}
             className="w-4 h-4 rounded-soft transition-smooth cursor-pointer"
             style={{
               accentColor: 'var(--accent)',
@@ -352,6 +371,24 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           </div>
         </label>
       </div>
+
+      {/* Premium Features */}
+      <PremiumFeatures
+        onFeatureClick={(feature) => {
+          setSelectedPremiumFeature(feature);
+          setIsPremiumModalOpen(true);
+        }}
+      />
+
+      {/* Premium Modal */}
+      <PremiumModal
+        isOpen={isPremiumModalOpen}
+        onClose={() => {
+          setIsPremiumModalOpen(false);
+          setSelectedPremiumFeature(null);
+        }}
+        selectedFeature={selectedPremiumFeature}
+      />
     </div>
   );
 }
