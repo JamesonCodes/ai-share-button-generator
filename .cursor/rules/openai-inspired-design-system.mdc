@@ -1,3 +1,112 @@
 ---
-alwaysApply: true
+description: UI styling, component design, theme implementation, form styling, button design, layout adjustments, color system updates, typography changes, spacing modifications
+alwaysApply: false
 ---
+Follow OpenAI's product design aesthetic for all UI components and styling decisions.
+
+## Design Principles
+- Minimal, calm, and clean aesthetic
+- Generous spacing throughout (use p-8, p-10, gap-8, mb-12+)
+- Soft rounded corners (rounded-soft: 8px, rounded-softer: 12px)
+- Subtle depth without heavy shadows (use borders instead of shadow-lg)
+- Clear hierarchy with larger, confident headings (text-5xl/6xl)
+- Neutral, modern typography (system fonts: -apple-system, Inter, Segoe UI)
+- Smooth transitions (transition-smooth: 200ms, transition-smoother: 300ms)
+- No visual clutter or decoration - focus on clarity
+
+## Color System
+
+### Light Mode
+- Background: #FAFAFA (soft neutral gray, not pure white)
+- Surface/Elevated: #FFFFFF (slightly darker than background)
+- Primary Accent: #10A37F (OpenAI green)
+- Text Primary: #1A1A1A (near black for readability)
+- Text Secondary: #6B6B6B
+- Border: #E5E5E5 (very subtle gray)
+
+### Dark Mode
+- Background: #1A1A1A (deep charcoal, not pure black)
+- Surface/Elevated: #2A2A2A (slightly lighter for layering)
+- Primary Accent: #19C37D (slightly brighter green)
+- Text Primary: #E5E5E5 (soft white, never pure white)
+- Text Secondary: #B0B0B0
+- Border: #3A3A3A (subtle dark gray)
+
+### CSS Variables
+Use CSS custom properties defined in globals.css:
+- var(--background)
+- var(--surface)
+- var(--accent)
+- var(--text-primary)
+- var(--text-secondary)
+- var(--border)
+
+## Component Patterns
+
+### Selection States (Checkboxes, Toggle Buttons, Quick Actions)
+**Active/Selected:**
+- Border: 1px solid var(--accent)
+- Background: rgba(16, 163, 127, 0.15) for light mode, rgba(25, 195, 125, 0.15) for dark mode (15% opacity green)
+- Text: #FFFFFF (white)
+
+**Inactive/Unselected:**
+- Border: 1px solid var(--border)
+- Background: transparent
+- Text: var(--text-primary)
+
+### Form Inputs
+- Clean borders: 1px solid var(--border)
+- Subtle focus states: border color changes to var(--accent), no heavy rings
+- Padding: px-4 py-3
+- Background: var(--background)
+- Text: var(--text-primary)
+- Border radius: rounded-soft (8px)
+
+### Buttons
+- Primary: Background var(--accent), white text, rounded-soft
+- Hover: opacity-90, subtle scale or translate effects
+- Active: opacity-95
+- No heavy shadows - use subtle borders if needed
+
+### Cards/Containers
+- Background: var(--surface)
+- Border: 1px solid var(--border)
+- Padding: p-8 or p-10 (generous)
+- Border radius: rounded-softer (12px)
+- No shadows or very subtle (shadow-sm at most)
+
+### Typography
+- Headings: Larger, confident (h1: text-5xl/6xl, h2: text-3xl/4xl)
+- Line height: 1.3 for headings, 1.6 for body
+- Font weight: 600 for headings, 400-500 for body
+- Letter spacing: -0.01em for headings
+
+### Code Blocks
+- Background: #FAFAFA (light) or #1E1E1E (dark)
+- Border: 1px solid var(--border)
+- Padding: 1.25rem
+- Font: monospace, 0.875rem
+
+## Spacing Guidelines
+- Use generous spacing: space-y-8, gap-8, mb-12, mb-16
+- Container padding: px-6 md:px-8, py-16 md:py-20
+- Section spacing: mb-16 md:mb-20
+- Form field spacing: space-y-8
+
+## Transitions
+- All interactive elements: transition-smooth (200ms ease)
+- Hover states: opacity changes, subtle transforms
+- Focus states: border color changes, no heavy rings
+- Theme switching: smooth color transitions
+
+## Responsive Design
+- Mobile-first approach
+- Generous spacing scales appropriately
+- Touch targets appropriately sized
+- Maintain readability at all breakpoints
+
+## Tone
+- Friendly, calm, and helpful
+- No clutter, no visual noise
+- Focus on clarity, not decoration
+- Should feel like it could live inside an OpenAI product
