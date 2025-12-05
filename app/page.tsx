@@ -6,6 +6,7 @@ import PreviewButton from '@/components/PreviewButton';
 import CodeOutput from '@/components/CodeOutput';
 import ThemeToggle from '@/components/ThemeToggle';
 import InstructionsAccordion from '@/components/InstructionsAccordion';
+import Footer from '@/components/Footer';
 import { generateCodeSnippets } from '@/lib/button-generator';
 import type { ButtonConfig } from '@/lib/config-validator';
 
@@ -90,6 +91,9 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </>
