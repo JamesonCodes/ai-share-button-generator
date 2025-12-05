@@ -4,12 +4,14 @@ import { useState, useRef } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
 import { promptPresets, type PromptPreset, defaultPromptTemplate } from '@/lib/prompt-templates';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface ConfigFormProps {
   onConfigChange: (config: ButtonConfig) => void;
 }
 
 export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
+  const { theme } = useTheme();
   const [config, setConfig] = useState<ButtonConfig>({
     url: '',
     brandName: '',
@@ -166,6 +168,12 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
         <div className="grid grid-cols-2 gap-3">
           {aiOptions.map((option) => {
             const isSelected = config.ai.includes(option.value);
+            // Get accent color RGB values for rgba opacity based on theme
+            // Light mode: #10A37F = rgb(16, 163, 127), Dark mode: #19C37D = rgb(25, 195, 125)
+            const accentRgba = theme === 'dark'
+              ? 'rgba(25, 195, 125, 0.15)' // 15% opacity green for dark mode
+              : 'rgba(16, 163, 127, 0.15)'; // 15% opacity green for light mode
+            
             return (
               <label
                 key={option.value}
@@ -173,7 +181,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                   isSelected ? '' : 'hover:opacity-80'
                 }`}
                 style={{
-                  backgroundColor: isSelected ? 'var(--accent)' : 'var(--background)',
+                  backgroundColor: isSelected ? accentRgba : 'transparent',
                   border: `1px solid ${isSelected ? 'var(--accent)' : 'var(--border)'}`,
                 }}
               >
@@ -232,6 +240,11 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           {Object.entries(promptPresets).map(([key, preset]) => {
             const isActive = config.promptTemplate === preset.template;
             const isHighlighted = highlightTemplate === key;
+            // Get accent color RGB values for rgba opacity based on theme
+            // Light mode: #10A37F = rgb(16, 163, 127), Dark mode: #19C37D = rgb(25, 195, 125)
+            const accentRgba = theme === 'dark'
+              ? 'rgba(25, 195, 125, 0.15)' // 15% opacity green for dark mode
+              : 'rgba(16, 163, 127, 0.15)'; // 15% opacity green for light mode
             
             return (
               <button
@@ -243,7 +256,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                   isHighlighted ? 'scale-105' : ''
                 }`}
                 style={{
-                  backgroundColor: isActive ? 'var(--accent)' : 'var(--background)',
+                  backgroundColor: isActive ? accentRgba : 'transparent',
                   borderColor: isActive ? 'var(--accent)' : 'var(--border)',
                   color: isActive ? '#FFFFFF' : 'var(--text-primary)',
                 }}
