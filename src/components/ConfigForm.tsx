@@ -80,7 +80,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const templateTooltips: Record<PromptPreset, string> = {
     summarize: 'Generates a prompt asking the AI to summarize key insights',
     analyze: 'Generates a prompt asking the AI to critique and analyze the content',
-    compare: 'Generates a prompt asking the AI to compare with other sources',
     explain: 'Generates a prompt asking the AI to explain concepts in detail',
     'key-points': 'Generates a prompt asking the AI to extract main points',
   };
@@ -160,10 +159,10 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* AI Destinations */}
       <div>
-        <label className="block text-sm font-medium mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Select AI Platforms
         </label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-wrap gap-2">
           {aiOptions.map((option) => {
             const isSelected = config.ai.includes(option.value);
             // Get accent color RGB values for rgba opacity based on theme
@@ -175,7 +174,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             return (
               <label
                 key={option.value}
-                className={`relative flex items-center gap-3 p-4 rounded-soft cursor-pointer transition-smooth ${
+                className={`relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-smooth ${
                   isSelected ? '' : 'hover:opacity-80'
                 }`}
                 style={{
@@ -190,13 +189,13 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                   className="sr-only"
                 />
                 <span 
-                  className="w-5 h-5 flex-shrink-0 transition-smooth"
+                  className="w-4 h-4 flex-shrink-0 transition-smooth"
                   style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
                 >
                   <AIIcon ai={option.value} />
                 </span>
                 <span 
-                  className="text-sm font-medium transition-smooth"
+                  className="text-sm font-medium transition-smooth whitespace-nowrap"
                   style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
                 >
                   {option.label}
@@ -251,12 +250,12 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                 type="button"
                 onClick={() => handlePresetClick(key as PromptPreset)}
                 title={templateTooltips[key as PromptPreset]}
-                className={`px-4 py-2 text-sm rounded-soft border transition-smooth ${
+                className={`inline-flex items-center px-3 py-1.5 text-sm rounded-full border transition-smooth whitespace-nowrap ${
                   isHighlighted ? 'scale-105' : ''
-                }`}
+                } ${isActive ? '' : 'hover:opacity-80'}`}
                 style={{
                   backgroundColor: isActive ? accentRgba : 'transparent',
-                  borderColor: isActive ? 'var(--accent)' : 'var(--border)',
+                  border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
                   color: isActive ? '#FFFFFF' : 'var(--text-primary)',
                 }}
               >

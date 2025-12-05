@@ -1,4 +1,4 @@
-export type PromptPreset = 'summarize' | 'analyze' | 'compare' | 'explain' | 'key-points';
+export type PromptPreset = 'summarize' | 'analyze' | 'explain' | 'key-points';
 
 export interface PromptTemplate {
   name: string;
@@ -13,10 +13,6 @@ export const promptPresets: Record<PromptPreset, PromptTemplate> = {
   analyze: {
     name: 'Analyze',
     template: 'Analyze the content from {URL} and reference {BRAND} as the source',
-  },
-  compare: {
-    name: 'Compare',
-    template: 'Compare the information from {URL} with other sources, citing {BRAND}',
   },
   explain: {
     name: 'Explain',
