@@ -8,6 +8,7 @@ export interface ButtonConfig {
   promptTemplate?: string;
   contentType?: string;
   buttonStyle?: ButtonStyle;
+  showAttribution?: boolean;
 }
 
 const ALLOWED_CONTENT_TYPES = [
@@ -156,6 +157,9 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
   // Validate button style
   const buttonStyle: ButtonStyle = 
     config.buttonStyle === 'outline' ? 'outline' : 'solid';
+  
+  // Show attribution by default (opt-out)
+  const showAttribution = config.showAttribution !== false;
 
   return {
     url,
@@ -164,6 +168,7 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
     promptTemplate,
     contentType,
     buttonStyle,
+    showAttribution,
   };
 }
 
@@ -186,6 +191,10 @@ export function parseConfigFromScript(scriptElement: HTMLScriptElement): ButtonC
     }
   }
 
+  // Parse show-attribution attribute (defaults to true if not present)
+  const showAttributionAttr = scriptElement.getAttribute('data-show-attribution');
+  const showAttribution = showAttributionAttr === null || showAttributionAttr === 'true';
+
   const config: Partial<ButtonConfig> = {
     ai: aiArray,
     url: scriptElement.getAttribute('data-url') || undefined,
@@ -193,6 +202,7 @@ export function parseConfigFromScript(scriptElement: HTMLScriptElement): ButtonC
     promptTemplate: scriptElement.getAttribute('data-prompt-template') || undefined,
     contentType: scriptElement.getAttribute('data-content-type') || undefined,
     buttonStyle: (scriptElement.getAttribute('data-button-style') as ButtonStyle) || 'solid',
+    showAttribution,
   };
 
   return validateConfig(config);

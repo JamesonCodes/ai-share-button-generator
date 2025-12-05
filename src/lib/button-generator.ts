@@ -29,6 +29,8 @@ export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'htt
   if (config.promptTemplate) attrs.push(`data-prompt-template="${escapeHtmlAttribute(config.promptTemplate)}"`);
   if (config.contentType) attrs.push(`data-content-type="${escapeHtmlAttribute(config.contentType)}"`);
   if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`data-button-style="${escapeHtmlAttribute(config.buttonStyle)}"`);
+  // Only include data-show-attribution if it's false (opt-out, default is true)
+  if (config.showAttribution === false) attrs.push(`data-show-attribution="false"`);
   
   return `<script src="${scriptUrl}" ${attrs.join(' ')}></script>`;
 }
@@ -47,6 +49,8 @@ export function generateReactSnippet(config: ButtonConfig, baseUrl: string = 'ht
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
   if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', ${JSON.stringify(config.contentType)});`);
   if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', ${JSON.stringify(config.buttonStyle)});`);
+  // Only include data-show-attribution if it's false (opt-out, default is true)
+  if (config.showAttribution === false) attrs.push(`    script.setAttribute('data-show-attribution', 'false');`);
   
   return `import { useEffect } from 'react';
 

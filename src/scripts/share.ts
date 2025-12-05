@@ -11,6 +11,7 @@ interface ButtonConfig {
   promptTemplate?: string;
   contentType?: string;
   buttonStyle?: ButtonStyle;
+  showAttribution?: boolean;
 }
 
 function getConfig(): ButtonConfig {
@@ -34,6 +35,10 @@ function getConfig(): ButtonConfig {
     );
   const ai: AIDestination[] = aiArray.length > 0 ? aiArray : ['chatgpt'];
 
+  // Parse show-attribution attribute (defaults to true if not present)
+  const showAttributionAttr = script.getAttribute('data-show-attribution');
+  const showAttribution = showAttributionAttr === null || showAttributionAttr === 'true';
+
   return {
     url: script.getAttribute('data-url') || '',
     brandName: script.getAttribute('data-brand') || '',
@@ -41,6 +46,7 @@ function getConfig(): ButtonConfig {
     promptTemplate: script.getAttribute('data-prompt-template') || undefined,
     contentType: script.getAttribute('data-content-type') || undefined,
     buttonStyle: (script.getAttribute('data-button-style') as ButtonStyle) || 'solid',
+    showAttribution,
   };
 }
 
@@ -49,6 +55,7 @@ function getDefaultConfig(): ButtonConfig {
     url: '',
     brandName: '',
     ai: ['chatgpt'],
+    showAttribution: true,
   };
 }
 
@@ -140,6 +147,19 @@ function getButtonStyles(): string {
         bottom: 16px;
         right: 16px;
       }
+    }
+    .ai-share-attribution {
+      font-size: 10px;
+      color: #999;
+      text-decoration: none;
+      margin-top: 4px;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+    .ai-share-attribution:hover {
+      opacity: 1;
+      text-decoration: underline;
     }
   `;
 }
@@ -257,6 +277,41 @@ function injectStyles(css: string): void {
   document.head.appendChild(style);
 }
 
+function createAttributionLink(): HTMLAnchorElement | null {
+  // Get the generator URL from the script src
+  const script = document.currentScript as HTMLScriptElement;
+  if (!script || !script.src) {
+    return null;
+  }
+  
+  try {
+    const scriptUrl = new URL(script.src);
+    const generatorUrl = `${scriptUrl.protocol}//${scriptUrl.host}`;
+    
+    const attribution = document.createElement('a');
+    attribution.href = generatorUrl;
+    attribution.target = '_blank';
+    attribution.rel = 'noopener noreferrer';
+    attribution.className = 'ai-share-attribution';
+    attribution.textContent = 'Powered by AI Share Button Generator';
+    attribution.style.cssText = 'font-size: 10px; color: #999; text-decoration: none; margin-top: 4px; opacity: 0.7; transition: opacity 0.2s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;';
+    
+    attribution.addEventListener('mouseenter', () => {
+      attribution.style.opacity = '1';
+      attribution.style.textDecoration = 'underline';
+    });
+    
+    attribution.addEventListener('mouseleave', () => {
+      attribution.style.opacity = '0.7';
+      attribution.style.textDecoration = 'none';
+    });
+    
+    return attribution;
+  } catch {
+    return null;
+  }
+}
+
 function init(): void {
   const config = getConfig();
 
@@ -285,6 +340,15 @@ function init(): void {
   buttons.forEach(button => {
     buttonContainer.appendChild(button);
   });
+  
+  // Add attribution link if enabled (default: true)
+  if (config.showAttribution !== false) {
+    const attribution = createAttributionLink();
+    if (attribution) {
+      buttonContainer.appendChild(attribution);
+    }
+  }
+  
   document.body.appendChild(buttonContainer);
 }
 

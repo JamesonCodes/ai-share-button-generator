@@ -19,6 +19,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     ai: ['chatgpt'],
     promptTemplate: defaultPromptTemplate,
     buttonStyle: 'solid',
+    showAttribution: true,
   });
   
   const [highlightTemplate, setHighlightTemplate] = useState<string | null>(null);
@@ -327,6 +328,29 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             );
           })}
         </div>
+      </div>
+
+      {/* Show Attribution */}
+      <div>
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={config.showAttribution !== false}
+            onChange={(e) => updateConfig({ showAttribution: e.target.checked })}
+            className="w-4 h-4 rounded-soft transition-smooth cursor-pointer"
+            style={{
+              accentColor: 'var(--accent)',
+            }}
+          />
+          <div>
+            <span className="text-sm font-medium transition-smooth" style={{ color: 'var(--text-primary)' }}>
+              Show "Powered by" attribution
+            </span>
+            <p className="text-xs mt-1 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              A small link will appear below the buttons linking back to the generator
+            </p>
+          </div>
+        </label>
       </div>
     </div>
   );
