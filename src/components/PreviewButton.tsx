@@ -2,7 +2,7 @@
 
 import type { ButtonConfig } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
-import { replacePromptPlaceholders } from '@/lib/prompt-templates';
+import { replacePromptPlaceholders, promptPresets, defaultPromptTemplate } from '@/lib/prompt-templates';
 
 interface PreviewButtonProps {
   config: ButtonConfig;
@@ -16,6 +16,23 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     gemini: 'Gemini',
     grok: 'Grok',
   };
+
+  // Get the preset name from the current prompt template
+  const getActionName = (): string => {
+    const currentTemplate = config.promptTemplate || defaultPromptTemplate;
+    
+    // Check if current template matches any preset
+    for (const [key, preset] of Object.entries(promptPresets)) {
+      if (preset.template === currentTemplate) {
+        return preset.name;
+      }
+    }
+    
+    // If no preset matches, use "Share"
+    return 'Share';
+  };
+
+  const actionName = getActionName();
 
   // OpenAI-inspired button style
   const buttonStyle = {
@@ -102,7 +119,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                   <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: '8px' }}>
                     <AIIcon ai={ai} className="w-4 h-4 text-white" />
                   </span>
-                  Share with {aiLabels[ai] || ai}
+                  {actionName} with {aiLabels[ai] || ai}
                 </button>
               ))
             ) : (
