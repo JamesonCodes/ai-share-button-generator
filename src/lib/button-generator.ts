@@ -21,13 +21,6 @@ export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'htt
 }
 
 /**
- * Generates the manual placement HTML snippet
- */
-export function generateManualPlacementSnippet(): string {
-  return `<div data-ai-share-button></div>`;
-}
-
-/**
  * Generates React component code
  */
 export function generateReactSnippet(config: ButtonConfig, baseUrl: string = 'https://your-domain.com'): string {
@@ -103,6 +96,5 @@ export function generateCodeSnippets(config: ButtonConfig, baseUrl?: string) {
     embedScript: generateEmbedScript(config, url),
     reactSnippet: generateReactSnippet(config, url),
     vueSnippet: generateVueSnippet(config, url),
-    manualPlacement: generateManualPlacementSnippet(),
   };
 }
