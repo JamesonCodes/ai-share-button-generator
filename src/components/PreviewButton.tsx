@@ -32,6 +32,9 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
 
   const actionName = getActionName();
 
+  // Get brand color or default to accent color
+  const buttonColor = config.brandColor || 'var(--accent)';
+
   // OpenAI-inspired button style
   const buttonStyle = {
     display: 'inline-flex',
@@ -41,7 +44,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     fontSize: '14px',
     fontWeight: 500,
     color: '#FFFFFF',
-    backgroundColor: 'var(--accent)',
+    backgroundColor: buttonColor,
     border: 'none',
     borderRadius: '8px',
     cursor: 'pointer',

@@ -135,6 +135,44 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
         />
       </div>
 
+      {/* Brand Color */}
+      <div>
+        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+          Brand Color (Optional)
+        </label>
+        <div className="flex items-center gap-3">
+          <input
+            type="color"
+            value={config.brandColor || '#10A37F'}
+            onChange={(e) => updateConfig({ brandColor: e.target.value })}
+            className="w-16 h-10 rounded-soft cursor-pointer transition-smooth"
+            style={{
+              border: 'none',
+              padding: 0,
+              WebkitAppearance: 'none',
+              MozAppearance: 'none',
+              appearance: 'none',
+            }}
+          />
+          <input
+            type="text"
+            value={config.brandColor || ''}
+            onChange={(e) => updateConfig({ brandColor: e.target.value || undefined })}
+            className={`${inputBaseStyles} ${inputFocusStyles} flex-1`}
+            style={{
+              backgroundColor: 'var(--background)',
+              border: '1px solid var(--border)',
+              color: 'var(--text-primary)',
+            }}
+            placeholder="#10A37F (default green)"
+            pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+          />
+        </div>
+        <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+          Customize button color to match your brand. Leave empty to use default green.
+        </p>
+      </div>
+
       {/* Content Type */}
       <div>
         <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>

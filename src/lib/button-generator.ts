@@ -16,6 +16,7 @@ export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'htt
   if (config.brandName) attrs.push(`data-brand="${config.brandName}"`);
   if (config.promptTemplate) attrs.push(`data-prompt-template="${config.promptTemplate.replace(/"/g, '&quot;')}"`);
   if (config.contentType) attrs.push(`data-content-type="${config.contentType}"`);
+  if (config.brandColor) attrs.push(`data-brand-color="${config.brandColor}"`);
   
   return `<script src="${scriptUrl}" ${attrs.join(' ')}></script>`;
 }
@@ -33,6 +34,7 @@ export function generateReactSnippet(config: ButtonConfig, baseUrl: string = 'ht
   if (config.brandName) attrs.push(`    script.setAttribute('data-brand', '${config.brandName.replace(/'/g, "\\'")}');`);
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
   if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', '${config.contentType.replace(/'/g, "\\'")}');`);
+  if (config.brandColor) attrs.push(`    script.setAttribute('data-brand-color', '${config.brandColor}');`);
   
   return `import { useEffect } from 'react';
 
@@ -65,6 +67,7 @@ export function generateVueSnippet(config: ButtonConfig, baseUrl: string = 'http
   if (config.brandName) attrs.push(`    script.setAttribute('data-brand', '${config.brandName.replace(/'/g, "\\'")}');`);
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
   if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', '${config.contentType.replace(/'/g, "\\'")}');`);
+  if (config.brandColor) attrs.push(`    script.setAttribute('data-brand-color', '${config.brandColor}');`);
   
   return `<template>
   <div></div>

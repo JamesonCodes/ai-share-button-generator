@@ -6,6 +6,7 @@ export interface ButtonConfig {
   ai: AIDestination[];
   promptTemplate?: string;
   contentType?: string;
+  brandColor?: string;
 }
 
 /**
@@ -42,6 +43,7 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
     ai: aiArray,
     promptTemplate: config.promptTemplate,
     contentType: config.contentType,
+    brandColor: config.brandColor,
   };
 }
 
@@ -70,6 +72,7 @@ export function parseConfigFromScript(scriptElement: HTMLScriptElement): ButtonC
     brandName: scriptElement.getAttribute('data-brand') || undefined,
     promptTemplate: scriptElement.getAttribute('data-prompt-template') || undefined,
     contentType: scriptElement.getAttribute('data-content-type') || undefined,
+    brandColor: scriptElement.getAttribute('data-brand-color') || undefined,
   };
 
   return validateConfig(config);

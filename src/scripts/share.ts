@@ -9,6 +9,7 @@ interface ButtonConfig {
   ai: AIDestination[];
   promptTemplate?: string;
   contentType?: string;
+  brandColor?: string;
 }
 
 function getConfig(): ButtonConfig {
@@ -38,6 +39,7 @@ function getConfig(): ButtonConfig {
     ai,
     promptTemplate: script.getAttribute('data-prompt-template') || undefined,
     contentType: script.getAttribute('data-content-type') || undefined,
+    brandColor: script.getAttribute('data-brand-color') || undefined,
   };
 }
 
@@ -100,7 +102,8 @@ function buildAIRedirectUrl(
   }
 }
 
-function getButtonStyles(): string {
+function getButtonStyles(brandColor?: string): string {
+  const buttonColor = brandColor || '#10A37F'; // Default to OpenAI green
   return `
     .ai-share-button {
       display: inline-flex;
@@ -110,7 +113,7 @@ function getButtonStyles(): string {
       font-size: 14px;
       font-weight: 500;
       color: white;
-      background-color: #3b82f6;
+      background-color: ${buttonColor};
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -213,7 +216,7 @@ function init(): void {
   }
 
   // Inject default styles
-  const styles = getButtonStyles();
+  const styles = getButtonStyles(config.brandColor);
   injectStyles(styles);
 
   // Create buttons for each AI destination
