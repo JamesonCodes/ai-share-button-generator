@@ -76,7 +76,7 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
               key={framework}
               onClick={() => setActiveFramework(framework)}
               className={`px-4 py-2 text-sm font-medium transition-smooth border-b-2 -mb-px ${
-                activeFramework === framework ? '' : 'opacity-60 hover:opacity-80'
+                activeFramework === framework ? '' : 'hover:opacity-80'
               }`}
               style={{
                 borderBottomColor: activeFramework === framework ? 'var(--accent)' : 'transparent',

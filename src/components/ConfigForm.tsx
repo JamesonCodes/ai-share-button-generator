@@ -107,7 +107,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           onChange={(e) => updateConfig({ url: e.target.value })}
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
-            backgroundColor: 'var(--background)',
+            backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -146,7 +146,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           onChange={(e) => updateConfig({ contentType: e.target.value })}
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
-            backgroundColor: 'var(--background)',
+            backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -209,13 +209,13 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                 />
                 <span 
                   className="w-4 h-4 flex-shrink-0 transition-smooth"
-                  style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
+                  style={{ color: isSelected ? brandColor.color : 'var(--text-primary)' }}
                 >
                   <AIIcon ai={option.value} />
                 </span>
                 <span 
                   className="text-sm font-medium transition-smooth whitespace-nowrap"
-                  style={{ color: isSelected ? '#FFFFFF' : 'var(--text-primary)' }}
+                  style={{ color: isSelected ? brandColor.color : 'var(--text-primary)' }}
                 >
                   {option.label}
                 </span>
@@ -235,7 +235,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           onChange={(e) => updateConfig({ buttonStyle: e.target.value as 'solid' | 'outline' })}
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
-            backgroundColor: 'var(--background)',
+            backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -260,7 +260,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           rows={5}
           className={`${inputBaseStyles} ${inputFocusStyles} font-mono text-sm resize-none`}
           style={{
-            backgroundColor: 'var(--background)',
+            backgroundColor: 'var(--surface)',
             border: '1px solid var(--border)',
             color: 'var(--text-primary)',
           }}
@@ -298,7 +298,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                 style={{
                   backgroundColor: isActive ? accentRgba : 'transparent',
                   border: `1px solid ${isActive ? 'var(--accent)' : 'var(--border)'}`,
-                  color: isActive ? '#FFFFFF' : 'var(--text-primary)',
+                  color: isActive ? 'var(--accent)' : 'var(--text-primary)',
                 }}
               >
                 {preset.name}

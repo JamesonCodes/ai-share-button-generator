@@ -161,7 +161,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                   onClick={() => handleButtonClick(ai)}
                   disabled={!config.url}
                   style={getButtonStyle(ai)}
-                  className="transition-smooth hover:opacity-90 active:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="transition-smooth hover:brightness-95 active:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span 
                     style={{ 

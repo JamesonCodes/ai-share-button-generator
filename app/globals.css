@@ -7,10 +7,11 @@
   --background: #FAFAFA;
   --foreground: #1A1A1A;
   --surface: #FFFFFF;
-  --border: #E5E5E5;
+  --border: #CCCCCC;
   --accent: #10A37F;
   --text-primary: #1A1A1A;
-  --text-secondary: #6B6B6B;
+  --text-secondary: #525252;
+  --placeholder: #757575;
 }
 
 .dark {
@@ -22,6 +23,7 @@
   --accent: #19C37D;
   --text-primary: #E5E5E5;
   --text-secondary: #B0B0B0;
+  --placeholder: #888888;
 }
 
 @layer base {
@@ -37,6 +39,14 @@
     font-size: 16px;
     line-height: 1.6;
     transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  /* Placeholder text styling for better contrast */
+  input::placeholder,
+  textarea::placeholder,
+  select option:disabled {
+    color: var(--placeholder);
+    opacity: 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
