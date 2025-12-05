@@ -94,12 +94,22 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     <div className="space-y-6">
       <div>
         <div 
-          className="relative p-10 rounded-soft transition-smooth min-h-[240px] flex items-end justify-end"
+          className="relative p-10 rounded-soft transition-smooth min-h-[240px] flex flex-col items-end justify-end"
           style={{ 
             backgroundColor: 'var(--background)', 
             border: '1px solid var(--border)'
           }}
         >
+          {/* Dynamic action label - appears above buttons */}
+          {config.ai.length > 0 && (
+            <div 
+              className="mb-4 text-sm font-medium transition-smooth self-end"
+              style={{ color: 'var(--text-primary)' }}
+            >
+              {actionName} in:
+            </div>
+          )}
+          
           {/* Floating buttons container - positioned bottom-right */}
           <div className="flex flex-col gap-3">
             {config.ai.length > 0 ? (
@@ -114,7 +124,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                   <span style={{ display: 'inline-flex', alignItems: 'center', marginRight: '8px' }}>
                     <AIIcon ai={ai} className="w-4 h-4 text-white" />
                   </span>
-                  {actionName} with {aiLabels[ai] || ai}
+                  {aiLabels[ai] || ai}
                 </button>
               ))
             ) : (
