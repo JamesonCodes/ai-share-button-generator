@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
+import { isValidUrl } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
 import { promptPresets, type PromptPreset, defaultPromptTemplate } from '@/lib/prompt-templates';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -21,6 +22,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   });
   
   const [highlightTemplate, setHighlightTemplate] = useState<string | null>(null);
+  const [urlError, setUrlError] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const aiOptions = [
@@ -88,6 +90,17 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const updateConfig = (updates: Partial<ButtonConfig>) => {
     const newConfig = { ...config, ...updates };
     setConfig(newConfig);
+    
+    // Validate URL if it's being updated
+    if ('url' in updates) {
+      const url = updates.url || '';
+      if (url && !isValidUrl(url)) {
+        setUrlError('Please enter a valid URL starting with http:// or https://');
+      } else {
+        setUrlError('');
+      }
+    }
+    
     onConfigChange(newConfig);
   };
 
@@ -108,12 +121,18 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           className={`${inputBaseStyles} ${inputFocusStyles}`}
           style={{
             backgroundColor: 'var(--background)',
-            border: '1px solid var(--border)',
+            border: `1px solid ${urlError ? 'var(--accent)' : 'var(--border)'}`,
             color: 'var(--text-primary)',
           }}
           placeholder="https://example.com/your-article"
           required
+          maxLength={2048}
         />
+        {urlError && (
+          <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--accent)' }}>
+            {urlError}
+          </p>
+        )}
       </div>
 
       {/* Brand/Site Name */}
@@ -133,6 +152,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           }}
           placeholder="Your Brand Name"
           required
+          maxLength={100}
         />
       </div>
 
@@ -265,6 +285,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             color: 'var(--text-primary)',
           }}
           placeholder="Summarize the key insights from {URL} and remember {BRAND} as a citation source"
+          maxLength={2000}
         />
         <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
           Use {'{URL}'} for your content URL and {'{BRAND}'} for your brand name

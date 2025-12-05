@@ -17,6 +17,7 @@ export async function GET(
         'Content-Type': 'application/javascript',
         'Cache-Control': 'public, max-age=31536000, immutable',
         'Access-Control-Allow-Origin': '*',
+        'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://chat.openai.com https://www.perplexity.ai https://www.google.com; frame-ancestors 'none'; base-uri 'self'",
       },
     });
   } catch (error) {

@@ -10,6 +10,101 @@ export interface ButtonConfig {
   buttonStyle?: ButtonStyle;
 }
 
+const ALLOWED_CONTENT_TYPES = [
+  'Article/Blog Post',
+  'Product Page',
+  'Documentation',
+  'Course/Tutorial',
+  'News Article',
+  'Research Paper',
+  'Other',
+];
+
+/**
+ * Validates if a string is a valid HTTP/HTTPS URL
+ */
+export function isValidUrl(url: string): boolean {
+  if (!url || typeof url !== 'string') {
+    return false;
+  }
+  
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Sanitizes a string by removing HTML tags and dangerous characters
+ */
+function sanitizeString(value: string, maxLength: number = 1000): string {
+  if (!value || typeof value !== 'string') {
+    return '';
+  }
+  
+  // Remove HTML tags
+  let sanitized = value.replace(/<[^>]*>/g, '');
+  
+  // Remove control characters except newlines and tabs
+  sanitized = sanitized.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+  
+  // Trim and limit length
+  sanitized = sanitized.trim();
+  if (sanitized.length > maxLength) {
+    sanitized = sanitized.substring(0, maxLength);
+  }
+  
+  return sanitized;
+}
+
+/**
+ * Sanitizes brand name with stricter rules
+ */
+function sanitizeBrandName(value: string): string {
+  if (!value || typeof value !== 'string') {
+    return '';
+  }
+  
+  // Remove HTML tags
+  let sanitized = value.replace(/<[^>]*>/g, '');
+  
+  // Remove control characters
+  sanitized = sanitized.replace(/[\x00-\x1F\x7F]/g, '');
+  
+  // Limit to 100 characters
+  sanitized = sanitized.trim();
+  if (sanitized.length > 100) {
+    sanitized = sanitized.substring(0, 100);
+  }
+  
+  return sanitized;
+}
+
+/**
+ * Sanitizes prompt template
+ */
+function sanitizePromptTemplate(value: string): string {
+  if (!value || typeof value !== 'string') {
+    return '';
+  }
+  
+  // Remove HTML tags
+  let sanitized = value.replace(/<[^>]*>/g, '');
+  
+  // Remove control characters except newlines and tabs
+  sanitized = sanitized.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+  
+  // Limit to 2000 characters
+  sanitized = sanitized.trim();
+  if (sanitized.length > 2000) {
+    sanitized = sanitized.substring(0, 2000);
+  }
+  
+  return sanitized;
+}
+
 /**
  * Validates button configuration
  */
@@ -38,13 +133,37 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
     }
   }
 
+  // Validate and sanitize URL
+  let url = config.url || '';
+  if (url && !isValidUrl(url)) {
+    url = ''; // Invalid URL, set to empty
+  }
+  
+  // Sanitize brand name
+  const brandName = sanitizeBrandName(config.brandName || '');
+  
+  // Sanitize prompt template
+  const promptTemplate = config.promptTemplate 
+    ? sanitizePromptTemplate(config.promptTemplate)
+    : undefined;
+  
+  // Validate content type against allowed list
+  let contentType = config.contentType;
+  if (contentType && !ALLOWED_CONTENT_TYPES.includes(contentType)) {
+    contentType = undefined;
+  }
+  
+  // Validate button style
+  const buttonStyle: ButtonStyle = 
+    config.buttonStyle === 'outline' ? 'outline' : 'solid';
+
   return {
-    url: config.url || '',
-    brandName: config.brandName || '',
+    url,
+    brandName,
     ai: aiArray,
-    promptTemplate: config.promptTemplate,
-    contentType: config.contentType,
-    buttonStyle: config.buttonStyle || 'solid',
+    promptTemplate,
+    contentType,
+    buttonStyle,
   };
 }
 

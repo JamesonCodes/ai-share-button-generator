@@ -1,6 +1,18 @@
 import type { ButtonConfig } from './config-validator';
 
 /**
+ * Escapes HTML attribute values to prevent XSS attacks
+ */
+function escapeHtmlAttribute(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/**
  * Generates the embed script tag with configuration
  */
 export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'https://your-domain.com'): string {
@@ -9,14 +21,14 @@ export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'htt
   const aiValue = Array.isArray(config.ai) ? config.ai.join(',') : config.ai;
   
   const attrs = [
-    `data-ai="${aiValue}"`,
+    `data-ai="${escapeHtmlAttribute(aiValue)}"`,
   ];
   
-  if (config.url) attrs.push(`data-url="${config.url}"`);
-  if (config.brandName) attrs.push(`data-brand="${config.brandName}"`);
-  if (config.promptTemplate) attrs.push(`data-prompt-template="${config.promptTemplate.replace(/"/g, '&quot;')}"`);
-  if (config.contentType) attrs.push(`data-content-type="${config.contentType}"`);
-  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`data-button-style="${config.buttonStyle}"`);
+  if (config.url) attrs.push(`data-url="${escapeHtmlAttribute(config.url)}"`);
+  if (config.brandName) attrs.push(`data-brand="${escapeHtmlAttribute(config.brandName)}"`);
+  if (config.promptTemplate) attrs.push(`data-prompt-template="${escapeHtmlAttribute(config.promptTemplate)}"`);
+  if (config.contentType) attrs.push(`data-content-type="${escapeHtmlAttribute(config.contentType)}"`);
+  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`data-button-style="${escapeHtmlAttribute(config.buttonStyle)}"`);
   
   return `<script src="${scriptUrl}" ${attrs.join(' ')}></script>`;
 }
@@ -29,12 +41,12 @@ export function generateReactSnippet(config: ButtonConfig, baseUrl: string = 'ht
   const aiValue = Array.isArray(config.ai) ? config.ai.join(',') : config.ai;
   
   const attrs: string[] = [];
-  attrs.push(`    script.setAttribute('data-ai', '${aiValue}');`);
-  if (config.url) attrs.push(`    script.setAttribute('data-url', '${config.url.replace(/'/g, "\\'")}');`);
-  if (config.brandName) attrs.push(`    script.setAttribute('data-brand', '${config.brandName.replace(/'/g, "\\'")}');`);
+  attrs.push(`    script.setAttribute('data-ai', ${JSON.stringify(aiValue)});`);
+  if (config.url) attrs.push(`    script.setAttribute('data-url', ${JSON.stringify(config.url)});`);
+  if (config.brandName) attrs.push(`    script.setAttribute('data-brand', ${JSON.stringify(config.brandName)});`);
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
-  if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', '${config.contentType.replace(/'/g, "\\'")}');`);
-  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', '${config.buttonStyle}');`);
+  if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', ${JSON.stringify(config.contentType)});`);
+  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', ${JSON.stringify(config.buttonStyle)});`);
   
   return `import { useEffect } from 'react';
 
@@ -62,12 +74,12 @@ export function generateVueSnippet(config: ButtonConfig, baseUrl: string = 'http
   const aiValue = Array.isArray(config.ai) ? config.ai.join(',') : config.ai;
   
   const attrs: string[] = [];
-  attrs.push(`    script.setAttribute('data-ai', '${aiValue}');`);
-  if (config.url) attrs.push(`    script.setAttribute('data-url', '${config.url.replace(/'/g, "\\'")}');`);
-  if (config.brandName) attrs.push(`    script.setAttribute('data-brand', '${config.brandName.replace(/'/g, "\\'")}');`);
+  attrs.push(`    script.setAttribute('data-ai', ${JSON.stringify(aiValue)});`);
+  if (config.url) attrs.push(`    script.setAttribute('data-url', ${JSON.stringify(config.url)});`);
+  if (config.brandName) attrs.push(`    script.setAttribute('data-brand', ${JSON.stringify(config.brandName)});`);
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
-  if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', '${config.contentType.replace(/'/g, "\\'")}');`);
-  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', '${config.buttonStyle}');`);
+  if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', ${JSON.stringify(config.contentType)});`);
+  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', ${JSON.stringify(config.buttonStyle)});`);
   
   return `<template>
   <div></div>
