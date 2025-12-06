@@ -230,7 +230,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Powered by AI Share Button Generator
+                Get your own AI Share Button
               </a>
             )}
           </div>

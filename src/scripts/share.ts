@@ -309,7 +309,7 @@ function createAttributionLink(): HTMLAnchorElement | null {
     attribution.target = '_blank';
     attribution.rel = 'noopener noreferrer';
     attribution.className = 'ai-share-attribution';
-    attribution.textContent = 'Powered by AI Share Button Generator';
+    attribution.textContent = 'Get your own AI Share Button';
     attribution.style.cssText = 'font-size: 10px; color: #999; text-decoration: none; margin-top: 4px; opacity: 0.7; transition: opacity 0.2s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;';
     
     attribution.addEventListener('mouseenter', () => {
