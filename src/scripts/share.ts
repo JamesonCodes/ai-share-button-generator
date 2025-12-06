@@ -287,7 +287,15 @@ function injectStyles(css: string): void {
 
 function createAttributionLink(): HTMLAnchorElement | null {
   // Get the generator URL from the script src
-  const script = document.currentScript as HTMLScriptElement;
+  // Try currentScript first (works when script executes synchronously)
+  let script = document.currentScript as HTMLScriptElement;
+  
+  // Fallback: find script by src attribute (needed when script executes asynchronously)
+  if (!script || !script.src) {
+    const scripts = document.querySelectorAll('script[src*="share.js"]');
+    script = scripts[scripts.length - 1] as HTMLScriptElement; // Get the last matching script
+  }
+  
   if (!script || !script.src) {
     return null;
   }
