@@ -1,8 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
+// Rate limiting configuration
+const MAX_REQUESTS = 5;
+const WINDOW_MS = 60 * 1000; // 1 minute
+const rateLimitMap = new Map<string, number[]>();
+
+/**
+ * Extract client IP address from request headers
+ * Handles Vercel's proxy headers (x-forwarded-for, x-real-ip)
+ */
+function getClientIP(request: NextRequest): string {
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  if (forwardedFor) {
+    // x-forwarded-for can contain multiple IPs, take the first one
+    return forwardedFor.split(',')[0].trim();
+  }
+  
+  const realIP = request.headers.get('x-real-ip');
+  if (realIP) {
+    return realIP.trim();
+  }
+  
+  // Fallback (shouldn't happen in Vercel, but good to have)
+  return 'unknown';
+}
+
+/**
+ * Check if the IP address has exceeded the rate limit
+ * Returns true if allowed, false if rate limited
+ */
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const windowStart = now - WINDOW_MS;
+  
+  // Get existing timestamps for this IP
+  const timestamps = rateLimitMap.get(ip) || [];
+  
+  // Filter out timestamps outside the current window
+  const recentTimestamps = timestamps.filter(ts => ts > windowStart);
+  
+  // Check if limit exceeded
+  if (recentTimestamps.length >= MAX_REQUESTS) {
+    return false;
+  }
+  
+  // Add current timestamp and update map
+  recentTimestamps.push(now);
+  rateLimitMap.set(ip, recentTimestamps);
+  
+  // Clean up old entries periodically (every 100 requests to avoid overhead)
+  if (Math.random() < 0.01) {
+    for (const [key, values] of rateLimitMap.entries()) {
+      const filtered = values.filter(ts => ts > windowStart);
+      if (filtered.length === 0) {
+        rateLimitMap.delete(key);
+      } else {
+        rateLimitMap.set(key, filtered);
+      }
+    }
+  }
+  
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting check
+    const clientIP = getClientIP(request);
+    if (!checkRateLimit(clientIP)) {
+      return NextResponse.json(
+        { message: 'Too many requests. Please try again in a minute.' },
+        { status: 429 }
+      );
+    }
+
     // Check for API key
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
@@ -49,10 +121,6 @@ export async function POST(request: NextRequest) {
       interested_white_label: features.includes('white-label') ? 'true' : 'false',
     };
 
-    // Log what we're sending for debugging
-    console.log('Creating contact with properties:', properties);
-    console.log('Features array:', features);
-
     // Add contact to Resend audience
     // Using Resend Contacts API
     const audienceId = process.env.RESEND_AUDIENCE_ID;
@@ -69,14 +137,10 @@ export async function POST(request: NextRequest) {
       contactData.audienceId = audienceId;
     }
 
-    console.log('Contact data being sent:', JSON.stringify(contactData, null, 2));
-
     let { data, error } = await resend.contacts.create(contactData);
     
     // If contact already exists, update it with the new properties
     if (error && (error.message?.includes('already exists') || error.message?.includes('duplicate'))) {
-      console.log('Contact already exists, updating with properties...');
-      
       // Update existing contact with properties
       const updateResult = await resend.contacts.update({
         email: email.trim(),
@@ -84,7 +148,7 @@ export async function POST(request: NextRequest) {
       });
       
       if (updateResult.error) {
-        console.error('Resend update error:', updateResult.error);
+        console.error('Resend update error:', updateResult.error.message || 'Unknown error');
         return NextResponse.json(
           {
             success: true,
@@ -94,8 +158,6 @@ export async function POST(request: NextRequest) {
           { status: 200 }
         );
       }
-      
-      console.log('Update result:', JSON.stringify(updateResult.data, null, 2));
       
       return NextResponse.json(
         {
@@ -108,25 +170,20 @@ export async function POST(request: NextRequest) {
     }
 
     if (error) {
-      console.error('Resend API error:', error);
+      console.error('Resend API error:', error.message || 'Unknown error');
       throw new Error(error.message || 'Failed to add contact to Resend');
     }
     
     if (data) {
-      console.log('Resend create response:', JSON.stringify(data, null, 2));
-      
       // Update contact immediately after creation to ensure properties are set
       // Sometimes properties don't get set on initial create
-      console.log('Updating contact to ensure properties are set...');
       const updateResult = await resend.contacts.update({
         email: email.trim(),
         properties: properties,
       });
       
       if (updateResult.error) {
-        console.error('Resend update error after create:', updateResult.error);
-      } else {
-        console.log('Update after create result:', JSON.stringify(updateResult.data, null, 2));
+        console.error('Resend update error after create:', updateResult.error.message || 'Unknown error');
       }
     }
 
@@ -140,10 +197,12 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('Waitlist API error:', error);
+    // Log error without exposing sensitive information
+    const errorMessage = error?.message || 'Unknown error';
+    console.error('Waitlist API error:', errorMessage);
     return NextResponse.json(
       {
-        message: error.message || 'Failed to join waitlist. Please try again.',
+        message: errorMessage || 'Failed to join waitlist. Please try again.',
       },
       { status: 500 }
     );
