@@ -16,7 +16,7 @@ export default function InstructionsAccordion() {
 
   return (
     <div 
-      className="mb-12 md:mb-16 rounded-softer transition-smooth overflow-hidden" 
+      className="mb-8 md:mb-16 rounded-softer transition-smooth overflow-hidden" 
       style={{ 
         backgroundColor: 'var(--surface)', 
         border: '1px solid var(--border)'
@@ -25,7 +25,7 @@ export default function InstructionsAccordion() {
       {/* Accordion Header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-8 md:px-10 py-6 flex items-center justify-between text-left transition-smooth hover:opacity-80"
+        className="w-full px-6 md:px-10 py-5 md:py-6 flex items-center justify-between text-left transition-smooth hover:opacity-80 touch-target"
         style={{ color: 'var(--text-primary)' }}
       >
         <h3 className="text-lg font-medium transition-smooth">
@@ -53,8 +53,8 @@ export default function InstructionsAccordion() {
           opacity: isOpen ? 1 : 0,
         }}
       >
-        <div className="px-8 md:px-10 pb-8 md:pb-10">
-          <ol className="list-decimal list-inside space-y-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+        <div className="px-6 md:px-10 pb-6 md:pb-10">
+          <ol className="list-decimal list-inside space-y-2.5 md:space-y-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
             {instructions.map((instruction, index) => (
               <li key={index}>{instruction}</li>
             ))}

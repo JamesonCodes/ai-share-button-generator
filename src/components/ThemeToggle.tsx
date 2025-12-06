@@ -8,7 +8,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 p-3 rounded-soft transition-smooth hover:opacity-80 active:opacity-90"
+      className="fixed top-4 right-4 md:top-6 md:right-6 z-50 p-3.5 md:p-3 rounded-soft transition-smooth hover:opacity-80 active:opacity-90 touch-target"
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',

@@ -125,7 +125,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
       onClick={handleClose}
     >
       <div
-        className="w-full max-w-md rounded-softer p-8 transition-smooth"
+        className="w-full mx-4 max-w-sm md:max-w-md rounded-softer p-6 md:p-8 transition-smooth"
         style={{
           backgroundColor: 'var(--surface)',
           border: '1px solid var(--border)',
@@ -140,7 +140,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
             </h3>
             <button
               onClick={handleClose}
-              className="p-1 rounded-soft transition-smooth hover:opacity-80"
+              className="p-2 md:p-1 rounded-soft transition-smooth hover:opacity-80 touch-target"
               style={{ color: 'var(--text-secondary)' }}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,7 +179,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
             {/* Feature Selection */}
             <div>
               <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
@@ -189,7 +189,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
                 {allFeatures.map((feature) => (
                   <label
                     key={feature.id}
-                    className="flex items-center gap-3 p-3 rounded-soft cursor-pointer transition-smooth hover:opacity-80"
+                    className="flex items-center gap-3 p-3.5 md:p-3 rounded-soft cursor-pointer transition-smooth hover:opacity-80 touch-target"
                     style={{
                       backgroundColor: selectedFeatures.includes(feature.id) ? 'var(--background)' : 'transparent',
                       border: `1px solid ${selectedFeatures.includes(feature.id) ? 'var(--accent)' : 'var(--border)'}`,
@@ -199,7 +199,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
                       type="checkbox"
                       checked={selectedFeatures.includes(feature.id)}
                       onChange={() => handleFeatureToggle(feature.id)}
-                      className="w-4 h-4 rounded-soft transition-smooth cursor-pointer"
+                      className="w-5 h-5 md:w-4 md:h-4 rounded-soft transition-smooth cursor-pointer"
                       style={{
                         accentColor: 'var(--accent)',
                       }}
@@ -246,7 +246,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-5 py-3 text-sm font-medium rounded-soft transition-smooth flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-5 py-3 text-sm font-medium rounded-soft transition-smooth flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed touch-target"
               style={{
                 backgroundColor: 'var(--accent)',
                 color: '#FFFFFF',

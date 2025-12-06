@@ -69,13 +69,13 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
   return (
     <div>
       {/* Framework Tabs */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex gap-1 transition-smooth" style={{ borderBottom: '1px solid var(--border)' }}>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-0 mb-6">
+        <div className="flex gap-1 transition-smooth w-full md:w-auto" style={{ borderBottom: '1px solid var(--border)' }}>
           {(['html', 'react', 'vue'] as Framework[]).map((framework) => (
             <button
               key={framework}
               onClick={() => setActiveFramework(framework)}
-              className={`px-4 py-2 text-sm font-medium transition-smooth border-b-2 -mb-px ${
+              className={`flex-1 md:flex-none px-4 py-3 md:py-2 text-sm font-medium transition-smooth border-b-2 -mb-px touch-target ${
                 activeFramework === framework ? '' : 'hover:opacity-80'
               }`}
               style={{
@@ -89,7 +89,7 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
         </div>
         <button
           onClick={() => copyToClipboard(currentCode)}
-          className={`px-5 py-2.5 text-sm font-medium rounded-soft transition-smooth flex items-center gap-2 ${
+          className={`w-full md:w-auto px-5 py-3 md:py-2.5 text-sm font-medium rounded-soft transition-smooth flex items-center justify-center gap-2 touch-target ${
             copied ? 'scale-105' : 'hover:opacity-90 active:opacity-95'
           }`}
           style={{
@@ -117,21 +117,29 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
 
       {/* Code Display */}
       <div className="rounded-soft overflow-hidden transition-smooth" style={{ border: '1px solid var(--border)' }}>
-        <SyntaxHighlighter
-          language={getLanguage()}
-          style={isDark ? vscDarkPlus : oneLight}
-          customStyle={{
-            margin: 0,
-            padding: '1.25rem',
-            fontSize: '0.875rem',
-            lineHeight: '1.6',
-            backgroundColor: isDark ? '#1E1E1E' : '#FAFAFA',
-          }}
-        >
-          {currentCode}
-        </SyntaxHighlighter>
+        <div className="overflow-x-auto p-4 md:p-5" style={{ background: isDark ? '#1E1E1E' : '#FAFAFA' }}>
+          <SyntaxHighlighter
+            language={getLanguage()}
+            style={isDark ? vscDarkPlus : oneLight}
+            customStyle={{
+              margin: 0,
+              padding: 0,
+              fontSize: '0.75rem',
+              lineHeight: '1.6',
+              background: 'transparent',
+              minWidth: 'fit-content',
+            }}
+            codeTagProps={{
+              style: {
+                fontSize: 'inherit',
+              }
+            }}
+          >
+            {currentCode}
+          </SyntaxHighlighter>
+        </div>
       </div>
-      <p className="mt-3 text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+      <p className="mt-3 text-xs md:text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
         {getHelperText()}
       </p>
     </div>

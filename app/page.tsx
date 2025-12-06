@@ -36,8 +36,8 @@ export default function Home() {
     <>
       <ThemeToggle />
       <div className="min-h-screen transition-smooth" style={{ backgroundColor: 'var(--background)' }}>
-        <div className="container mx-auto px-6 py-16 md:px-8 md:py-20 max-w-6xl">
-          <header className="text-center mb-12 md:mb-16">
+        <div className="container mx-auto px-4 py-12 md:px-8 md:py-20 max-w-6xl">
+          <header className="text-center mb-8 md:mb-16">
             <h1 className="mb-6 transition-smooth" style={{ color: 'var(--text-primary)' }}>
               AI Share Button Generator
             </h1>
@@ -51,10 +51,10 @@ export default function Home() {
           <InstructionsAccordion />
 
           {/* Two-Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10">
             {/* Left Column: Configuration */}
             <div 
-              className="rounded-softer p-8 md:p-10 transition-smooth" 
+              className="rounded-softer p-6 md:p-10 transition-smooth" 
               style={{ 
                 backgroundColor: 'var(--surface)', 
                 border: '1px solid var(--border)'
@@ -68,7 +68,7 @@ export default function Home() {
             <div className="space-y-8">
               {/* Live Preview */}
               <div 
-                className="rounded-softer p-8 md:p-10 transition-smooth" 
+                className="rounded-softer p-6 md:p-10 transition-smooth" 
                 style={{ 
                   backgroundColor: 'var(--surface)', 
                   border: '1px solid var(--border)'
@@ -80,7 +80,7 @@ export default function Home() {
 
               {/* Embed Code */}
               <div 
-                className="rounded-softer p-8 md:p-10 transition-smooth" 
+                className="rounded-softer p-6 md:p-10 transition-smooth" 
                 style={{ 
                   backgroundColor: 'var(--surface)', 
                   border: '1px solid var(--border)'

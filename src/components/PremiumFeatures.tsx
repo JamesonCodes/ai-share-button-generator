@@ -40,13 +40,13 @@ export default function PremiumFeatures({ onFeatureClick }: PremiumFeaturesProps
         </p>
       </div>
       
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 gap-2.5 md:gap-3">
         {premiumFeatures.map((feature) => (
           <button
             key={feature.id}
             type="button"
             onClick={() => onFeatureClick(feature)}
-            className="relative p-4 rounded-soft transition-smooth text-left border group hover:opacity-90"
+            className="relative p-3.5 md:p-4 rounded-soft transition-smooth text-left border group hover:opacity-90 touch-target"
             style={{
               backgroundColor: 'var(--background)',
               borderColor: 'var(--border)',

@@ -109,14 +109,14 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     onConfigChange(newConfig);
   };
 
-  const inputBaseStyles = "w-full px-4 py-3 rounded-soft transition-smooth font-normal";
+  const inputBaseStyles = "w-full px-4 py-3.5 md:py-3 rounded-soft transition-smooth font-normal";
   const inputFocusStyles = "focus:outline-none focus:border-accent";
   
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       {/* Content URL */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Content URL <span style={{ color: 'var(--accent)' }}>*</span>
         </label>
         <input
@@ -142,7 +142,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Brand/Site Name */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Brand/Site Name <span style={{ color: 'var(--accent)' }}>*</span>
         </label>
         <input
@@ -163,7 +163,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Content Type */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Content Type (Optional)
         </label>
         <select
@@ -185,10 +185,10 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* AI Destinations */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Select AI Platforms
         </label>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {aiOptions.map((option) => {
             const isSelected = config.ai.includes(option.value);
             
@@ -218,7 +218,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             return (
               <label
                 key={option.value}
-                className={`relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-smooth ${
+                className={`relative inline-flex items-center gap-2 px-3.5 py-2 md:px-3 md:py-1.5 rounded-full cursor-pointer transition-smooth touch-target ${
                   isSelected ? '' : 'hover:opacity-80'
                 }`}
                 style={{
@@ -252,7 +252,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Embed Button Style */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Embed Button Style
         </label>
         <select
@@ -275,14 +275,14 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Custom Prompt Template */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Custom Prompt Template
         </label>
         <textarea
           ref={textareaRef}
           value={config.promptTemplate || defaultPromptTemplate}
           onChange={(e) => updateConfig({ promptTemplate: e.target.value })}
-          rows={5}
+          rows={4}
           className={`${inputBaseStyles} ${inputFocusStyles} font-mono text-sm resize-none`}
           style={{
             backgroundColor: 'var(--background)',
@@ -299,10 +299,10 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
 
       {/* Quick Templates */}
       <div>
-        <label className="block text-sm font-medium mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
           Quick Templates
         </label>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {Object.entries(promptPresets).map(([key, preset]) => {
             const isActive = config.promptTemplate === preset.template;
             const isHighlighted = highlightTemplate === key;
@@ -318,7 +318,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
                 type="button"
                 onClick={() => handlePresetClick(key as PromptPreset)}
                 title={templateTooltips[key as PromptPreset]}
-                className={`inline-flex items-center px-3 py-1.5 text-sm rounded-full border transition-smooth whitespace-nowrap ${
+                className={`inline-flex items-center px-3 py-2 md:py-1.5 text-sm rounded-full border transition-smooth whitespace-nowrap touch-target ${
                   isHighlighted ? 'scale-105' : ''
                 } ${isActive ? '' : 'hover:opacity-80'}`}
                 style={{

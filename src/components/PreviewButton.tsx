@@ -136,7 +136,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     <div className="space-y-6">
       <div>
         <div 
-          className="relative p-10 rounded-soft transition-smooth min-h-[240px] flex flex-col items-end justify-end"
+          className="relative p-6 md:p-10 rounded-soft transition-smooth min-h-[180px] md:min-h-[240px] flex flex-col items-end justify-end"
           style={{ 
             backgroundColor: 'var(--background)', 
             border: '1px solid var(--border)'
@@ -153,15 +153,18 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
           )}
           
           {/* Floating buttons container - positioned bottom-right */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2.5 md:gap-3 w-full md:w-auto">
             {config.ai.length > 0 ? (
               config.ai.map((ai) => (
                 <button
                   key={ai}
                   onClick={() => handleButtonClick(ai)}
                   disabled={!config.url}
-                  style={getButtonStyle(ai)}
-                  className="transition-smooth hover:brightness-95 active:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    ...getButtonStyle(ai),
+                    minHeight: '44px',
+                  }}
+                  className="transition-smooth hover:brightness-95 active:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
                 >
                   <span 
                     style={{ 
@@ -196,10 +199,10 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
       {config.url || config.brandName ? (
         <div className="space-y-3 pt-4 border-t transition-smooth" style={{ borderColor: 'var(--border)' }}>
           {config.url && (
-            <div className="text-sm">
+            <div className="text-xs md:text-sm">
               <span className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>URL: </span>
               <span 
-                className="font-mono text-xs break-all transition-smooth" 
+                className="font-mono text-xs break-url transition-smooth" 
                 style={{ color: 'var(--text-primary)' }}
               >
                 {config.url}
