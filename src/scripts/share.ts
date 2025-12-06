@@ -15,8 +15,16 @@ interface ButtonConfig {
 }
 
 function getConfig(): ButtonConfig {
-  const script = document.currentScript as HTMLScriptElement;
-  if (!script) {
+  // Try currentScript first (works when script executes synchronously)
+  let script = document.currentScript as HTMLScriptElement;
+  
+  // Fallback: find script by src attribute (needed when script executes asynchronously)
+  if (!script || !script.getAttribute) {
+    const scripts = document.querySelectorAll('script[src*="share.js"]');
+    script = scripts[scripts.length - 1] as HTMLScriptElement; // Get the last matching script
+  }
+  
+  if (!script || !script.getAttribute) {
     return getDefaultConfig();
   }
 
