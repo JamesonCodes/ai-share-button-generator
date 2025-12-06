@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
 import { AIIcon } from '@/lib/icons';
 import { replacePromptPlaceholders, promptPresets, defaultPromptTemplate } from '@/lib/prompt-templates';
@@ -9,6 +10,15 @@ interface PreviewButtonProps {
 }
 
 export default function PreviewButton({ config }: PreviewButtonProps) {
+  const [attributionUrl, setAttributionUrl] = useState('#');
+
+  useEffect(() => {
+    // Set attribution URL after hydration to avoid mismatch
+    if (typeof window !== 'undefined') {
+      setAttributionUrl(window.location.origin);
+    }
+  }, []);
+
   const aiLabels: Record<string, string> = {
     chatgpt: 'ChatGPT',
     perplexity: 'Perplexity',
@@ -142,54 +152,86 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
             border: '1px solid var(--border)'
           }}
         >
-          {/* Dynamic action label - appears above buttons */}
-          {config.ai.length > 0 && (
-            <div 
-              className="mb-4 text-sm font-medium transition-smooth self-end"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              {actionName} in:
-            </div>
-          )}
-          
-          {/* Floating buttons container - positioned bottom-right */}
-          <div className="flex flex-col gap-2.5 md:gap-3 w-full md:w-auto">
-            {config.ai.length > 0 ? (
-              config.ai.map((ai) => (
-                <button
-                  key={ai}
-                  onClick={() => handleButtonClick(ai)}
-                  disabled={!config.url}
-                  style={{
-                    ...getButtonStyle(ai),
-                    minHeight: '44px',
-                  }}
-                  className="transition-smooth hover:brightness-95 active:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
-                >
-                  <span 
-                    style={{ 
-                      display: 'inline-flex', 
-                      alignItems: 'center', 
-                      marginRight: '8px',
-                      color: buttonStyle === 'outline' ? brandColors[ai] || 'var(--accent)' : '#FFFFFF'
-                    }}
-                  >
-                    <AIIcon ai={ai} className="w-4 h-4" />
-                  </span>
-                  {aiLabels[ai] || ai}
-                </button>
-              ))
-            ) : (
+          {/* Container for label, buttons, and attribution */}
+          <div className="flex flex-col items-end gap-2.5 md:gap-3 w-full md:w-auto">
+            {/* Dynamic action label - appears above buttons */}
+            {config.ai.length > 0 && (
               <div 
-                className="px-4 py-2 rounded-soft text-sm transition-smooth"
-                style={{ 
-                  color: 'var(--text-secondary)',
-                  backgroundColor: 'var(--surface)',
-                  border: '1px dashed var(--border)'
+                className="text-sm font-medium transition-smooth"
+                style={{ color: 'var(--text-primary)' }}
+              >
+                {actionName} in:
+              </div>
+            )}
+            
+            {/* Buttons container */}
+            <div className="flex flex-col gap-2.5 md:gap-3 w-full md:w-auto">
+              {config.ai.length > 0 ? (
+                config.ai.map((ai) => (
+                  <button
+                    key={ai}
+                    onClick={() => handleButtonClick(ai)}
+                    disabled={!config.url}
+                    style={{
+                      ...getButtonStyle(ai),
+                      minHeight: '44px',
+                    }}
+                    className="transition-smooth hover:brightness-95 active:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
+                  >
+                    <span 
+                      style={{ 
+                        display: 'inline-flex', 
+                        alignItems: 'center', 
+                        marginRight: '8px',
+                        color: buttonStyle === 'outline' ? brandColors[ai] || 'var(--accent)' : '#FFFFFF'
+                      }}
+                    >
+                      <AIIcon ai={ai} className="w-4 h-4" />
+                    </span>
+                    {aiLabels[ai] || ai}
+                  </button>
+                ))
+              ) : (
+                <div 
+                  className="px-4 py-2 rounded-soft text-sm transition-smooth"
+                  style={{ 
+                    color: 'var(--text-secondary)',
+                    backgroundColor: 'var(--surface)',
+                    border: '1px dashed var(--border)'
+                  }}
+                >
+                  Select AI platforms to preview
+                </div>
+              )}
+            </div>
+
+            {/* Attribution link - matches embed script behavior */}
+            {config.showAttribution !== false && config.ai.length > 0 && (
+              <a
+                href={attributionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ai-share-attribution transition-smooth"
+                style={{
+                  fontSize: '10px',
+                  color: '#999',
+                  textDecoration: 'none',
+                  marginTop: '4px',
+                  opacity: 0.7,
+                  transition: 'opacity 0.2s ease',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.textDecoration = 'underline';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.7';
+                  e.currentTarget.style.textDecoration = 'none';
                 }}
               >
-                Select AI platforms to preview
-              </div>
+                Powered by AI Share Button Generator
+              </a>
             )}
           </div>
         </div>
