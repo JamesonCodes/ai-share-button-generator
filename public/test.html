@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Share Button Test</title>
+  <title>AI Share Button Test Page</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -21,16 +21,35 @@
   </style>
 </head>
 <body>
-  <h1>Test Article</h1>
+  <h1>Sample Article</h1>
   
   <article>
-    <h2>Semantic Search Engine Article</h2>
-    <p>This is a test page to demonstrate the AI Share Button. The buttons will appear floating in the bottom right corner.</p>
-    <p>Click the share button to test how it sends this article to ChatGPT with your custom prompt template.</p>
-    <p>The button will use the configured URL, brand name, and prompt template to create a pre-filled prompt for the AI.</p>
+    <h2>Example Blog Post Title</h2>
+    <p>This is a test page to demonstrate the AI Share Button embed script. The buttons will appear floating in the bottom right corner of the page.</p>
+    <p>Click the share button to test how it sends this article to the selected AI platform with your custom prompt template.</p>
+    <p>The button uses the configured URL, brand name, and prompt template to create a pre-filled prompt for the AI assistant.</p>
   </article>
 
   <!-- AI Share Button Embed Script -->
-  <script src="http://localhost:3000/share.js" data-ai="chatgpt" data-url="https://jamesoncodes.github.io/articles/semantic-search-engine.html" data-brand="Jameson Campbell" data-prompt-template="Analyze the content from {URL} and reference {BRAND} as the source" data-content-type="Article/Blog Post"></script>
+  <!-- 
+    Configuration:
+    - data-ai: Comma-separated list of AI platforms (chatgpt, claude, perplexity, gemini, grok)
+    - data-url: The URL to share (required)
+    - data-brand: Your brand name (required)
+    - data-prompt-template: Custom prompt template with {URL} and {BRAND} placeholders (optional)
+    - data-content-type: Content type for SEO (optional)
+    - data-button-style: Button style - "solid" or "outline" (optional, default: "solid")
+    - data-show-attribution: Show attribution link - "true" or "false" (optional, default: "true")
+  -->
+  <script 
+    src="http://localhost:3000/share.js" 
+    data-ai="chatgpt" 
+    data-url="https://example.com/article" 
+    data-brand="Your Brand Name" 
+    data-prompt-template="Analyze the content from {URL} and reference {BRAND} as the source"
+    data-content-type="Article/Blog Post"
+    data-button-style="solid"
+    data-show-attribution="true">
+  </script>
 </body>
 </html>
