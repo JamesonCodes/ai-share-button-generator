@@ -285,6 +285,61 @@ function injectStyles(css: string): void {
   document.head.appendChild(style);
 }
 
+function getContrastingTextColor(): string {
+  // Detect actual background color by checking body and html elements
+  const body = document.body;
+  const html = document.documentElement;
+  
+  // Get computed styles
+  const bodyStyle = window.getComputedStyle(body);
+  const htmlStyle = window.getComputedStyle(html);
+  
+  // Try body background first, fallback to html
+  let bgColor = bodyStyle.backgroundColor || htmlStyle.backgroundColor;
+  
+  // Check if background is transparent (handle various formats)
+  const transparentPatterns = ['transparent', 'rgba(0, 0, 0, 0)', 'rgba(0,0,0,0)'];
+  if (transparentPatterns.some(pattern => bgColor.toLowerCase().includes(pattern.toLowerCase()))) {
+    // If transparent, assume white background (most common)
+    return '#000000';
+  }
+  
+  // Parse RGB values from rgba/rgb string (handle spaces)
+  const rgbMatch = bgColor.match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
+  
+  if (!rgbMatch) {
+    // Fallback: if we can't parse, default to dark text (most sites are light)
+    return '#000000';
+  }
+  
+  const r = parseInt(rgbMatch[1]);
+  const g = parseInt(rgbMatch[2]);
+  const b = parseInt(rgbMatch[3]);
+  const alpha = rgbMatch[4] ? parseFloat(rgbMatch[4]) : 1;
+  
+  // If alpha is very low, treat as transparent and default to dark text
+  if (alpha < 0.1) {
+    return '#000000';
+  }
+  
+  // If r=g=b=0, it's likely transparent black, default to dark text
+  if (r === 0 && g === 0 && b === 0 && alpha < 1) {
+    return '#000000';
+  }
+  
+  // Calculate relative luminance (WCAG formula)
+  // Normalize RGB values to 0-1 range
+  const [rNorm, gNorm, bNorm] = [r, g, b].map(val => {
+    val = val / 255;
+    return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+  });
+  
+  const luminance = 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm;
+  
+  // Return light text for dark backgrounds (luminance < 0.5), dark text for light backgrounds
+  return luminance < 0.5 ? '#E5E5E5' : '#000000';
+}
+
 function createAttributionLink(): HTMLAnchorElement | null {
   // Get the generator URL from the script src
   // Try currentScript first (works when script executes synchronously)
@@ -304,13 +359,15 @@ function createAttributionLink(): HTMLAnchorElement | null {
     const scriptUrl = new URL(script.src);
     const generatorUrl = `${scriptUrl.protocol}//${scriptUrl.host}`;
     
+    const textColor = getContrastingTextColor();
+    
     const attribution = document.createElement('a');
     attribution.href = generatorUrl;
     attribution.target = '_blank';
     attribution.rel = 'noopener noreferrer';
     attribution.className = 'ai-share-attribution';
     attribution.textContent = 'Get your own AI Share Button';
-    attribution.style.cssText = 'font-size: 10px; color: #999; text-decoration: none; margin-top: 4px; opacity: 0.7; transition: opacity 0.2s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;';
+    attribution.style.cssText = `font-size: 10px; color: ${textColor}; text-decoration: none; margin-top: 4px; opacity: 0.7; transition: opacity 0.2s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;`;
     
     attribution.addEventListener('mouseenter', () => {
       attribution.style.opacity = '1';
@@ -396,7 +453,8 @@ function init(): void {
     const actionName = getActionName(config);
     const label = document.createElement('div');
     label.textContent = `${actionName} in:`;
-    label.style.cssText = 'font-size: 14px; font-weight: 500; color: inherit; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;';
+    const textColor = getContrastingTextColor();
+    label.style.cssText = `font-size: 14px; font-weight: 500; color: ${textColor}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;`;
     wrapper.appendChild(label);
   }
   

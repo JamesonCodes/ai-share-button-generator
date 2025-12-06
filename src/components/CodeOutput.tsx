@@ -118,14 +118,14 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
       {/* Code Display */}
       <div className="rounded-soft overflow-hidden transition-smooth" style={{ border: '1px solid var(--border)' }}>
         <div className="overflow-x-auto p-4 md:p-5" style={{ background: isDark ? '#1E1E1E' : '#FAFAFA' }}>
-          <SyntaxHighlighter
-            language={getLanguage()}
-            style={isDark ? vscDarkPlus : oneLight}
-            customStyle={{
-              margin: 0,
+        <SyntaxHighlighter
+          language={getLanguage()}
+          style={isDark ? vscDarkPlus : oneLight}
+          customStyle={{
+            margin: 0,
               padding: 0,
               fontSize: '0.75rem',
-              lineHeight: '1.6',
+            lineHeight: '1.6',
               background: 'transparent',
               minWidth: 'fit-content',
             }}
@@ -133,11 +133,11 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
               style: {
                 fontSize: 'inherit',
               }
-            }}
-          >
-            {currentCode}
-          </SyntaxHighlighter>
-        </div>
+          }}
+        >
+          {currentCode}
+        </SyntaxHighlighter>
+      </div>
       </div>
       <p className="mt-3 text-xs md:text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
         {getHelperText()}
