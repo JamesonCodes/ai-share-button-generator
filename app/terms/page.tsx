@@ -42,8 +42,8 @@ export default function TermsOfService() {
               Agreement to Terms
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              By accessing or using the AI Share Button Generator ("Service") operated by SearchWell Labs LLC 
-              ("we," "our," or "us"), you agree to be bound by these Terms of Service. If you disagree with 
+              By accessing or using the AI Share Button Generator (&ldquo;Service&rdquo;) operated by SearchWell Labs LLC 
+              (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;), you agree to be bound by these Terms of Service. If you disagree with 
               any part of these terms, you may not access the Service.
             </p>
           </section>
@@ -95,7 +95,7 @@ export default function TermsOfService() {
               Disclaimer of Warranties
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS 
+              THE SERVICE IS PROVIDED &ldquo;AS IS&rdquo; AND &ldquo;AS AVAILABLE&rdquo; WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS 
               OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
               PURPOSE, OR NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR 
               ERROR-FREE.

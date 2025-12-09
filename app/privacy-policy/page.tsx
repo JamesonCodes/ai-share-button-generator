@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
               Introduction
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              SearchWell Labs LLC ("we," "our," or "us") operates the AI Share Button Generator ("Service"). 
+              SearchWell Labs LLC (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) operates the AI Share Button Generator (&ldquo;Service&rdquo;). 
               This Privacy Policy explains how we handle information when you use our Service.
             </p>
           </section>
@@ -56,7 +56,7 @@ export default function PrivacyPolicy() {
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li><strong>Email Address:</strong> If you choose to join our waitlist for premium features, we collect your email address and your feature preferences. This information is stored securely with our email service provider (Resend) and is used solely to notify you about premium feature launches.</li>
-              <li><strong>Theme Preference:</strong> We store your theme preference (light or dark mode) in your browser's localStorage. This information is stored locally on your device and is not transmitted to our servers.</li>
+              <li><strong>Theme Preference:</strong> We store your theme preference (light or dark mode) in your browser&rsquo;s localStorage. This information is stored locally on your device and is not transmitted to our servers.</li>
               <li><strong>User Input:</strong> When you use the generator to create share button code, the information you enter (URLs, brand names, prompt templates) is processed entirely in your browser. We do not collect, store, or transmit this information to our servers.</li>
             </ul>
           </section>
@@ -79,7 +79,7 @@ export default function PrivacyPolicy() {
               Third-Party Services
             </h2>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist. Resend processes your email address on our behalf in accordance with their privacy policy. You can review Resend's privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
+              <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist. Resend processes your email address on our behalf in accordance with their privacy policy. You can review Resend&rsquo;s privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
             </p>
             <p className="mb-3 mt-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>AI Platform Redirects:</strong> Our Service generates code that redirects users to third-party AI platforms, including:
@@ -163,7 +163,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
-              Children's Privacy
+              Children&rsquo;s Privacy
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               Our Service is not directed to children under the age of 13. We do not knowingly collect 
@@ -178,7 +178,7 @@ export default function PrivacyPolicy() {
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               We may update this Privacy Policy from time to time. We will notify you of any changes by 
-              posting the new Privacy Policy on this page and updating the "Last updated" date.
+              posting the new Privacy Policy on this page and updating the &ldquo;Last updated&rdquo; date.
             </p>
           </section>
 

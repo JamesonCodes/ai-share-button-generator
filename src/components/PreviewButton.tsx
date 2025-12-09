@@ -14,66 +14,50 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
   const [textColor, setTextColor] = useState('#000000');
 
   useEffect(() => {
-    // Set attribution URL after hydration to avoid mismatch
-    if (typeof window !== 'undefined') {
-      setAttributionUrl(window.location.origin);
-      
-      // Detect actual background color by checking body and html elements
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const resolveTextColor = () => {
       const body = document.body;
       const html = document.documentElement;
-      
       const bodyStyle = window.getComputedStyle(body);
       const htmlStyle = window.getComputedStyle(html);
-      
-      // Try body background first, fallback to html
       const bgColor = bodyStyle.backgroundColor || htmlStyle.backgroundColor;
-      
-      // Check if background is transparent (handle various formats)
       const transparentPatterns = ['transparent', 'rgba(0, 0, 0, 0)', 'rgba(0,0,0,0)'];
       if (transparentPatterns.some(pattern => bgColor.toLowerCase().includes(pattern.toLowerCase()))) {
-        // If transparent, assume white background (most common)
-        setTextColor('#000000');
-        return;
+        return '#000000';
       }
-      
-      // Parse RGB values from rgba/rgb string (handle spaces)
       const rgbMatch = bgColor.match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
-      
       if (!rgbMatch) {
-        // Fallback: if we can't parse, default to dark text (most sites are light)
-        setTextColor('#000000');
-        return;
+        return '#000000';
       }
-      
       const r = parseInt(rgbMatch[1]);
       const g = parseInt(rgbMatch[2]);
       const b = parseInt(rgbMatch[3]);
       const alpha = rgbMatch[4] ? parseFloat(rgbMatch[4]) : 1;
-      
-      // If alpha is very low, treat as transparent and default to dark text
       if (alpha < 0.1) {
-        setTextColor('#000000');
-        return;
+        return '#000000';
       }
-      
-      // If r=g=b=0, it's likely transparent black, default to dark text
       if (r === 0 && g === 0 && b === 0 && alpha < 1) {
-        setTextColor('#000000');
-        return;
+        return '#000000';
       }
-      
-      // Calculate relative luminance (WCAG formula)
-      // Normalize RGB values to 0-1 range
       const [rNorm, gNorm, bNorm] = [r, g, b].map(val => {
-        val = val / 255;
-        return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+        let normalized = val / 255;
+        return normalized <= 0.03928 ? normalized / 12.92 : Math.pow((normalized + 0.055) / 1.055, 2.4);
       });
-      
       const luminance = 0.2126 * rNorm + 0.7152 * gNorm + 0.0722 * bNorm;
-      
-      // Return light text for dark backgrounds (luminance < 0.5), dark text for light backgrounds
-      setTextColor(luminance < 0.5 ? '#E5E5E5' : '#000000');
-    }
+      return luminance < 0.5 ? '#E5E5E5' : '#000000';
+    };
+
+    const frame = window.requestAnimationFrame(() => {
+      setAttributionUrl(window.location.origin);
+      setTextColor(resolveTextColor());
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   const aiLabels: Record<string, string> = {
@@ -321,4 +305,3 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     </div>
   );
 }
-

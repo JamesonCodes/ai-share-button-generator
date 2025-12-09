@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ConfigForm from '@/components/ConfigForm';
 import PreviewButton from '@/components/PreviewButton';
 import CodeOutput from '@/components/CodeOutput';
@@ -20,10 +20,13 @@ export default function Home() {
   const [baseUrl, setBaseUrl] = useState('');
 
   useEffect(() => {
-    // Get base URL from window location
-    if (typeof window !== 'undefined') {
-      setBaseUrl(window.location.origin);
+    if (typeof window === 'undefined') {
+      return;
     }
+    const frame = window.requestAnimationFrame(() => {
+      setBaseUrl(window.location.origin);
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const handleConfigChange = (newConfig: ButtonConfig) => {

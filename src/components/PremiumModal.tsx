@@ -184,10 +184,10 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
               </svg>
             </div>
             <h4 className="text-lg font-medium mb-2 transition-smooth" style={{ color: 'var(--text-primary)' }}>
-              You're on the list!
+              You&rsquo;re on the list!
             </h4>
             <p className="text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              We'll notify you when premium features are available.
+              We&rsquo;ll notify you when premium features are available.
             </p>
           </div>
         ) : (
@@ -248,7 +248,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
                 disabled={isSubmitting}
               />
               <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-                We'll only use your email to notify you about premium feature launches. You can unsubscribe at any time.
+                We&rsquo;ll only use your email to notify you about premium feature launches. You can unsubscribe at any time.
               </p>
               {errorMessage && (
                 <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--accent)' }}>

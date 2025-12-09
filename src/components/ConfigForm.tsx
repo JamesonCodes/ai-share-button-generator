@@ -363,7 +363,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           />
           <div>
             <span className="text-sm font-medium transition-smooth" style={{ color: 'var(--text-primary)' }}>
-              Show "Powered by" attribution
+              Show &quot;Powered by&quot; attribution
             </span>
             <p className="text-xs mt-1 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               A small link will appear below the buttons linking back to the generator
