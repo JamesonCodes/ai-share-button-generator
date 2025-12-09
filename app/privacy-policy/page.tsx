@@ -55,6 +55,7 @@ export default function PrivacyPolicy() {
               Our Service is designed with privacy in mind. We collect minimal information:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <li><strong>Email Address:</strong> If you choose to join our waitlist for premium features, we collect your email address and your feature preferences. This information is stored securely with our email service provider (Resend) and is used solely to notify you about premium feature launches.</li>
               <li><strong>Theme Preference:</strong> We store your theme preference (light or dark mode) in your browser's localStorage. This information is stored locally on your device and is not transmitted to our servers.</li>
               <li><strong>User Input:</strong> When you use the generator to create share button code, the information you enter (URLs, brand names, prompt templates) is processed entirely in your browser. We do not collect, store, or transmit this information to our servers.</li>
             </ul>
@@ -64,11 +65,13 @@ export default function PrivacyPolicy() {
             <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
               How We Use Information
             </h2>
-            <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              The theme preference stored in localStorage is used solely to maintain your display preferences 
-              between visits. We do not use this information for any other purpose, and we do not share it 
-              with third parties.
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              We use the information we collect for the following purposes:
             </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <li><strong>Email Addresses:</strong> We use your email address to send you notifications about premium feature launches and updates related to the features you expressed interest in. We do not use your email for marketing purposes unrelated to the waitlist, and we do not share your email with third parties except as necessary to provide the email service (see Third-Party Services below).</li>
+              <li><strong>Theme Preference:</strong> The theme preference stored in localStorage is used solely to maintain your display preferences between visits. We do not use this information for any other purpose, and we do not share it with third parties.</li>
+            </ul>
           </section>
 
           <section>
@@ -76,7 +79,10 @@ export default function PrivacyPolicy() {
               Third-Party Services
             </h2>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              Our Service generates code that redirects users to third-party AI platforms, including:
+              <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist. Resend processes your email address on our behalf in accordance with their privacy policy. You can review Resend's privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
+            </p>
+            <p className="mb-3 mt-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <strong>AI Platform Redirects:</strong> Our Service generates code that redirects users to third-party AI platforms, including:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li>ChatGPT (operated by OpenAI)</li>
@@ -99,10 +105,48 @@ export default function PrivacyPolicy() {
             <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
               Data Storage and Security
             </h2>
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <strong>Email Addresses:</strong> Email addresses collected through our waitlist are stored securely with Resend, our email service provider. We retain your email address until you request its deletion or unsubscribe from our waitlist communications.
+            </p>
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <strong>Local Data:</strong> Theme preferences and user input for generating share button code are processed entirely in your browser. The theme preference stored in localStorage can be cleared at any time through your browser settings.
+            </p>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              All data processing occurs locally in your browser. We do not operate servers that collect or 
-              store your information. The theme preference stored in localStorage can be cleared at any time 
-              through your browser settings.
+              We implement reasonable security measures to protect your information, but no method of transmission over the Internet or electronic storage is 100% secure.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+              Email Communications and Opt-Out
+            </h2>
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              If you have joined our waitlist, we may send you emails about premium feature launches and updates. You can opt-out of these communications at any time by:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <li>Clicking the unsubscribe link in any email we send you</li>
+              <li>Contacting us at <a href="mailto:jameson@searchwell.io" className="underline" style={{ color: 'var(--accent)' }}>jameson@searchwell.io</a> and requesting removal from the waitlist</li>
+            </ul>
+            <p className="mt-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              We will process your opt-out request promptly, typically within 10 business days.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+              Your Rights
+            </h2>
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              You have the following rights regarding your personal information:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <li><strong>Access:</strong> You can request a copy of the personal information we hold about you.</li>
+              <li><strong>Deletion:</strong> You can request that we delete your email address from our waitlist.</li>
+              <li><strong>Opt-Out:</strong> You can unsubscribe from our email communications at any time (see Email Communications and Opt-Out above).</li>
+              <li><strong>Correction:</strong> You can request that we correct any inaccurate information we hold about you.</li>
+            </ul>
+            <p className="mt-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              To exercise any of these rights, please contact us at <a href="mailto:jameson@searchwell.io" className="underline" style={{ color: 'var(--accent)' }}>jameson@searchwell.io</a>. We will respond to your request within a reasonable timeframe.
             </p>
           </section>
 

@@ -23,6 +23,7 @@ const allFeatures = [
 export default function PremiumModal({ isOpen, onClose, selectedFeature }: PremiumModalProps) {
   const [email, setEmail] = useState('');
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const [hasConsented, setHasConsented] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -33,6 +34,10 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
       setSelectedFeatures([selectedFeature.id]);
     } else if (isOpen && !selectedFeature) {
       setSelectedFeatures([]);
+    }
+    // Reset consent when modal opens/closes
+    if (!isOpen) {
+      setHasConsented(false);
     }
   }, [isOpen, selectedFeature]);
 
@@ -69,6 +74,12 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
 
     if (selectedFeatures.length === 0) {
       setErrorMessage('Please select at least one feature');
+      setSubmitStatus('error');
+      return;
+    }
+
+    if (!hasConsented) {
+      setErrorMessage('Please agree to the privacy policy to continue');
       setSubmitStatus('error');
       return;
     }
@@ -110,6 +121,7 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
   const handleClose = () => {
     setEmail('');
     setSelectedFeatures([]);
+    setHasConsented(false);
     setSubmitStatus('idle');
     setErrorMessage('');
     onClose();
@@ -228,13 +240,16 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
                 className="w-full px-4 py-3 rounded-soft transition-smooth font-normal focus:outline-none focus:border-accent"
                 style={{
                   backgroundColor: 'var(--background)',
-                  border: `1px solid ${errorMessage ? 'var(--accent)' : 'var(--border)'}`,
+                  border: `1px solid ${errorMessage && !hasConsented ? 'var(--accent)' : 'var(--border)'}`,
                   color: 'var(--text-primary)',
                 }}
                 placeholder="your@email.com"
                 required
                 disabled={isSubmitting}
               />
+              <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+                We'll only use your email to notify you about premium feature launches. You can unsubscribe at any time.
+              </p>
               {errorMessage && (
                 <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--accent)' }}>
                   {errorMessage}
@@ -242,10 +257,45 @@ export default function PremiumModal({ isOpen, onClose, selectedFeature }: Premi
               )}
             </div>
 
+            {/* Consent Checkbox */}
+            <div>
+              <label className="flex items-start gap-3 cursor-pointer transition-smooth">
+                <input
+                  type="checkbox"
+                  checked={hasConsented}
+                  onChange={(e) => {
+                    setHasConsented(e.target.checked);
+                    setErrorMessage('');
+                    setSubmitStatus('idle');
+                  }}
+                  className="mt-1 w-5 h-5 md:w-4 md:h-4 rounded-soft transition-smooth cursor-pointer flex-shrink-0"
+                  style={{
+                    accentColor: 'var(--accent)',
+                  }}
+                  required
+                  disabled={isSubmitting}
+                />
+                <span className="text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+                  I agree to receive email notifications about premium features and understand that my email will be stored with Resend. I can unsubscribe at any time. By joining, I acknowledge that I have read and agree to the{' '}
+                  <a 
+                    href="/privacy-policy" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="underline transition-smooth hover:opacity-80"
+                    style={{ color: 'var(--accent)' }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Privacy Policy
+                  </a>
+                  .
+                </span>
+              </label>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !hasConsented}
               className="w-full px-5 py-3 text-sm font-medium rounded-soft transition-smooth flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed touch-target"
               style={{
                 backgroundColor: 'var(--accent)',

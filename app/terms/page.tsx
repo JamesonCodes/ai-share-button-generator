@@ -138,6 +138,24 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
+              Waitlist and Email Communications
+            </h2>
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              Our Service offers a waitlist for premium features. By joining the waitlist, you agree to the following:
+            </p>
+            <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <li><strong>Email Collection:</strong> You provide your email address voluntarily to receive notifications about premium feature launches and updates.</li>
+              <li><strong>Purpose:</strong> We will only use your email address to send you information about premium features you expressed interest in. We will not use your email for unrelated marketing purposes.</li>
+              <li><strong>No Guarantee:</strong> Joining the waitlist does not guarantee access to premium features. We reserve the right to modify, delay, or cancel premium features at any time.</li>
+              <li><strong>Unsubscribe Rights:</strong> You may unsubscribe from waitlist communications at any time by clicking the unsubscribe link in any email we send you, or by contacting us at <a href="mailto:jameson@searchwell.io" className="underline" style={{ color: 'var(--accent)' }}>jameson@searchwell.io</a>.</li>
+            </ul>
+            <p className="mt-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              By joining the waitlist, you acknowledge that you have read and agree to our <a href="/privacy-policy" className="underline" style={{ color: 'var(--accent)' }}>Privacy Policy</a>, which describes how we handle your email address and other information.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
               Termination
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
