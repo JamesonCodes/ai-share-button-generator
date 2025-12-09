@@ -1,4 +1,4 @@
-2# AI Share Button Generator
+# AI Share Button Generator
 
 Add AI share actions to any article in seconds. The generator produces a lightweight script (≈8 KB, zero dependencies) readers can use to send your content to ChatGPT, Perplexity, or Google AI with a pre-filled prompt.
 
