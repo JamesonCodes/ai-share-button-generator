@@ -62,7 +62,14 @@ ${attrs.join('\n')}
     document.body.appendChild(script);
     
     return () => {
-      document.body.removeChild(script);
+      document.querySelectorAll('.ai-share-button-container').forEach(container => {
+        container.remove();
+      });
+      const styleEl = document.getElementById('ai-share-button-styles');
+      styleEl?.remove();
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
     };
   }, []);
   
@@ -100,6 +107,13 @@ ${attrs.join('\n')}
 });
 
 onUnmounted(() => {
+  document.querySelectorAll('.ai-share-button-container').forEach(container => {
+    container.remove();
+  });
+  const styleEl = document.getElementById('ai-share-button-styles');
+  if (styleEl) {
+    styleEl.remove();
+  }
   const scripts = document.querySelectorAll(\`script[src="${scriptUrl}"]\`);
   scripts.forEach(script => script.remove());
 });

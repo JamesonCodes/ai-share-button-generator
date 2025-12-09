@@ -15,7 +15,7 @@ export async function GET(
     return new NextResponse(scriptContent, {
       headers: {
         'Content-Type': 'application/javascript',
-        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=86400',
         'Access-Control-Allow-Origin': '*',
         'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://chat.openai.com https://www.perplexity.ai https://www.google.com; frame-ancestors 'none'; base-uri 'self'",
       },
@@ -25,4 +25,3 @@ export async function GET(
     return new NextResponse('Script not found', { status: 404 });
   }
 }
-
