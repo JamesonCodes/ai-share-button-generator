@@ -1,6 +1,20 @@
-export const metadata = {
-  title: 'Disclaimer - AI Share Button Generator',
-  description: 'Disclaimer for AI Share Button Generator by SearchWell Labs LLC',
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Disclaimer',
+  description: 'Disclaimer for AI Share Button Generator by SearchWell Labs LLC. Important information about third-party AI platforms and service limitations.',
+  alternates: {
+    canonical: '/disclaimer',
+  },
+  openGraph: {
+    title: 'Disclaimer - AI Share Button Generator',
+    description: 'Disclaimer for AI Share Button Generator by SearchWell Labs LLC. Important information about third-party AI platforms.',
+    url: '/disclaimer',
+  },
+  twitter: {
+    title: 'Disclaimer - AI Share Button Generator',
+    description: 'Disclaimer for AI Share Button Generator by SearchWell Labs LLC.',
+  },
 };
 
 export default function Disclaimer() {

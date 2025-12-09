@@ -1,6 +1,20 @@
-export const metadata = {
-  title: 'Privacy Policy - AI Share Button Generator',
-  description: 'Privacy Policy for AI Share Button Generator by SearchWell Labs LLC',
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Privacy Policy',
+  description: 'Privacy Policy for AI Share Button Generator by SearchWell Labs LLC. Learn how we handle your data and protect your privacy when using our service.',
+  alternates: {
+    canonical: '/privacy-policy',
+  },
+  openGraph: {
+    title: 'Privacy Policy - AI Share Button Generator',
+    description: 'Privacy Policy for AI Share Button Generator by SearchWell Labs LLC. Learn how we handle your data and protect your privacy.',
+    url: '/privacy-policy',
+  },
+  twitter: {
+    title: 'Privacy Policy - AI Share Button Generator',
+    description: 'Privacy Policy for AI Share Button Generator by SearchWell Labs LLC.',
+  },
 };
 
 export default function PrivacyPolicy() {

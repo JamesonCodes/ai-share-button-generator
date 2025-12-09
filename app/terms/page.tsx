@@ -1,6 +1,20 @@
-export const metadata = {
-  title: 'Terms of Service - AI Share Button Generator',
-  description: 'Terms of Service for AI Share Button Generator by SearchWell Labs LLC',
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description: 'Terms of Service for AI Share Button Generator by SearchWell Labs LLC. Read our terms and conditions for using the AI share button generator service.',
+  alternates: {
+    canonical: '/terms',
+  },
+  openGraph: {
+    title: 'Terms of Service - AI Share Button Generator',
+    description: 'Terms of Service for AI Share Button Generator by SearchWell Labs LLC. Read our terms and conditions.',
+    url: '/terms',
+  },
+  twitter: {
+    title: 'Terms of Service - AI Share Button Generator',
+    description: 'Terms of Service for AI Share Button Generator by SearchWell Labs LLC.',
+  },
 };
 
 export default function TermsOfService() {
