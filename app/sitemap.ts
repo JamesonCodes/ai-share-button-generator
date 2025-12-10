@@ -20,5 +20,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/disclaimer`,
       lastModified: new Date(),
     },
+    {
+      url: `${baseUrl}/feedback`,
+      lastModified: new Date(),
+    },
   ]
 }
