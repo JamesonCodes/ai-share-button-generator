@@ -3,7 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-share-button.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aisharebuttongenerator.com'),
   title: {
     default: "AI Share Button Generator",
     template: "%s | AI Share Button Generator"
@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-share-button.com';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aisharebuttongenerator.com';
 
 export default function RootLayout({
   children,

@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-share-button.com'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://aisharebuttongenerator.com'
   
   return {
     name: 'AI Share Button Generator',
