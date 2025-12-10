@@ -58,6 +58,7 @@ export default function PrivacyPolicy() {
               <li><strong>Email Address:</strong> If you choose to join our waitlist for premium features, we collect your email address and your feature preferences. This information is stored securely with our email service provider (Resend) and is used solely to notify you about premium feature launches.</li>
               <li><strong>Theme Preference:</strong> We store your theme preference (light or dark mode) in your browser&rsquo;s localStorage. This information is stored locally on your device and is not transmitted to our servers.</li>
               <li><strong>User Input:</strong> When you use the generator to create share button code, the information you enter (URLs, brand names, prompt templates) is processed entirely in your browser. We do not collect, store, or transmit this information to our servers.</li>
+              <li><strong>Feedback Responses:</strong> If you submit our feedback form, Google Forms collects your responses (and any contact information you voluntarily provide) so we can review product suggestions.</li>
             </ul>
           </section>
 
@@ -80,6 +81,9 @@ export default function PrivacyPolicy() {
             </h2>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist. Resend processes your email address on our behalf in accordance with their privacy policy. You can review Resend&rsquo;s privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
+            </p>
+            <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <strong>Feedback Form:</strong> We embed Google Forms to collect feedback. Google processes form responses subject to their terms and privacy policy. You can review Google&rsquo;s privacy practices at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>policies.google.com/privacy</a>.
             </p>
             <p className="mb-3 mt-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>AI Platform Redirects:</strong> Our Service generates code that redirects users to third-party AI platforms, including:
