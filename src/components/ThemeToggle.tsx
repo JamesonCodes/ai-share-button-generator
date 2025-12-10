@@ -2,13 +2,17 @@
 
 import { useTheme } from '@/contexts/ThemeContext';
 
-export default function ThemeToggle() {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export default function ThemeToggle({ className = '' }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <button
       onClick={toggleTheme}
-      className="fixed top-4 right-4 md:top-6 md:right-6 z-50 p-3.5 md:p-3 rounded-soft transition-smooth hover:opacity-80 active:opacity-90 touch-target"
+      className={`p-3.5 md:p-3 rounded-soft transition-smooth hover:opacity-80 active:opacity-90 touch-target ${className}`}
       style={{
         backgroundColor: 'var(--surface)',
         border: '1px solid var(--border)',
@@ -46,4 +50,3 @@ export default function ThemeToggle() {
     </button>
   );
 }
-
