@@ -6,6 +6,31 @@ const MAX_REQUESTS = 5;
 const WINDOW_MS = 60 * 1000; // 1 minute
 const rateLimitMap = new Map<string, number[]>();
 
+// Security limits
+const MAX_EMAIL_LENGTH = 254; // RFC 5321 limit
+const MAX_MESSAGE_LENGTH = 2000; // Matches frontend limit
+const MAX_REQUEST_BODY_SIZE = 10 * 1024; // 10KB max request body
+
+/**
+ * Sanitize string by removing control characters and limiting length
+ */
+function sanitizeString(value: string, maxLength: number): string {
+  if (!value || typeof value !== 'string') {
+    return '';
+  }
+  
+  // Remove control characters except newlines, tabs, and carriage returns
+  let sanitized = value.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '');
+  
+  // Trim and limit length
+  sanitized = sanitized.trim();
+  if (sanitized.length > maxLength) {
+    sanitized = sanitized.substring(0, maxLength);
+  }
+  
+  return sanitized;
+}
+
 /**
  * Extract client IP address from request headers
  * Handles Vercel's proxy headers (x-forwarded-for, x-real-ip)
@@ -66,6 +91,15 @@ function checkRateLimit(ip: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate Content-Type header
+    const contentType = request.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return NextResponse.json(
+        { message: 'Content-Type must be application/json' },
+        { status: 400 }
+      );
+    }
+
     // Rate limiting check
     const clientIP = getClientIP(request);
     if (!checkRateLimit(clientIP)) {
@@ -85,8 +119,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Parse and validate request body
+    let body;
+    try {
+      const text = await request.text();
+      
+      // Check body size
+      if (text.length > MAX_REQUEST_BODY_SIZE) {
+        return NextResponse.json(
+          { message: 'Request body too large' },
+          { status: 413 }
+        );
+      }
+      
+      body = JSON.parse(text);
+    } catch (parseError) {
+      return NextResponse.json(
+        { message: 'Invalid JSON in request body' },
+        { status: 400 }
+      );
+    }
+
     const resend = new Resend(apiKey);
-    const body = await request.json();
     const { email, rating, message } = body;
 
     // Validate email
@@ -97,8 +151,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sanitize and normalize email (lowercase, trim)
+    const emailTrimmed = email.trim().toLowerCase();
+    
+    // Check email length
+    if (emailTrimmed.length > MAX_EMAIL_LENGTH) {
+      return NextResponse.json(
+        { message: 'Email address is too long' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
+    if (!emailRegex.test(emailTrimmed)) {
       return NextResponse.json(
         { message: 'Invalid email format' },
         { status: 400 }
@@ -129,20 +195,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sanitize message if provided
+    let sanitizedMessage: string | undefined;
+    if (message && typeof message === 'string') {
+      sanitizedMessage = sanitizeString(message, MAX_MESSAGE_LENGTH);
+    }
+
     // Prepare properties for Resend
     const properties: Record<string, string> = {
       feedback_rating: rating,
     };
 
-    // Only include message if provided and not empty
-    if (message && message.trim()) {
-      properties.feedback_message = message.trim();
+    // Only include message if provided and not empty after sanitization
+    if (sanitizedMessage && sanitizedMessage.length > 0) {
+      properties.feedback_message = sanitizedMessage;
     }
 
     // Get feedback audience ID
     const audienceId = process.env.RESEND_FEEDBACK_AUDIENCE_ID;
     
-    const contactEmail = email.trim();
+    // Use normalized email (lowercase, trimmed)
+    const contactEmail = emailTrimmed;
 
     const contactData: any = {
       email: contactEmail,

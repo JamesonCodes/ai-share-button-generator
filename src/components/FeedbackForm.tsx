@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface FeedbackFormProps {
@@ -18,6 +18,18 @@ export default function FeedbackForm({ onSubmitSuccess }: FeedbackFormProps) {
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
+  
+  // Store timeout ID to clean up on unmount
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const validateEmail = (emailValue: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -93,9 +105,15 @@ export default function FeedbackForm({ onSubmitSuccess }: FeedbackFormProps) {
         onSubmitSuccess();
       }
 
+      // Clear any existing timeout before setting a new one
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
       // Clear success message after 5 seconds
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setSubmitStatus({ type: null, message: '' });
+        timeoutRef.current = null;
       }, 5000);
     } catch (error: any) {
       setSubmitStatus({
