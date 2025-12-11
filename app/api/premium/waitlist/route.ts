@@ -6,6 +6,13 @@ const MAX_REQUESTS = 5;
 const WINDOW_MS = 60 * 1000; // 1 minute
 const rateLimitMap = new Map<string, number[]>();
 
+// Security limits
+const MAX_EMAIL_LENGTH = 254; // RFC 5321 limit
+const MAX_REQUEST_BODY_SIZE = 10 * 1024; // 10KB max request body
+
+// Allowed feature values
+const ALLOWED_FEATURES = ['analytics', 'custom-themes', 'white-label'] as const;
+
 /**
  * Extract client IP address from request headers
  * Handles Vercel's proxy headers (x-forwarded-for, x-real-ip)
@@ -66,6 +73,15 @@ function checkRateLimit(ip: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate Content-Type header
+    const contentType = request.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      return NextResponse.json(
+        { message: 'Content-Type must be application/json' },
+        { status: 400 }
+      );
+    }
+
     // Rate limiting check
     const clientIP = getClientIP(request);
     if (!checkRateLimit(clientIP)) {
@@ -85,8 +101,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Parse and validate request body
+    let body;
+    try {
+      const text = await request.text();
+      
+      // Check body size
+      if (text.length > MAX_REQUEST_BODY_SIZE) {
+        return NextResponse.json(
+          { message: 'Request body too large' },
+          { status: 413 }
+        );
+      }
+      
+      body = JSON.parse(text);
+    } catch (parseError) {
+      return NextResponse.json(
+        { message: 'Invalid JSON in request body' },
+        { status: 400 }
+      );
+    }
+
     const resend = new Resend(apiKey);
-    const body = await request.json();
     const { email, features, source } = body;
 
     // Validate email
@@ -97,8 +133,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sanitize and normalize email (lowercase, trim)
+    const emailTrimmed = email.trim().toLowerCase();
+    
+    // Check email length
+    if (emailTrimmed.length > MAX_EMAIL_LENGTH) {
+      return NextResponse.json(
+        { message: 'Email address is too long' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(emailTrimmed)) {
       return NextResponse.json(
         { message: 'Invalid email format' },
         { status: 400 }
@@ -113,20 +161,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate and sanitize features array - only allow predefined values
+    const sanitizedFeatures = features.filter((feature: any) => 
+      typeof feature === 'string' && ALLOWED_FEATURES.includes(feature as typeof ALLOWED_FEATURES[number])
+    );
+
+    if (sanitizedFeatures.length === 0) {
+      return NextResponse.json(
+        { message: 'At least one valid feature must be selected' },
+        { status: 400 }
+      );
+    }
+
     // Prepare custom properties for Resend
     // Map feature IDs to property names (only properties that exist in Resend)
+    // Use sanitizedFeatures instead of original features array
     const properties: Record<string, string> = {
-      interested_analytics: features.includes('analytics') ? 'true' : 'false',
-      interested_custom_themes: features.includes('custom-themes') ? 'true' : 'false',
-      interested_white_label: features.includes('white-label') ? 'true' : 'false',
+      interested_analytics: sanitizedFeatures.includes('analytics') ? 'true' : 'false',
+      interested_custom_themes: sanitizedFeatures.includes('custom-themes') ? 'true' : 'false',
+      interested_white_label: sanitizedFeatures.includes('white-label') ? 'true' : 'false',
     };
 
     // Add contact to Resend audience
     // Using Resend Contacts API
     const audienceId = process.env.RESEND_AUDIENCE_ID;
     
+    // Use normalized email (lowercase, trimmed)
+    const contactEmail = emailTrimmed;
+    
     const contactData: any = {
-      email: email.trim(),
+      email: contactEmail,
       unsubscribed: false,
       properties: properties,
       // Don't include firstName/lastName to prevent auto-parsing from email
@@ -143,7 +207,7 @@ export async function POST(request: NextRequest) {
     if (error && (error.message?.includes('already exists') || error.message?.includes('duplicate'))) {
       // Update existing contact with properties
       const updateResult = await resend.contacts.update({
-        email: email.trim(),
+        email: contactEmail,
         properties: properties,
       });
       
@@ -178,7 +242,7 @@ export async function POST(request: NextRequest) {
       // Update contact immediately after creation to ensure properties are set
       // Sometimes properties don't get set on initial create
       const updateResult = await resend.contacts.update({
-        email: email.trim(),
+        email: contactEmail,
         properties: properties,
       });
       
