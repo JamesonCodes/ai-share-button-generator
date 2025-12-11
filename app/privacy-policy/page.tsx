@@ -56,9 +56,9 @@ export default function PrivacyPolicy() {
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li><strong>Email Address:</strong> If you choose to join our waitlist for premium features, we collect your email address and your feature preferences. This information is stored securely with our email service provider (Resend) and is used solely to notify you about premium feature launches.</li>
+              <li><strong>Feedback Submissions:</strong> If you submit our feedback form, we collect your email address, rating (1-5 scale), and any optional feedback message you provide. This information is stored securely with our email service provider (Resend) in a separate feedback audience and is used solely to improve our Service.</li>
               <li><strong>Theme Preference:</strong> We store your theme preference (light or dark mode) in your browser&rsquo;s localStorage. This information is stored locally on your device and is not transmitted to our servers.</li>
               <li><strong>User Input:</strong> When you use the generator to create share button code, the information you enter (URLs, brand names, prompt templates) is processed entirely in your browser. We do not collect, store, or transmit this information to our servers.</li>
-              <li><strong>Feedback Responses:</strong> If you submit our feedback form, Google Forms collects your responses (and any contact information you voluntarily provide) so we can review product suggestions.</li>
             </ul>
           </section>
 
@@ -71,6 +71,7 @@ export default function PrivacyPolicy() {
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li><strong>Email Addresses:</strong> We use your email address to send you notifications about premium feature launches and updates related to the features you expressed interest in. We do not use your email for marketing purposes unrelated to the waitlist, and we do not share your email with third parties except as necessary to provide the email service (see Third-Party Services below).</li>
+              <li><strong>Feedback Data:</strong> We use your feedback submissions (email, rating, and message) to improve our Service and understand user experience. We do not use your feedback email for marketing purposes, and we do not share your feedback with third parties except as necessary to store it with our email service provider (see Third-Party Services below).</li>
               <li><strong>Theme Preference:</strong> The theme preference stored in localStorage is used solely to maintain your display preferences between visits. We do not use this information for any other purpose, and we do not share it with third parties.</li>
             </ul>
           </section>
@@ -80,10 +81,7 @@ export default function PrivacyPolicy() {
               Third-Party Services
             </h2>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist. Resend processes your email address on our behalf in accordance with their privacy policy. You can review Resend&rsquo;s privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
-            </p>
-            <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              <strong>Feedback Form:</strong> We embed Google Forms to collect feedback. Google processes form responses subject to their terms and privacy policy. You can review Google&rsquo;s privacy practices at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>policies.google.com/privacy</a>.
+              <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist and feedback submissions. Resend processes your email address and feedback data on our behalf in accordance with their privacy policy. You can review Resend&rsquo;s privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
             </p>
             <p className="mb-3 mt-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>AI Platform Redirects:</strong> Our Service generates code that redirects users to third-party AI platforms, including:
@@ -110,7 +108,7 @@ export default function PrivacyPolicy() {
               Data Storage and Security
             </h2>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              <strong>Email Addresses:</strong> Email addresses collected through our waitlist are stored securely with Resend, our email service provider. We retain your email address until you request its deletion or unsubscribe from our waitlist communications.
+              <strong>Email Addresses and Feedback:</strong> Email addresses and feedback data collected through our waitlist and feedback forms are stored securely with Resend, our email service provider. We retain your email address and feedback until you request its deletion or unsubscribe from our communications.
             </p>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>Local Data:</strong> Theme preferences and user input for generating share button code are processed entirely in your browser. The theme preference stored in localStorage can be cleared at any time through your browser settings.
@@ -144,8 +142,8 @@ export default function PrivacyPolicy() {
               You have the following rights regarding your personal information:
             </p>
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              <li><strong>Access:</strong> You can request a copy of the personal information we hold about you.</li>
-              <li><strong>Deletion:</strong> You can request that we delete your email address from our waitlist.</li>
+              <li><strong>Access:</strong> You can request a copy of the personal information we hold about you, including your waitlist and feedback submissions.</li>
+              <li><strong>Deletion:</strong> You can request that we delete your email address from our waitlist or your feedback submissions at any time.</li>
               <li><strong>Opt-Out:</strong> You can unsubscribe from our email communications at any time (see Email Communications and Opt-Out above).</li>
               <li><strong>Correction:</strong> You can request that we correct any inaccurate information we hold about you.</li>
             </ul>
