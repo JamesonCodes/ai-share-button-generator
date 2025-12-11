@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BackButton from '@/components/BackButton';
 
 export const metadata: Metadata = {
   title: 'Disclaimer',
@@ -21,6 +22,9 @@ export default function Disclaimer() {
   return (
     <div className="min-h-screen transition-smooth" style={{ backgroundColor: 'var(--background)' }}>
       <div className="container mx-auto px-6 py-16 md:px-8 md:py-20 max-w-4xl">
+        <div className="mb-6">
+          <BackButton />
+        </div>
         <header className="mb-12">
           <h1 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
             Disclaimer
