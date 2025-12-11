@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import TopControls from '@/components/TopControls';
+import FeedbackForm from '@/components/FeedbackForm';
 
 export const metadata: Metadata = {
   title: 'Feedback',
@@ -23,20 +24,10 @@ export default function FeedbackPage() {
           </p>
         </header>
         <div
-          className="rounded-softer p-4 md:p-6 border transition-smooth"
+          className="rounded-softer p-6 md:p-10 border transition-smooth"
           style={{ borderColor: 'var(--border)', backgroundColor: 'var(--surface)' }}
         >
-          <iframe
-            src="https://docs.google.com/forms/d/e/1FAIpQLSdaL7JU-xLBjK5YXVbA_S7j3pnW_rw5g2F2a6i6HGtRNl_meA/viewform?embedded=true"
-            width="100%"
-            height="720"
-            style={{ border: 'none' }}
-            loading="lazy"
-            allowFullScreen
-            title="AI Share Button Generator Feedback Form"
-          >
-            Loading…
-          </iframe>
+          <FeedbackForm />
         </div>
       </div>
     </div>
