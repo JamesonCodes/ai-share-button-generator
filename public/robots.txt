@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://aisharebuttongenerator.com/sitemap.xml
+Sitemap: https://www.aisharebuttongenerator.com/sitemap.xml
 
 # Disallow admin or private areas if any exist
 # Disallow: /admin/
