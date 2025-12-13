@@ -156,6 +156,136 @@ function getButtonStyles(): string {
         right: 16px;
       }
     }
+    /* FAB (Floating Action Button) Styles */
+    .ai-share-fab {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #4285F4;
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 24px;
+    }
+    .ai-share-fab:hover {
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    .ai-share-fab:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    .ai-share-fab.active {
+      transform: rotate(15deg);
+    }
+    .ai-share-speed-dial {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(20px) scale(0.8);
+      pointer-events: none;
+      transition: all 0.3s ease-out;
+    }
+    .ai-share-speed-dial.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .ai-share-speed-dial .ai-share-button {
+      min-width: auto;
+      white-space: nowrap;
+    }
+    .ai-share-speed-dial-separator {
+      width: 100%;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      margin: 8px 0;
+      align-self: stretch;
+    }
+    .ai-share-speed-dial-attribution {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 6px;
+      background-color: #F5F5F5;
+      color: #1A1A1A;
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      width: 100%;
+      min-height: 44px;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+    .ai-share-speed-dial-attribution:hover {
+      background-color: #E8E8E8;
+    }
+    .ai-share-speed-dial-attribution:active {
+      background-color: #DDDDDD;
+    }
+    .ai-share-fab-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .ai-share-fab-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 600px) {
+      /* Hide desktop floating button container on mobile */
+      .ai-share-button-container {
+        display: none !important;
+      }
+      /* Show FAB on mobile */
+      .ai-share-fab {
+        display: flex;
+        bottom: 20px;
+        right: 20px;
+      }
+      /* Adjust speed dial position for mobile */
+      .ai-share-speed-dial {
+        bottom: 90px;
+        right: 20px;
+      }
+      /* Remove body padding since we're using FAB */
+      body {
+        padding-bottom: 0 !important;
+      }
+    }
+    @media (min-width: 601px) {
+      /* Hide FAB on desktop */
+      .ai-share-fab,
+      .ai-share-speed-dial,
+      .ai-share-fab-backdrop {
+        display: none !important;
+      }
+    }
     .ai-share-attribution {
       font-size: 10px;
       color: #999;
@@ -340,6 +470,47 @@ function getContrastingTextColor(): string {
   return luminance < 0.5 ? '#E5E5E5' : '#000000';
 }
 
+function getBackgroundColor(): string {
+  // Detect actual background color by checking body and html elements
+  const body = document.body;
+  const html = document.documentElement;
+  
+  // Get computed styles
+  const bodyStyle = window.getComputedStyle(body);
+  const htmlStyle = window.getComputedStyle(html);
+  
+  // Try body background first, fallback to html
+  let bgColor = bodyStyle.backgroundColor || htmlStyle.backgroundColor;
+  
+  // Check if background is transparent (handle various formats)
+  const transparentPatterns = ['transparent', 'rgba(0, 0, 0, 0)', 'rgba(0,0,0,0)'];
+  if (transparentPatterns.some(pattern => bgColor.toLowerCase().includes(pattern.toLowerCase()))) {
+    // If transparent, assume white background (most common)
+    return '#FFFFFF';
+  }
+  
+  // Parse RGB values from rgba/rgb string (handle spaces)
+  const rgbMatch = bgColor.match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
+  
+  if (!rgbMatch) {
+    // Fallback: if we can't parse, default to white background (most sites are light)
+    return '#FFFFFF';
+  }
+  
+  const r = parseInt(rgbMatch[1]);
+  const g = parseInt(rgbMatch[2]);
+  const b = parseInt(rgbMatch[3]);
+  const alpha = rgbMatch[4] ? parseFloat(rgbMatch[4]) : 1;
+  
+  // If alpha is very low, treat as transparent and default to white
+  if (alpha < 0.1) {
+    return '#FFFFFF';
+  }
+  
+  // Return the background color in rgb format for the bar
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 function createAttributionLink(): HTMLAnchorElement | null {
   // Get the generator URL from the script src
   // Try currentScript first (works when script executes synchronously)
@@ -381,6 +552,252 @@ function createAttributionLink(): HTMLAnchorElement | null {
   } catch {
     return null;
   }
+}
+
+function createFAB(
+  buttons: HTMLButtonElement[],
+  attribution?: HTMLAnchorElement | null
+): { fab: HTMLButtonElement; speedDial: HTMLDivElement; backdrop: HTMLDivElement; container: HTMLDivElement } {
+  // Create FAB button
+  const fab = document.createElement('button');
+  fab.className = 'ai-share-fab';
+  fab.setAttribute('aria-label', 'Share to AI');
+  fab.setAttribute('aria-expanded', 'false');
+  
+  // Magic wand emoji (🪄)
+  fab.innerHTML = '🪄';
+  fab.style.cssText += 'font-size: 28px; line-height: 1;';
+  
+  // Create speed dial container
+  const speedDial = document.createElement('div');
+  speedDial.className = 'ai-share-speed-dial';
+  speedDial.setAttribute('aria-hidden', 'true');
+  
+  // Add buttons to speed dial (in reverse order so first button is at bottom)
+  buttons.forEach(button => {
+    const buttonWrapper = document.createElement('div');
+    buttonWrapper.style.cssText = 'display: flex; align-items: center;';
+    buttonWrapper.appendChild(button);
+    speedDial.appendChild(buttonWrapper);
+  });
+  
+  // Add visual separator if attribution is provided
+  if (attribution) {
+    const separator = document.createElement('div');
+    separator.className = 'ai-share-speed-dial-separator';
+    speedDial.appendChild(separator);
+    
+    // Style attribution link as subtle button (light solid background with high-contrast text)
+    const textColor = getContrastingTextColor();
+    
+    // Detect if page has light or dark background
+    const isLightBackground = textColor === '#000000' || textColor === '#1A1A1A';
+    
+    // Set subtle button colors based on background
+    let backgroundColor: string;
+    let buttonTextColor: string;
+    let borderColor: string;
+    let hoverBackgroundColor: string;
+    let activeBackgroundColor: string;
+    
+    if (isLightBackground) {
+      // Light background pages
+      backgroundColor = '#F5F5F5';
+      buttonTextColor = '#1A1A1A';
+      borderColor = 'rgba(0, 0, 0, 0.1)';
+      hoverBackgroundColor = '#E8E8E8';
+      activeBackgroundColor = '#DDDDDD';
+    } else {
+      // Dark background pages
+      backgroundColor = '#2A2A2A';
+      buttonTextColor = '#E5E5E5';
+      borderColor = 'rgba(255, 255, 255, 0.1)';
+      hoverBackgroundColor = '#333333';
+      activeBackgroundColor = '#3A3A3A';
+    }
+    
+    attribution.className = 'ai-share-speed-dial-attribution';
+    attribution.style.cssText = `
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: ${buttonTextColor};
+      text-decoration: none;
+      padding: 12px 16px;
+      border: 1px solid ${borderColor};
+      border-radius: 6px;
+      background-color: ${backgroundColor};
+      transition: all 0.2s ease;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      width: 100%;
+      min-height: 44px;
+      box-sizing: border-box;
+      cursor: pointer;
+    `;
+    
+    // Hover state: slightly darker background
+    attribution.addEventListener('mouseenter', () => {
+      attribution.style.backgroundColor = hoverBackgroundColor;
+    });
+    
+    attribution.addEventListener('mouseleave', () => {
+      attribution.style.backgroundColor = backgroundColor;
+    });
+    
+    attribution.addEventListener('mousedown', () => {
+      attribution.style.backgroundColor = activeBackgroundColor;
+    });
+    
+    attribution.addEventListener('mouseup', () => {
+      attribution.style.backgroundColor = hoverBackgroundColor;
+    });
+    
+    // Add attribution link to speed dial
+    const attributionWrapper = document.createElement('div');
+    attributionWrapper.style.cssText = 'display: flex; align-items: center; width: 100%;';
+    attributionWrapper.appendChild(attribution);
+    speedDial.appendChild(attributionWrapper);
+  }
+  
+  // Create backdrop for click-outside-to-close
+  const backdrop = document.createElement('div');
+  backdrop.className = 'ai-share-fab-backdrop';
+  
+  // Create container for FAB, speed dial, and backdrop
+  const container = document.createElement('div');
+  container.style.cssText = 'position: fixed; bottom: 0; right: 0; z-index: 1000;';
+  container.appendChild(backdrop);
+  container.appendChild(speedDial);
+  container.appendChild(fab);
+  
+  // Toggle function
+  let isExpanded = false;
+  const toggle = () => {
+    isExpanded = !isExpanded;
+    fab.classList.toggle('active', isExpanded);
+    speedDial.classList.toggle('active', isExpanded);
+    backdrop.classList.toggle('active', isExpanded);
+    fab.setAttribute('aria-expanded', isExpanded.toString());
+    speedDial.setAttribute('aria-hidden', (!isExpanded).toString());
+  };
+  
+  // FAB click handler
+  fab.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggle();
+  });
+  
+  // Backdrop click handler (close on click outside)
+  backdrop.addEventListener('click', () => {
+    if (isExpanded) {
+      toggle();
+    }
+  });
+  
+  // Close on button click (after opening AI)
+  buttons.forEach(button => {
+    const originalHandler = button.onclick;
+    button.addEventListener('click', (e) => {
+      // Close the speed dial when a button is clicked
+      if (isExpanded) {
+        setTimeout(() => toggle(), 100); // Small delay to allow navigation
+      }
+      // Original handler will still fire for the button's own click event
+    });
+  });
+  
+  // Keyboard support
+  fab.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggle();
+    }
+    if (e.key === 'Escape' && isExpanded) {
+      toggle();
+    }
+  });
+  
+  return { fab, speedDial, backdrop, container };
+}
+
+function removeExistingAttribution(): void {
+  // Remove any existing inline attribution wrappers
+  const existingAttributions = document.querySelectorAll('.ai-share-attribution');
+  existingAttributions.forEach(attr => {
+    const wrapper = attr.parentElement;
+    if (wrapper && wrapper.tagName === 'P' && wrapper.textContent?.includes('Get your own AI Share Button')) {
+      wrapper.remove();
+    }
+  });
+}
+
+function appendAttributionToContent(attribution: HTMLAnchorElement): void {
+  // Remove any existing attribution first
+  removeExistingAttribution();
+  
+  // Try to find article, main, or last paragraph
+  let targetElement: HTMLElement | null = null;
+  
+  // Priority 1: Last <article> element
+  const articles = document.querySelectorAll('article');
+  if (articles.length > 0) {
+    targetElement = articles[articles.length - 1] as HTMLElement;
+  }
+  
+  // Priority 2: <main> element
+  if (!targetElement) {
+    const main = document.querySelector('main');
+    if (main) {
+      targetElement = main as HTMLElement;
+    }
+  }
+  
+  // Priority 3: Last <p> element in body
+  if (!targetElement) {
+    const paragraphs = document.querySelectorAll('body > p, article > p, main > p');
+    if (paragraphs.length > 0) {
+      targetElement = paragraphs[paragraphs.length - 1] as HTMLElement;
+    }
+  }
+  
+  // Priority 4: Body element
+  if (!targetElement) {
+    targetElement = document.body;
+  }
+  
+  // Create wrapper paragraph for attribution
+  const attributionWrapper = document.createElement('p');
+  attributionWrapper.style.cssText = `
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  `;
+  
+  // Update attribution styling for inline placement
+  attribution.style.cssText = `
+    font-size: 12px;
+    font-weight: 500;
+    color: ${getContrastingTextColor()};
+    text-decoration: none;
+    transition: text-decoration 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  `;
+  
+  attribution.addEventListener('mouseenter', () => {
+    attribution.style.textDecoration = 'underline';
+  });
+  
+  attribution.addEventListener('mouseleave', () => {
+    attribution.style.textDecoration = 'none';
+  });
+  
+  attributionWrapper.appendChild(attribution);
+  targetElement.appendChild(attributionWrapper);
 }
 
 function getActionName(config: ButtonConfig): string {
@@ -437,6 +854,67 @@ function init(): void {
   // Create buttons for each AI destination
   const buttons = config.ai.map(ai => createButton(config, ai));
 
+  // Detect viewport width
+  const isMobile = window.innerWidth <= 600;
+
+  if (isMobile) {
+    // Mobile: Create attribution link first (if enabled)
+    const attribution = config.showAttribution !== false ? createAttributionLink() : null;
+    
+    // Mobile: Create FAB with speed dial, including attribution in menu
+    const { container: fabContainer } = createFAB(buttons, attribution);
+    document.body.appendChild(fabContainer);
+    
+    // Handle window resize to switch between mobile/desktop
+    let resizeTimeout: number | null = null;
+    window.addEventListener('resize', () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = window.setTimeout(() => {
+        const isMobileNow = window.innerWidth <= 600;
+        if (!isMobileNow) {
+          // Switched to desktop - remove FAB and inline attribution
+          const fabContainer = document.querySelector('.ai-share-fab')?.parentElement;
+          if (fabContainer) {
+            fabContainer.remove();
+          }
+          removeExistingAttribution();
+          // Create desktop layout
+          createDesktopLayout(config, buttons);
+        }
+      }, 100);
+    });
+  } else {
+    // Desktop: Create floating button container (existing behavior)
+    createDesktopLayout(config, buttons);
+    
+    // Handle window resize to switch between desktop/mobile
+    let resizeTimeout: number | null = null;
+    window.addEventListener('resize', () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = window.setTimeout(() => {
+        const isMobileNow = window.innerWidth <= 600;
+        if (isMobileNow) {
+          // Switched to mobile - remove desktop layout and create FAB
+          const desktopContainer = document.querySelector('.ai-share-button-container');
+          if (desktopContainer) {
+            desktopContainer.remove();
+          }
+          // Create attribution link for mobile FAB
+          const attribution = config.showAttribution !== false ? createAttributionLink() : null;
+          // Create mobile FAB with attribution in speed dial
+          const { container: fabContainer } = createFAB(buttons, attribution);
+          document.body.appendChild(fabContainer);
+        }
+      }, 100);
+    });
+  }
+}
+
+function createDesktopLayout(config: ButtonConfig, buttons: HTMLButtonElement[]): void {
   // Create a container for floating buttons
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'ai-share-button-container';
@@ -444,27 +922,38 @@ function init(): void {
   
   // Create wrapper container for label, buttons, and attribution
   const wrapper = document.createElement('div');
+  wrapper.className = 'ai-share-button-wrapper';
   wrapper.style.cssText = 'display: flex; flex-direction: column; align-items: flex-end; gap: 8px;';
   
-  // Add action label above buttons
+  // Create a row container for label and buttons
+  const rowContainer = document.createElement('div');
+  rowContainer.className = 'ai-share-button-row';
+  rowContainer.style.cssText = 'display: flex; flex-direction: column; align-items: flex-end; gap: 8px;';
+  
+  // Add action label
   if (config.ai.length > 0) {
     const actionName = getActionName(config);
     const label = document.createElement('div');
+    label.className = 'ai-share-button-label';
     label.textContent = `${actionName} in:`;
     const textColor = getContrastingTextColor();
     label.style.cssText = `font-size: 14px; font-weight: 500; color: ${textColor}; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;`;
-    wrapper.appendChild(label);
+    rowContainer.appendChild(label);
   }
   
   // Add buttons container
   const buttonsContainer = document.createElement('div');
+  buttonsContainer.className = 'ai-share-button-buttons';
   buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 8px;';
   buttons.forEach(button => {
     buttonsContainer.appendChild(button);
   });
-  wrapper.appendChild(buttonsContainer);
+  rowContainer.appendChild(buttonsContainer);
   
-  // Add attribution link if enabled (default: true)
+  // Add row container to wrapper
+  wrapper.appendChild(rowContainer);
+  
+  // Add attribution link if enabled (default: true) - keep in container for desktop
   if (config.showAttribution !== false) {
     const attribution = createAttributionLink();
     if (attribution) {
