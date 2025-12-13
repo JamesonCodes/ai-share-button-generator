@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from 'next/link';
-import BackButton from '@/components/BackButton';
 import FAQAccordion from '@/components/FAQAccordion';
 
 export const metadata: Metadata = {
@@ -144,10 +143,6 @@ export default function StrategicAdvantage() {
         }}
       />
       <div className="container mx-auto px-6 py-16 md:px-8 md:py-20 max-w-4xl">
-        <div className="mb-6">
-          <BackButton />
-        </div>
-        
         <header className="mb-12">
           <h1 className="mb-6 transition-smooth" style={{ color: 'var(--text-primary)' }}>
             The Strategic Advantage of AI Share Buttons

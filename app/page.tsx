@@ -6,7 +6,6 @@ import PreviewButton from '@/components/PreviewButton';
 import CodeOutput from '@/components/CodeOutput';
 import InstructionsAccordion from '@/components/InstructionsAccordion';
 import Footer from '@/components/Footer';
-import TopControls from '@/components/TopControls';
 import { generateCodeSnippets } from '@/lib/button-generator';
 import type { ButtonConfig } from '@/lib/config-validator';
 
@@ -36,9 +35,7 @@ export default function Home() {
   const { embedScript, reactSnippet, vueSnippet } = generateCodeSnippets(config, baseUrl);
 
   return (
-    <>
-      <TopControls />
-      <div className="min-h-screen transition-smooth" style={{ backgroundColor: 'var(--background)' }}>
+    <div className="min-h-screen transition-smooth" style={{ backgroundColor: 'var(--background)' }}>
         <div className="container mx-auto px-4 py-12 md:px-8 md:py-20 max-w-6xl">
           <header className="text-center mb-8 md:mb-16">
             <h1 className="mb-6 transition-smooth" style={{ color: 'var(--text-primary)' }}>
@@ -99,6 +96,5 @@ export default function Home() {
           <Footer />
         </div>
       </div>
-    </>
   );
 }
