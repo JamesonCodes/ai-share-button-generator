@@ -24,5 +24,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/feedback`,
       lastModified: new Date(),
     },
+    {
+      url: `${baseUrl}/strategic-advantage`,
+      lastModified: new Date(),
+    },
   ]
 }
