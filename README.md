@@ -169,6 +169,10 @@ Deploy on Vercel (recommended):
 
 Modern Chromium, Firefox, and Safari. The embed is plain ES2015 and runs without frameworks.
 
+### Automatic Script Updates
+
+`share.js` is served with `Cache-Control: public, max-age=0, must-revalidate`. Any site that embeds `https://your-domain.com/share.js` automatically revalidates the script on each visit, so new deployments take effect without users clearing cache or swapping script tags.
+
 ## License & Contributions
 
 Released under the MIT License. Issues and pull requests are welcome.
