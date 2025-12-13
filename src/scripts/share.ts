@@ -367,7 +367,7 @@ function createAttributionLink(): HTMLAnchorElement | null {
     attribution.rel = 'noopener noreferrer';
     attribution.className = 'ai-share-attribution';
     attribution.textContent = 'Get your own AI Share Button';
-    attribution.style.cssText = `font-size: 10px; color: ${textColor}; text-decoration: none; margin-top: 4px; transition: text-decoration 0.2s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;`;
+    attribution.style.cssText = `font-size: 12px; font-weight: 500; color: ${textColor}; text-decoration: none; margin-top: 4px; transition: text-decoration 0.2s ease; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;`;
     
     attribution.addEventListener('mouseenter', () => {
       attribution.style.textDecoration = 'underline';
