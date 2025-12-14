@@ -201,14 +201,15 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                         }}
                       >
-                        <img
-                          src={getIconPath(ai)}
-                          alt={aiLabels[ai] || ai}
-                          width={24}
-                          height={24}
-                          className="block"
-                          style={{ width: '24px', height: '24px', display: 'block' }}
-                        />
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={getIconPath(ai)}
+                        alt={aiLabels[ai] || ai}
+                        width={24}
+                        height={24}
+                        className="block"
+                        style={{ width: '24px', height: '24px', display: 'block' }}
+                      />
                       </button>
                       {/* Tooltip */}
                       <div
