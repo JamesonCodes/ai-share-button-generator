@@ -8,7 +8,6 @@ export default function InstructionsAccordion() {
   const instructions = [
     'Enter your content URL and brand name',
     'Customize your prompt template or use a preset (Summarize, Analyze, etc.)',
-    'Select which AI platforms you want to share to',
     'Copy the generated script code',
     'Paste it into the HTML of the specific page where you want the share button',
     'The button will share that specific URL with your custom prompt',
