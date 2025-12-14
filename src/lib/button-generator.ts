@@ -28,7 +28,6 @@ export function generateEmbedScript(config: ButtonConfig, baseUrl: string = 'htt
   if (config.brandName) attrs.push(`data-brand="${escapeHtmlAttribute(config.brandName)}"`);
   if (config.promptTemplate) attrs.push(`data-prompt-template="${escapeHtmlAttribute(config.promptTemplate)}"`);
   if (config.contentType) attrs.push(`data-content-type="${escapeHtmlAttribute(config.contentType)}"`);
-  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`data-button-style="${escapeHtmlAttribute(config.buttonStyle)}"`);
   // Only include data-show-attribution if it's false (opt-out, default is true)
   if (config.showAttribution === false) attrs.push(`data-show-attribution="false"`);
   
@@ -48,7 +47,6 @@ export function generateReactSnippet(config: ButtonConfig, baseUrl: string = 'ht
   if (config.brandName) attrs.push(`    script.setAttribute('data-brand', ${JSON.stringify(config.brandName)});`);
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
   if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', ${JSON.stringify(config.contentType)});`);
-  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', ${JSON.stringify(config.buttonStyle)});`);
   // Only include data-show-attribution if it's false (opt-out, default is true)
   if (config.showAttribution === false) attrs.push(`    script.setAttribute('data-show-attribution', 'false');`);
   
@@ -90,7 +88,6 @@ export function generateVueSnippet(config: ButtonConfig, baseUrl: string = 'http
   if (config.brandName) attrs.push(`    script.setAttribute('data-brand', ${JSON.stringify(config.brandName)});`);
   if (config.promptTemplate) attrs.push(`    script.setAttribute('data-prompt-template', ${JSON.stringify(config.promptTemplate)});`);
   if (config.contentType) attrs.push(`    script.setAttribute('data-content-type', ${JSON.stringify(config.contentType)});`);
-  if (config.buttonStyle && config.buttonStyle !== 'solid') attrs.push(`    script.setAttribute('data-button-style', ${JSON.stringify(config.buttonStyle)});`);
   
   return `<template>
   <div></div>

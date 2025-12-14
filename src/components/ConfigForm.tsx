@@ -19,7 +19,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     brandName: '',
     ai: ['chatgpt', 'perplexity', 'gemini'],
     promptTemplate: defaultPromptTemplate,
-    buttonStyle: 'solid',
     showAttribution: true,
   });
   
@@ -162,29 +161,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             <option key={type} value={type}>{type}</option>
           ))}
         </select>
-      </div>
-
-      {/* Embed Button Style */}
-      <div>
-        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
-          Embed Button Style
-        </label>
-        <select
-          value={config.buttonStyle || 'solid'}
-          onChange={(e) => updateConfig({ buttonStyle: e.target.value as 'solid' | 'outline' })}
-          className={`${inputBaseStyles} ${inputFocusStyles}`}
-          style={{
-            backgroundColor: 'var(--background)',
-            border: '1px solid var(--border)',
-            color: 'var(--text-primary)',
-          }}
-        >
-          <option value="solid">Solid Fill (Default)</option>
-          <option value="outline">High-Contrast Outline</option>
-        </select>
-        <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-          Choose between solid fill or outline style for better visibility on different backgrounds
-        </p>
       </div>
 
       {/* Custom Prompt Template */}
