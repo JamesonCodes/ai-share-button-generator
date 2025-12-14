@@ -12,6 +12,18 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
           <div className="text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
             <p>© {currentYear} SearchWell Labs LLC. All rights reserved.</p>
+            <p className="mt-2">
+              Made with ❤️ by{' '}
+              <a
+                href="https://jamesoncodes.github.io/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-smooth hover:opacity-80"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Jameson Campbell
+              </a>
+            </p>
           </div>
           <nav className="flex flex-wrap justify-center gap-3 md:gap-6">
             <Link 
