@@ -4,6 +4,9 @@
 type AIDestination = 'chatgpt' | 'claude' | 'perplexity' | 'gemini' | 'grok';
 type ButtonStyle = 'solid' | 'outline';
 
+const MOBILE_BREAKPOINT = 600;
+const MOBILE_MEDIA_QUERY = `(max-width: ${MOBILE_BREAKPOINT}px)`;
+
 interface ButtonConfig {
   url: string;
   brandName: string;
@@ -854,62 +857,46 @@ function init(): void {
   // Create buttons for each AI destination
   const buttons = config.ai.map(ai => createButton(config, ai));
 
-  // Detect viewport width
-  const isMobile = window.innerWidth <= 600;
-
-  if (isMobile) {
-    // Mobile: Create attribution link first (if enabled)
-    const attribution = config.showAttribution !== false ? createAttributionLink() : null;
-    
-    // Mobile: Create FAB with speed dial, including attribution in menu
-    const { container: fabContainer } = createFAB(buttons, attribution);
-    document.body.appendChild(fabContainer);
-    
-    // Handle window resize to switch between mobile/desktop
-    let resizeTimeout: number | null = null;
-    window.addEventListener('resize', () => {
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-      }
-      resizeTimeout = window.setTimeout(() => {
-        const isMobileNow = window.innerWidth <= 600;
-        if (!isMobileNow) {
-          // Switched to desktop - remove FAB and inline attribution
-          const fabContainer = document.querySelector('.ai-share-fab')?.parentElement;
-          if (fabContainer) {
-            fabContainer.remove();
-          }
-          removeExistingAttribution();
-          // Create desktop layout
-          createDesktopLayout(config, buttons);
-        }
-      }, 100);
-    });
-  } else {
-    // Desktop: Create floating button container (existing behavior)
+  const mountDesktopLayout = () => {
+    const existingDesktop = document.querySelector('.ai-share-button-container');
+    if (existingDesktop) {
+      existingDesktop.remove();
+    }
     createDesktopLayout(config, buttons);
-    
-    // Handle window resize to switch between desktop/mobile
-    let resizeTimeout: number | null = null;
+  };
+
+  const unmountDesktopLayout = () => {
+    const existingDesktop = document.querySelector('.ai-share-button-container');
+    if (existingDesktop) {
+      existingDesktop.remove();
+    }
+  };
+
+  const handleViewportChange = (matchesMobile: boolean) => {
+    if (matchesMobile) {
+      unmountDesktopLayout();
+    } else {
+      mountDesktopLayout();
+    }
+  };
+
+  if (typeof window.matchMedia === 'function') {
+    const mobileQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
+    handleViewportChange(mobileQuery.matches);
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      handleViewportChange(event.matches);
+    };
+
+    if (typeof mobileQuery.addEventListener === 'function') {
+      mobileQuery.addEventListener('change', handleChange);
+    } else if (typeof mobileQuery.addListener === 'function') {
+      mobileQuery.addListener(handleChange);
+    }
+  } else {
+    handleViewportChange(window.innerWidth <= MOBILE_BREAKPOINT);
     window.addEventListener('resize', () => {
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-      }
-      resizeTimeout = window.setTimeout(() => {
-        const isMobileNow = window.innerWidth <= 600;
-        if (isMobileNow) {
-          // Switched to mobile - remove desktop layout and create FAB
-          const desktopContainer = document.querySelector('.ai-share-button-container');
-          if (desktopContainer) {
-            desktopContainer.remove();
-          }
-          // Create attribution link for mobile FAB
-          const attribution = config.showAttribution !== false ? createAttributionLink() : null;
-          // Create mobile FAB with attribution in speed dial
-          const { container: fabContainer } = createFAB(buttons, attribution);
-          document.body.appendChild(fabContainer);
-        }
-      }, 100);
+      handleViewportChange(window.innerWidth <= MOBILE_BREAKPOINT);
     });
   }
 }
