@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
-import { AIIcon } from '@/lib/icons';
 import { replacePromptPlaceholders, promptPresets, defaultPromptTemplate } from '@/lib/prompt-templates';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PreviewButtonProps {
   config: ButtonConfig;
@@ -12,6 +12,8 @@ interface PreviewButtonProps {
 export default function PreviewButton({ config }: PreviewButtonProps) {
   const [attributionUrl, setAttributionUrl] = useState('#');
   const [textColor, setTextColor] = useState('#000000');
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -66,6 +68,20 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     gemini: 'Google AI',
   };
 
+  // Map AI destinations to icon file names
+  const aiIconFileMap: Record<string, string> = {
+    chatgpt: 'chatgpt',
+    perplexity: 'perplexity',
+    gemini: 'google',
+  };
+
+  // Get icon path based on theme
+  const getIconPath = (ai: string): string => {
+    const iconName = aiIconFileMap[ai] || 'chatgpt';
+    const themeMode = theme === 'dark' ? 'dark' : 'light';
+    return `/icons/ai/${iconName}-${themeMode}-mode.svg`;
+  };
+
   // Get the preset name from the current prompt template
   const getActionName = (): string => {
     const currentTemplate = config.promptTemplate || defaultPromptTemplate;
@@ -82,68 +98,6 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
   };
 
   const actionName = getActionName();
-
-  // Official brand colors for AI platforms
-  const brandColors: Record<string, string> = {
-    chatgpt: '#10A37F', // OpenAI/ChatGPT bright green
-    perplexity: '#8B5CF6', // Perplexity purple/blue
-    gemini: '#4285F4', // Google blue
-  };
-
-  const buttonStyle = config.buttonStyle || 'solid';
-
-  // Helper function to convert hex to rgba with opacity
-  const hexToRgba = (hex: string, opacity: number): string => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-  };
-
-  // Get button style based on selected style mode and platform brand color
-  const getButtonStyle = (ai: string) => {
-    const brandColor = brandColors[ai] || 'var(--accent)';
-    
-    if (buttonStyle === 'outline') {
-      // High-Contrast Outline style with increased visibility
-      const backgroundColor = brandColor.startsWith('#') 
-        ? hexToRgba(brandColor, 0.1) 
-        : brandColor; // Fallback for CSS variables
-      
-      return {
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '10px 20px',
-        fontSize: '14px',
-        fontWeight: 500,
-        color: brandColor,
-        backgroundColor: backgroundColor,
-        border: `2px solid ${brandColor}`,
-        borderRadius: '8px',
-        cursor: 'pointer',
-        transition: 'all 200ms ease',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif',
-      };
-    } else {
-      // Solid Fill (Default) style
-      return {
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '10px 20px',
-        fontSize: '14px',
-        fontWeight: 500,
-        color: '#FFFFFF',
-        backgroundColor: brandColor,
-        border: 'none',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        transition: 'all 200ms ease',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Roboto, "Helvetica Neue", Arial, sans-serif',
-      };
-    }
-  };
 
   const handleButtonClick = (ai: string) => {
     if (!config.url) {
@@ -193,44 +147,78 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
             border: '1px solid var(--border)'
           }}
         >
-          {/* Container for label, buttons, and attribution */}
-          <div className="flex flex-col items-end gap-2.5 md:gap-3 w-full md:w-auto">
-            {/* Dynamic action label - appears above buttons */}
-            {config.ai.length > 0 && (
-              <div 
-                className="text-sm font-medium transition-smooth"
-                style={{ color: textColor }}
-              >
-                {actionName} in:
-              </div>
-            )}
-            
-            {/* Buttons container */}
-            <div className="flex flex-col gap-2.5 md:gap-3 w-full md:w-auto">
+          {/* Container for buttons and attribution */}
+          <div className="flex flex-col items-end gap-3 w-full md:w-auto">
+            {/* Circular icon-only buttons container */}
+            <div className="flex flex-col gap-3 items-end">
               {config.ai.length > 0 ? (
                 config.ai.map((ai) => (
-                  <button
+                  <div
                     key={ai}
-                    onClick={() => handleButtonClick(ai)}
-                    disabled={!config.url}
-                    style={{
-                      ...getButtonStyle(ai),
-                      minHeight: '44px',
-                    }}
-                    className="transition-smooth hover:brightness-95 active:brightness-90 disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto"
+                    className="relative"
+                    onMouseEnter={() => setHoveredButton(ai)}
+                    onMouseLeave={() => setHoveredButton(null)}
                   >
-                    <span 
-                      style={{ 
-                        display: 'inline-flex', 
-                        alignItems: 'center', 
-                        marginRight: '8px',
-                        color: buttonStyle === 'outline' ? brandColors[ai] || 'var(--accent)' : '#FFFFFF'
+                    <button
+                      onClick={() => handleButtonClick(ai)}
+                      disabled={!config.url}
+                      className="transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                      style={{
+                        width: '48px',
+                        height: '48px',
+                        borderRadius: '50%',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E5E5',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: 0,
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                       }}
                     >
-                      <AIIcon ai={ai} className="w-4 h-4" />
-                    </span>
-                    {aiLabels[ai] || ai}
-                  </button>
+                      <img
+                        src={getIconPath(ai)}
+                        alt={aiLabels[ai] || ai}
+                        width={24}
+                        height={24}
+                        className="block"
+                        style={{ width: '24px', height: '24px', display: 'block' }}
+                      />
+                    </button>
+                    {/* Tooltip */}
+                    <div
+                      className="absolute right-full mr-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none whitespace-nowrap z-50"
+                      style={{
+                        opacity: hoveredButton === ai ? 1 : 0,
+                        transform: hoveredButton === ai 
+                          ? 'translateY(-50%) translateX(-4px)' 
+                          : 'translateY(-50%)',
+                      }}
+                    >
+                      <div
+                        className="bg-white border border-[#E5E5E5] rounded-md px-3 py-2 text-sm font-medium text-[#1A1A1A] shadow-md relative"
+                        style={{
+                          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        }}
+                      >
+                        {actionName} in {aiLabels[ai] || ai}
+                        {/* Arrow pointer */}
+                        <div
+                          className="absolute left-full top-1/2 -translate-y-1/2"
+                          style={{
+                            width: 0,
+                            height: 0,
+                            borderTop: '6px solid transparent',
+                            borderBottom: '6px solid transparent',
+                            borderLeft: '6px solid #FFFFFF',
+                            filter: 'drop-shadow(1px 0 0 #E5E5E5)',
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 ))
               ) : (
                 <div 
