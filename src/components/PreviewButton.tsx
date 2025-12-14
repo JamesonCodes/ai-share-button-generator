@@ -100,6 +100,11 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
 
   const actionName = getActionName();
 
+  // Get wireframe color based on theme
+  const getWireframeColor = (): string => {
+    return theme === 'dark' ? '#444444' : '#D0D0D0';
+  };
+
   const handleButtonClick = (ai: string) => {
     if (!config.url) {
       return; // Don't redirect if URL is not set
@@ -142,14 +147,93 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     <div className="space-y-6">
       <div>
         <div 
-          className="relative p-6 md:p-10 rounded-soft transition-smooth min-h-[180px] md:min-h-[240px] flex flex-col items-end justify-end"
+          className="relative p-6 md:p-10 rounded-soft transition-smooth min-h-[180px] md:min-h-[240px]"
           style={{ 
             backgroundColor: 'var(--background)', 
             border: '1px solid var(--border)'
           }}
         >
-          {/* Container for buttons and attribution */}
-          <div className="flex flex-col items-end gap-3 w-full md:w-auto">
+          {/* Wireframe elements */}
+          <div className="absolute inset-0 p-6 md:p-10 flex flex-col gap-3" aria-hidden="true" style={{ pointerEvents: 'none' }}>
+            {/* Header Bar */}
+            <div
+              style={{
+                width: '100%',
+                height: '12px',
+                backgroundColor: getWireframeColor(),
+                borderRadius: '2px',
+                opacity: 0.6,
+              }}
+            />
+            
+            {/* Page Title */}
+            <div
+              style={{
+                width: '60%',
+                height: '8px',
+                backgroundColor: getWireframeColor(),
+                borderRadius: '2px',
+                opacity: 0.6,
+                marginTop: '8px',
+              }}
+            />
+            
+            {/* Body Text Group 1 */}
+            <div className="flex flex-col gap-1.5" style={{ marginTop: '12px' }}>
+              <div
+                style={{
+                  width: '85%',
+                  height: '5px',
+                  backgroundColor: getWireframeColor(),
+                  borderRadius: '2px',
+                  opacity: 0.6,
+                }}
+              />
+              <div
+                style={{
+                  width: '90%',
+                  height: '5px',
+                  backgroundColor: getWireframeColor(),
+                  borderRadius: '2px',
+                  opacity: 0.6,
+                }}
+              />
+              <div
+                style={{
+                  width: '80%',
+                  height: '5px',
+                  backgroundColor: getWireframeColor(),
+                  borderRadius: '2px',
+                  opacity: 0.6,
+                }}
+              />
+            </div>
+            
+            {/* Body Text Group 2 */}
+            <div className="flex flex-col gap-1.5" style={{ marginTop: '16px' }}>
+              <div
+                style={{
+                  width: '88%',
+                  height: '5px',
+                  backgroundColor: getWireframeColor(),
+                  borderRadius: '2px',
+                  opacity: 0.6,
+                }}
+              />
+              <div
+                style={{
+                  width: '75%',
+                  height: '5px',
+                  backgroundColor: getWireframeColor(),
+                  borderRadius: '2px',
+                  opacity: 0.6,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Container for buttons and attribution - positioned at bottom-right */}
+          <div className="absolute bottom-6 md:bottom-10 right-6 md:right-10 flex flex-col items-end gap-3">
             {/* Circular icon-only buttons container */}
             <div 
               className="flex flex-col-reverse gap-3 items-end"
