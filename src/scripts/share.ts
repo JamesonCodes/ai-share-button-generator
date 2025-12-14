@@ -385,7 +385,7 @@ const aiLabels: Record<AIDestination, string> = {
   chatgpt: 'ChatGPT',
   claude: 'Claude',
   perplexity: 'Perplexity',
-  gemini: 'Gemini',
+  gemini: 'Google AI',
   grok: 'Grok',
 };
 
@@ -1005,8 +1005,15 @@ function init(): void {
   const styles = getButtonStyles();
   injectStyles(styles);
 
+  // Sort buttons to ensure ChatGPT is first if present
+  const sortedAI = [...config.ai].sort((a, b) => {
+    if (a === 'chatgpt') return -1;
+    if (b === 'chatgpt') return 1;
+    return 0;
+  });
+  
   // Create buttons for each AI destination
-  const buttons = config.ai.map(ai => createButton(config, ai));
+  const buttons = sortedAI.map(ai => createButton(config, ai));
 
   const mountDesktopLayout = () => {
     const existingDesktop = document.querySelector('.ai-share-button-container');
@@ -1056,25 +1063,64 @@ function createDesktopLayout(config: ButtonConfig, buttons: HTMLElement[]): void
   // Create a container for floating buttons
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'ai-share-button-container';
-  buttonContainer.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px;';
+  buttonContainer.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: 8px;';
   
-  // Create wrapper container for label, buttons, and attribution
+  // Create wrapper container for buttons and attribution
   const wrapper = document.createElement('div');
   wrapper.className = 'ai-share-button-wrapper';
   wrapper.style.cssText = 'display: flex; flex-direction: column; align-items: flex-end; gap: 8px;';
   
-  // Add buttons container (no label needed - tooltips show action)
+  // Add buttons container (ChatGPT at bottom, others above on hover)
   const buttonsContainer = document.createElement('div');
   buttonsContainer.className = 'ai-share-button-buttons';
-  buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 12px; align-items: flex-end;';
-  buttons.forEach(button => {
+  buttonsContainer.style.cssText = 'display: flex; flex-direction: column-reverse; gap: 12px; align-items: flex-end;';
+  
+  // Add buttons in reverse order (ChatGPT at bottom, others above)
+  // Initially show only ChatGPT (first button), hide others
+  buttons.forEach((button, index) => {
     buttonsContainer.appendChild(button);
+    if (index > 0) {
+      // Hide non-ChatGPT buttons initially - positioned above (positive translateY)
+      (button as HTMLElement).style.opacity = '0';
+      (button as HTMLElement).style.transform = 'translateY(20px) scale(0.8)';
+      (button as HTMLElement).style.pointerEvents = 'none';
+      (button as HTMLElement).style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    }
   });
   
-  // Add buttons container to wrapper
+  // Add hover functionality to show other buttons
+  const firstButton = buttons[0];
+  if (firstButton) {
+    const expandButtons = () => {
+      buttons.forEach((button, index) => {
+        if (index > 0) {
+          (button as HTMLElement).style.opacity = '1';
+          (button as HTMLElement).style.transform = 'translateY(0) scale(1)';
+          (button as HTMLElement).style.pointerEvents = 'auto';
+        }
+      });
+    };
+    
+    const collapseButtons = () => {
+      buttons.forEach((button, index) => {
+        if (index > 0) {
+          (button as HTMLElement).style.opacity = '0';
+          (button as HTMLElement).style.transform = 'translateY(20px) scale(0.8)';
+          (button as HTMLElement).style.pointerEvents = 'none';
+        }
+      });
+    };
+    
+    // Add hover listeners to the first button and container
+    firstButton.addEventListener('mouseenter', expandButtons);
+    buttonsContainer.addEventListener('mouseenter', expandButtons);
+    buttonsContainer.addEventListener('mouseleave', collapseButtons);
+  }
+  
+  // Add buttons container to wrapper first
   wrapper.appendChild(buttonsContainer);
   
-  // Add attribution link if enabled (default: true) - keep in container for desktop
+  // Add attribution link below buttons (after ChatGPT)
   if (config.showAttribution !== false) {
     const attribution = createAttributionLink();
     if (attribution) {

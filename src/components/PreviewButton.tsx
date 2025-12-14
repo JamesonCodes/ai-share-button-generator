@@ -13,6 +13,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
   const [attributionUrl, setAttributionUrl] = useState('#');
   const [textColor, setTextColor] = useState('#000000');
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -150,77 +151,100 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
           {/* Container for buttons and attribution */}
           <div className="flex flex-col items-end gap-3 w-full md:w-auto">
             {/* Circular icon-only buttons container */}
-            <div className="flex flex-col gap-3 items-end">
-              {config.ai.length > 0 ? (
-                config.ai.map((ai) => (
-                  <div
-                    key={ai}
-                    className="relative"
-                    onMouseEnter={() => setHoveredButton(ai)}
-                    onMouseLeave={() => setHoveredButton(null)}
-                  >
-                    <button
-                      onClick={() => handleButtonClick(ai)}
-                      disabled={!config.url}
-                      className="transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
-                      style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '50%',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #E5E5E5',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: 0,
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                      }}
-                    >
-                      <img
-                        src={getIconPath(ai)}
-                        alt={aiLabels[ai] || ai}
-                        width={24}
-                        height={24}
-                        className="block"
-                        style={{ width: '24px', height: '24px', display: 'block' }}
-                      />
-                    </button>
-                    {/* Tooltip */}
+            <div 
+              className="flex flex-col-reverse gap-3 items-end"
+              onMouseEnter={() => setIsExpanded(true)}
+              onMouseLeave={() => setIsExpanded(false)}
+            >
+              {config.ai.length > 0 ? (() => {
+                // Sort to ensure ChatGPT is first
+                const sortedAI = [...config.ai].sort((a, b) => {
+                  if (a === 'chatgpt') return -1;
+                  if (b === 'chatgpt') return 1;
+                  return 0;
+                });
+                
+                return sortedAI.map((ai, index) => {
+                  const isFirst = index === 0;
+                  const shouldShow = isFirst || isExpanded;
+                  
+                  return (
                     <div
-                      className="absolute right-full mr-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none whitespace-nowrap z-50"
+                      key={ai}
+                      className="relative transition-all duration-300 ease-out"
                       style={{
-                        opacity: hoveredButton === ai ? 1 : 0,
-                        transform: hoveredButton === ai 
-                          ? 'translateY(-50%) translateX(-4px)' 
-                          : 'translateY(-50%)',
+                        opacity: shouldShow ? 1 : 0,
+                        transform: shouldShow 
+                          ? 'translateY(0) scale(1)' 
+                          : 'translateY(20px) scale(0.8)',
+                        pointerEvents: shouldShow ? 'auto' : 'none',
                       }}
+                      onMouseEnter={() => setHoveredButton(ai)}
+                      onMouseLeave={() => setHoveredButton(null)}
                     >
-                      <div
-                        className="bg-white border border-[#E5E5E5] rounded-md px-3 py-2 text-sm font-medium text-[#1A1A1A] shadow-md relative"
+                      <button
+                        onClick={() => handleButtonClick(ai)}
+                        disabled={!config.url}
+                        className="transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
                         style={{
+                          width: '48px',
+                          height: '48px',
+                          borderRadius: '50%',
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #E5E5E5',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          padding: 0,
+                          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
                           fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                         }}
                       >
-                        {actionName} in {aiLabels[ai] || ai}
-                        {/* Arrow pointer */}
-                        <div
-                          className="absolute left-full top-1/2 -translate-y-1/2"
-                          style={{
-                            width: 0,
-                            height: 0,
-                            borderTop: '6px solid transparent',
-                            borderBottom: '6px solid transparent',
-                            borderLeft: '6px solid #FFFFFF',
-                            filter: 'drop-shadow(1px 0 0 #E5E5E5)',
-                          }}
+                        <img
+                          src={getIconPath(ai)}
+                          alt={aiLabels[ai] || ai}
+                          width={24}
+                          height={24}
+                          className="block"
+                          style={{ width: '24px', height: '24px', display: 'block' }}
                         />
+                      </button>
+                      {/* Tooltip */}
+                      <div
+                        className="absolute right-full mr-3 top-1/2 -translate-y-1/2 transition-all duration-200 pointer-events-none whitespace-nowrap z-50"
+                        style={{
+                          opacity: hoveredButton === ai ? 1 : 0,
+                          transform: hoveredButton === ai 
+                            ? 'translateY(-50%) translateX(-4px)' 
+                            : 'translateY(-50%)',
+                        }}
+                      >
+                        <div
+                          className="bg-white border border-[#E5E5E5] rounded-md px-3 py-2 text-sm font-medium text-[#1A1A1A] shadow-md relative"
+                          style={{
+                            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                          }}
+                        >
+                          {actionName} in {aiLabels[ai] || ai}
+                          {/* Arrow pointer */}
+                          <div
+                            className="absolute left-full top-1/2 -translate-y-1/2"
+                            style={{
+                              width: 0,
+                              height: 0,
+                              borderTop: '6px solid transparent',
+                              borderBottom: '6px solid transparent',
+                              borderLeft: '6px solid #FFFFFF',
+                              filter: 'drop-shadow(1px 0 0 #E5E5E5)',
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
-              ) : (
+                  );
+                });
+              })() : (
                 <div 
                   className="px-4 py-2 rounded-soft text-sm transition-smooth"
                   style={{ 
@@ -233,8 +257,8 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                 </div>
               )}
             </div>
-
-            {/* Attribution link - matches embed script behavior */}
+            
+            {/* Attribution link below buttons (after ChatGPT) */}
             {config.showAttribution !== false && config.ai.length > 0 && (
               <a
                 href={attributionUrl}
@@ -245,7 +269,6 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                   fontSize: '10px',
                   color: textColor,
                   textDecoration: 'none',
-                  marginTop: '4px',
                   opacity: 0.7,
                   transition: 'opacity 0.2s ease',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
