@@ -3,7 +3,6 @@
 import { useState, useRef } from 'react';
 import type { ButtonConfig } from '@/lib/config-validator';
 import { isValidUrl } from '@/lib/config-validator';
-import { AIIcon } from '@/lib/icons';
 import { promptPresets, type PromptPreset, defaultPromptTemplate } from '@/lib/prompt-templates';
 import { useTheme } from '@/contexts/ThemeContext';
 import PremiumFeatures from '@/components/PremiumFeatures';
@@ -18,7 +17,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const [config, setConfig] = useState<ButtonConfig>({
     url: '',
     brandName: '',
-    ai: ['chatgpt'],
+    ai: ['chatgpt', 'perplexity', 'gemini'],
     promptTemplate: defaultPromptTemplate,
     buttonStyle: 'solid',
     showAttribution: true,
@@ -30,12 +29,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const [selectedPremiumFeature, setSelectedPremiumFeature] = useState<{ id: string; name: string; description: string } | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const aiOptions = [
-    { value: 'chatgpt', label: 'ChatGPT' },
-    { value: 'perplexity', label: 'Perplexity' },
-    { value: 'gemini', label: 'Google AI' },
-  ] as const;
-
   const contentTypes = [
     'Article/Blog Post',
     'Product Page',
@@ -45,18 +38,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
     'Research Paper',
     'Other',
   ];
-
-  const handleAIToggle = (aiValue: typeof aiOptions[number]['value']) => {
-    const currentAi = config.ai || [];
-    const newAi = currentAi.includes(aiValue)
-      ? currentAi.filter(a => a !== aiValue)
-      : [...currentAi, aiValue];
-    
-    // Ensure at least one is selected
-    if (newAi.length > 0) {
-      updateConfig({ ai: newAi });
-    }
-  };
 
   const isCustomPrompt = () => {
     const currentTemplate = config.promptTemplate || defaultPromptTemplate;
@@ -181,73 +162,6 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
             <option key={type} value={type}>{type}</option>
           ))}
         </select>
-      </div>
-
-      {/* AI Destinations */}
-      <div>
-        <label className="block text-sm font-medium mb-2.5 md:mb-3 transition-smooth" style={{ color: 'var(--text-primary)' }}>
-          Select AI Platforms
-        </label>
-        <div className="flex flex-wrap gap-2.5">
-          {aiOptions.map((option) => {
-            const isSelected = config.ai.includes(option.value);
-            
-            // Official brand colors for AI platforms (outline + subtle fill)
-            const brandColors: Record<string, { color: string; rgba: string }> = {
-              chatgpt: {
-                color: '#10A37F', // OpenAI/ChatGPT bright green
-                rgba: 'rgba(16, 163, 127, 0.15)', // 15% opacity
-              },
-              perplexity: {
-                color: '#8B5CF6', // Perplexity purple/blue
-                rgba: 'rgba(139, 92, 246, 0.15)', // 15% opacity
-              },
-              gemini: {
-                color: '#4285F4', // Google blue
-                rgba: 'rgba(66, 133, 244, 0.15)', // 15% opacity
-              },
-            };
-            
-            const brandColor = brandColors[option.value] || {
-              color: 'var(--accent)',
-              rgba: theme === 'dark'
-                ? 'rgba(25, 195, 125, 0.15)'
-                : 'rgba(16, 163, 127, 0.15)',
-            };
-            
-            return (
-              <label
-                key={option.value}
-                className={`relative inline-flex items-center gap-2 px-3.5 py-2 md:px-3 md:py-1.5 rounded-full cursor-pointer transition-smooth touch-target ${
-                  isSelected ? '' : 'hover:opacity-80'
-                }`}
-                style={{
-                  backgroundColor: isSelected ? brandColor.rgba : 'transparent',
-                  border: `1px solid ${isSelected ? brandColor.color : 'var(--border)'}`,
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  onChange={() => handleAIToggle(option.value)}
-                  className="sr-only"
-                />
-                <span 
-                  className="w-4 h-4 flex-shrink-0 transition-smooth"
-                  style={{ color: isSelected ? brandColor.color : 'var(--text-primary)' }}
-                >
-                  <AIIcon ai={option.value} />
-                </span>
-                <span 
-                  className="text-sm font-medium transition-smooth whitespace-nowrap"
-                  style={{ color: isSelected ? brandColor.color : 'var(--text-primary)' }}
-                >
-                  {option.label}
-                </span>
-              </label>
-            );
-          })}
-        </div>
       </div>
 
       {/* Embed Button Style */}

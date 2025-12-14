@@ -13,7 +13,7 @@ export default function Home() {
   const [config, setConfig] = useState<ButtonConfig>({
     url: '',
     brandName: '',
-    ai: ['chatgpt'],
+    ai: ['chatgpt', 'perplexity', 'gemini'],
   });
 
   const [baseUrl, setBaseUrl] = useState('');
