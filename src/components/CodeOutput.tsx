@@ -11,9 +11,10 @@ interface CodeOutputProps {
   embedScript: string;
   reactSnippet: string;
   vueSnippet: string;
+  isConfigValid?: boolean;
 }
 
-export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: CodeOutputProps) {
+export default function CodeOutput({ embedScript, reactSnippet, vueSnippet, isConfigValid = true }: CodeOutputProps) {
   const [copied, setCopied] = useState<boolean>(false);
   const [activeFramework, setActiveFramework] = useState<Framework>('html');
   const { theme } = useTheme();
@@ -54,6 +55,9 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
   };
 
   const copyToClipboard = async (text: string) => {
+    if (!isConfigValid) {
+      return;
+    }
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -89,13 +93,17 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
         </div>
         <button
           onClick={() => copyToClipboard(currentCode)}
+          disabled={!isConfigValid}
           className={`w-full md:w-auto px-5 py-3 md:py-2.5 text-sm font-medium rounded-soft transition-smooth flex items-center justify-center gap-2 touch-target ${
-            copied ? 'scale-105' : 'hover:opacity-90 active:opacity-95'
+            copied ? 'scale-105' : isConfigValid ? 'hover:opacity-90 active:opacity-95' : ''
           }`}
           style={{
-            backgroundColor: copied ? '#10A37F' : 'var(--accent)',
-            color: '#FFFFFF',
+            backgroundColor: copied ? '#10A37F' : isConfigValid ? 'var(--accent)' : 'var(--border)',
+            color: isConfigValid ? '#FFFFFF' : 'var(--text-secondary)',
+            cursor: isConfigValid ? 'pointer' : 'not-allowed',
+            opacity: isConfigValid ? 1 : 0.6,
           }}
+          title={!isConfigValid ? 'Please fill in Content URL and Brand/Site Name to copy the embed code' : ''}
         >
           {copied ? (
             <>
@@ -142,6 +150,11 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet }: Co
       <p className="mt-3 text-xs md:text-sm transition-smooth" style={{ color: 'var(--text-secondary)' }}>
         {getHelperText()}
       </p>
+      {!isConfigValid && (
+        <p className="mt-2 text-xs transition-smooth" style={{ color: 'var(--accent)' }}>
+          Please fill in Content URL and Brand/Site Name to copy the embed code
+        </p>
+      )}
     </div>
   );
 }

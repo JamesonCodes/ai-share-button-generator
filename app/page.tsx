@@ -33,6 +33,9 @@ export default function Home() {
   };
 
   const { embedScript, reactSnippet, vueSnippet } = generateCodeSnippets(config, baseUrl);
+  
+  // Check if required fields are filled
+  const isConfigValid = Boolean(config.url && config.brandName);
 
   return (
     <div className="min-h-screen transition-smooth" style={{ backgroundColor: 'var(--background)' }}>
@@ -87,7 +90,7 @@ export default function Home() {
                 }}
               >
                 <h2 className="mb-8 transition-smooth" style={{ color: 'var(--text-primary)' }}>Embed Code</h2>
-                <CodeOutput embedScript={embedScript} reactSnippet={reactSnippet} vueSnippet={vueSnippet} />
+                <CodeOutput embedScript={embedScript} reactSnippet={reactSnippet} vueSnippet={vueSnippet} isConfigValid={isConfigValid} />
               </div>
             </div>
           </div>
