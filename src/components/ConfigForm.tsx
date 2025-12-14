@@ -253,7 +253,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
           />
           <div>
             <span className="text-sm font-medium transition-smooth" style={{ color: 'var(--text-primary)' }}>
-              Show &quot;Powered by&quot; attribution
+              Show &quot;Get your own AI share button&quot;
             </span>
             <p className="text-xs mt-1 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               A small link will appear below the buttons linking back to the generator

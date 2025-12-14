@@ -671,11 +671,13 @@ function createAttributionLink(): HTMLAnchorElement | null {
   let script = document.currentScript as HTMLScriptElement;
   
   // Fallback: find script by src attribute (needed when script executes asynchronously)
+  // Check if script is falsy or doesn't have src property
   if (!script || !script.src) {
     const scripts = document.querySelectorAll('script[src*="share.js"]');
     script = scripts[scripts.length - 1] as HTMLScriptElement; // Get the last matching script
   }
   
+  // Final validation: ensure we have a valid script with src
   if (!script || !script.src) {
     return null;
   }
