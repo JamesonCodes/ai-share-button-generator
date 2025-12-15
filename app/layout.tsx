@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import TopControls from "@/components/TopControls";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://aisharebuttongenerator.com'),
@@ -157,6 +158,7 @@ export default function RootLayout({
         <ThemeProvider>
           <TopControls />
           {children}
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
