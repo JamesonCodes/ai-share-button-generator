@@ -61,6 +61,7 @@ export default function PrivacyPolicy() {
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li><strong>Email Address:</strong> If you choose to join our waitlist for premium features, we collect your email address and your feature preferences. This information is stored securely with our email service provider (Resend) and is used solely to notify you about premium feature launches.</li>
               <li><strong>Feedback Submissions:</strong> If you submit our feedback form, we collect your email address, rating (1-5 scale), and any optional feedback message you provide. This information is stored securely with our email service provider (Resend) in a separate feedback audience and is used solely to improve our Service.</li>
+              <li><strong>Analytics Data:</strong> We use Vercel Analytics to collect anonymous usage statistics, including page views, user interactions, and custom events (such as when users copy code snippets). This data helps us understand how the Service is used and improve user experience. Analytics data is processed by Vercel in accordance with their privacy policy.</li>
               <li><strong>Theme Preference:</strong> We store your theme preference (light or dark mode) in your browser&rsquo;s localStorage. This information is stored locally on your device and is not transmitted to our servers.</li>
               <li><strong>User Input:</strong> When you use the generator to create share button code, the information you enter (URLs, brand names, prompt templates) is processed entirely in your browser. We do not collect, store, or transmit this information to our servers.</li>
             </ul>
@@ -76,6 +77,7 @@ export default function PrivacyPolicy() {
             <ul className="list-disc list-inside space-y-2 ml-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <li><strong>Email Addresses:</strong> We use your email address to send you notifications about premium feature launches and updates related to the features you expressed interest in. We do not use your email for marketing purposes unrelated to the waitlist, and we do not share your email with third parties except as necessary to provide the email service (see Third-Party Services below).</li>
               <li><strong>Feedback Data:</strong> We use your feedback submissions (email, rating, and message) to improve our Service and understand user experience. We do not use your feedback email for marketing purposes, and we do not share your feedback with third parties except as necessary to store it with our email service provider (see Third-Party Services below).</li>
+              <li><strong>Analytics Data:</strong> We use analytics data to understand how users interact with our Service, identify popular features, and improve the user experience. This data is aggregated and anonymized, and we do not use it to identify individual users.</li>
               <li><strong>Theme Preference:</strong> The theme preference stored in localStorage is used solely to maintain your display preferences between visits. We do not use this information for any other purpose, and we do not share it with third parties.</li>
             </ul>
           </section>
@@ -86,6 +88,9 @@ export default function PrivacyPolicy() {
             </h2>
             <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>Email Service Provider:</strong> We use Resend to store and manage email addresses for our waitlist and feedback submissions. Resend processes your email address and feedback data on our behalf in accordance with their privacy policy. You can review Resend&rsquo;s privacy practices at <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>resend.com/legal/privacy-policy</a>.
+            </p>
+            <p className="mb-3 mt-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              <strong>Analytics Service:</strong> We use Vercel Analytics to collect and analyze usage data, including page views, user interactions, and custom events. Vercel processes this data in accordance with their privacy policy. You can review Vercel&rsquo;s privacy practices at <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: 'var(--accent)' }}>vercel.com/legal/privacy-policy</a>.
             </p>
             <p className="mb-3 mt-4 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               <strong>AI Platform Redirects:</strong> Our Service generates code that redirects users to third-party AI platforms, including:
@@ -160,10 +165,15 @@ export default function PrivacyPolicy() {
             <h2 className="mb-4 transition-smooth" style={{ color: 'var(--text-primary)' }}>
               Cookies and Local Storage
             </h2>
-            <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+            <p className="mb-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               We use browser localStorage (not cookies) to store your theme preference. This is a standard 
               browser feature that allows websites to remember your preferences. You can disable or clear 
               localStorage through your browser settings at any time.
+            </p>
+            <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
+              Our analytics service (Vercel Analytics) may use cookies or similar tracking technologies to collect 
+              usage data. These cookies are used to analyze how users interact with our Service and are processed 
+              in accordance with Vercel&rsquo;s privacy policy. You can control cookies through your browser settings.
             </p>
           </section>
 
