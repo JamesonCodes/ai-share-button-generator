@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useTheme } from '@/contexts/ThemeContext';
+import { track } from '@vercel/analytics';
 
 type Framework = 'html' | 'react' | 'vue';
 
@@ -61,6 +62,12 @@ export default function CodeOutput({ embedScript, reactSnippet, vueSnippet, isCo
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      
+      // Track copy event with framework type
+      track('copy_code', {
+        framework: activeFramework,
+      });
+      
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
