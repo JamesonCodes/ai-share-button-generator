@@ -352,18 +352,20 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                 className="ai-share-attribution transition-smooth"
                 style={{
                   fontSize: '10px',
-                  color: textColor,
+                  color: '#1A1A1A',
                   textDecoration: 'none',
-                  opacity: 0.7,
-                  transition: 'opacity 0.2s ease',
+                  transition: 'opacity 0.2s ease, text-decoration 0.2s ease',
                   fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  padding: '4px 8px',
+                  borderRadius: '999px',
+                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                  display: 'inline-block',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '1';
                   e.currentTarget.style.textDecoration = 'underline';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '0.7';
                   e.currentTarget.style.textDecoration = 'none';
                 }}
               >
