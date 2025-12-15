@@ -12,7 +12,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -25,8 +25,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = systemPrefersDark ? 'dark' : 'light';
+      const initialTheme = 'dark';
       setTheme(initialTheme);
       localStorage.setItem('ai-share-button-theme', initialTheme);
       document.documentElement.classList.toggle('dark', initialTheme === 'dark');

@@ -88,7 +88,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 const stored = localStorage.getItem('ai-share-button-theme');
-                const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                const theme = stored || 'dark';
                 if (theme === 'dark') {
                   document.documentElement.classList.add('dark');
                 }
