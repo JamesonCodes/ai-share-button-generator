@@ -311,7 +311,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
                             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
                           }}
                         >
-                          {actionName} in {aiLabels[ai] || ai}
+                          {actionName} with {aiLabels[ai] || ai}
                           {/* Arrow pointer */}
                           <div
                             className="absolute left-full top-1/2 -translate-y-1/2"

@@ -492,7 +492,7 @@ function createButton(config: ButtonConfig, aiDestination: AIDestination): HTMLE
   tooltip.className = 'ai-share-tooltip';
   const actionName = getActionName(config);
   const aiLabel = aiLabels[aiDestination] || aiDestination;
-  tooltip.textContent = `${actionName} in ${aiLabel}`;
+  tooltip.textContent = `${actionName} with ${aiLabel}`;
   tooltip.style.cssText = `
     position: absolute;
     right: calc(100% + 12px);
