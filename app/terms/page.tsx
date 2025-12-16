@@ -58,7 +58,7 @@ export default function TermsOfService() {
             </h2>
             <p className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               The AI Share Button Generator is a web-based tool that allows users to generate embeddable code 
-              for share buttons that redirect to third-party AI platforms (ChatGPT, Perplexity AI, and Google AI). 
+              for share buttons that redirect to third-party AI platforms (ChatGPT, Perplexity AI, Google AI, and Grok). 
               The Service generates code snippets that users can embed on their own websites.
             </p>
           </section>

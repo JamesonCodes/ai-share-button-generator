@@ -62,9 +62,10 @@ export default function Disclaimer() {
               <li><strong>ChatGPT</strong> - Operated by OpenAI</li>
               <li><strong>Perplexity AI</strong> - Operated by Perplexity AI, Inc.</li>
               <li><strong>Google AI (Gemini)</strong> - Operated by Google LLC</li>
+              <li><strong>Grok</strong> - Operated by X Corp.</li>
             </ul>
             <p className="mt-3 transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-              <strong>We are not affiliated with, endorsed by, or sponsored by OpenAI, Perplexity AI, or Google.</strong> 
+              <strong>We are not affiliated with, endorsed by, or sponsored by OpenAI, Perplexity AI, Google, or X Corp.</strong> 
               These are independent third-party services, and we have no control over their operations, content, 
               or policies.
             </p>
