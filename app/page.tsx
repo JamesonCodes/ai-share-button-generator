@@ -13,7 +13,7 @@ export default function Home() {
   const [config, setConfig] = useState<ButtonConfig>({
     url: '',
     brandName: '',
-    ai: ['chatgpt', 'perplexity', 'gemini'],
+    ai: ['chatgpt', 'perplexity', 'gemini', 'grok'],
   });
 
   const [baseUrl, setBaseUrl] = useState('');
@@ -46,7 +46,7 @@ export default function Home() {
             </h1>
             <p className="text-lg md:text-xl max-w-2xl mx-auto transition-smooth" style={{ color: 'var(--text-secondary)' }}>
               Create embeddable AI share buttons for your blog or website. 
-              Let readers send articles to ChatGPT, Perplexity, or Google AI with one click.
+              Let readers send articles to ChatGPT, Perplexity, Google AI, or Grok with one click.
             </p>
           </header>
 

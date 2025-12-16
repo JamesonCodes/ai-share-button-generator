@@ -67,6 +67,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     chatgpt: 'ChatGPT',
     perplexity: 'Perplexity',
     gemini: 'Google AI',
+    grok: 'Grok',
   };
 
   // Map AI destinations to icon file names
@@ -74,6 +75,7 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
     chatgpt: 'chatgpt',
     perplexity: 'perplexity',
     gemini: 'google',
+    grok: 'grok',
   };
 
   // Get icon path based on theme
@@ -134,6 +136,9 @@ export default function PreviewButton({ config }: PreviewButtonProps) {
         break;
       case 'gemini':
         redirectUrl = `https://www.google.com/search?udm=50&aep=11&q=${encodedPrompt}`;
+        break;
+      case 'grok':
+        redirectUrl = `https://x.com/i/grok?text=${encodedPrompt}`;
         break;
       default:
         redirectUrl = `https://chat.openai.com/?q=${encodedPrompt}`;

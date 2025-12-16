@@ -33,9 +33,9 @@ function getConfig(): ButtonConfig {
 
   // Parse AI destinations (comma-separated)
   const aiAttr = script.getAttribute('data-ai') || 'chatgpt';
-  // Filter to only supported platforms: chatgpt, perplexity, gemini
+  // Filter to only supported platforms: chatgpt, perplexity, gemini, grok
   // Keep backward compatibility for old embeds
-  const supportedPlatforms: readonly AIDestination[] = ['chatgpt', 'perplexity', 'gemini'] as const;
+  const supportedPlatforms: readonly AIDestination[] = ['chatgpt', 'perplexity', 'gemini', 'grok'] as const;
   const allPlatforms: readonly AIDestination[] = ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'] as const;
   
   const aiArray: AIDestination[] = aiAttr
@@ -115,7 +115,7 @@ function buildAIRedirectUrl(
     case 'gemini':
       return `https://www.google.com/search?udm=50&aep=11&q=${encodedPrompt}`;
     case 'grok':
-      return `https://x.com/i/grok?q=${encodedPrompt}`;
+      return `https://x.com/i/grok?text=${encodedPrompt}`;
     default:
       return `https://chat.openai.com/?q=${encodedPrompt}`;
   }
@@ -395,7 +395,7 @@ const aiIconFileMap: Record<AIDestination, string> = {
   perplexity: 'perplexity',
   gemini: 'google',
   claude: 'chatgpt', // Fallback
-  grok: 'chatgpt', // Fallback
+  grok: 'grok',
 };
 
 // Detect if user prefers dark mode

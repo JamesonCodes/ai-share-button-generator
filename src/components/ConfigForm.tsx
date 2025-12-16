@@ -17,7 +17,7 @@ export default function ConfigForm({ onConfigChange }: ConfigFormProps) {
   const [config, setConfig] = useState<ButtonConfig>({
     url: '',
     brandName: '',
-    ai: ['chatgpt', 'perplexity', 'gemini'],
+    ai: ['chatgpt', 'perplexity', 'gemini', 'grok'],
     promptTemplate: defaultPromptTemplate,
     showAttribution: true,
   });

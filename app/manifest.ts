@@ -6,7 +6,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'AI Share Button Generator',
     short_name: 'AI Share Button',
-    description: 'Generate embeddable AI share buttons for your blog or website. Let readers send articles to ChatGPT, Perplexity, or Google AI with one click.',
+    description: 'Generate embeddable AI share buttons for your blog or website. Let readers send articles to ChatGPT, Perplexity, Google AI, or Grok with one click.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

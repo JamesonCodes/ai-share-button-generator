@@ -113,7 +113,7 @@ export function validateConfig(config: Partial<ButtonConfig>): ButtonConfig {
   // Handle ai as string (legacy) or array
   // Filter to only supported platforms: chatgpt, perplexity, gemini
   // Keep backward compatibility for old embeds with claude/grok
-  const supportedPlatforms: AIDestination[] = ['chatgpt', 'perplexity', 'gemini'];
+  const supportedPlatforms: AIDestination[] = ['chatgpt', 'perplexity', 'gemini', 'grok'];
   const allPlatforms: AIDestination[] = ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'];
   
   let aiArray: AIDestination[] = ['chatgpt'];
@@ -183,7 +183,7 @@ export function parseConfigFromScript(scriptElement: HTMLScriptElement): ButtonC
     const aiList = aiAttr.split(',').map(a => a.trim()).filter(Boolean);
     if (aiList.length > 0) {
       // Filter to supported platforms only
-      const supportedPlatforms: AIDestination[] = ['chatgpt', 'perplexity', 'gemini'];
+      const supportedPlatforms: AIDestination[] = ['chatgpt', 'perplexity', 'gemini', 'grok'];
       aiArray = aiList.filter((a): a is AIDestination => 
         ['chatgpt', 'claude', 'perplexity', 'gemini', 'grok'].includes(a)
       ).filter(a => supportedPlatforms.includes(a)) as AIDestination[];
