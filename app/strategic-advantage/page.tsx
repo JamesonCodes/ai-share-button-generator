@@ -4,7 +4,7 @@ import FAQAccordion from '@/components/FAQAccordion';
 
 export const metadata: Metadata = {
   title: 'The Strategic Advantage of AI Share Buttons',
-  description: 'Learn how AI Share Buttons integrate your content into LLM workflows, establish AI authority through citation, and build brand recognition in AI systems. Best practices for ChatGPT, Perplexity, and Google AI integration.',
+  description: 'Learn how AI Share Buttons integrate your content into LLM workflows, establish AI authority through citation, and build brand recognition in AI systems. Best practices for ChatGPT, Perplexity, Google AI, and Grok integration.',
   keywords: [
     'AI share buttons',
     'LLM integration',
@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     'ChatGPT share',
     'Perplexity share',
     'Google AI share',
+    'Grok share',
     'AI citation',
     'brand attribution',
     'AI content strategy',
@@ -89,7 +90,7 @@ export default function StrategicAdvantage() {
         "name": "Which AI platforms should I include?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Start with ChatGPT, Perplexity, and Google AI due to their high visibility and integration capabilities."
+          "text": "Start with ChatGPT, Perplexity, Google AI, and Grok due to their high visibility and integration capabilities."
         }
       },
       {
@@ -172,7 +173,7 @@ export default function StrategicAdvantage() {
             </p>
             <ol className="space-y-6 ml-4">
               <li className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
-                <strong className="transition-smooth" style={{ color: 'var(--text-primary)' }}>Direct LLM Engagement:</strong> A new tab opens instantly, directing the user to their chosen AI chatbot, such as ChatGPT, Perplexity, or Google AI.
+                <strong className="transition-smooth" style={{ color: 'var(--text-primary)' }}>Direct LLM Engagement:</strong> A new tab opens instantly, directing the user to their chosen AI chatbot, such as ChatGPT, Perplexity, Google AI, or Grok.
               </li>
               <li className="transition-smooth" style={{ color: 'var(--text-secondary)' }}>
                 <strong className="transition-smooth" style={{ color: 'var(--text-primary)' }}>Prompt Pre-fill:</strong> The AI&apos;s input box is automatically populated with a structured command to summarize, analyze, or process the content from your page.
@@ -273,7 +274,7 @@ export default function StrategicAdvantage() {
               </div>
               <div className="p-4 rounded-soft transition-smooth" style={{ backgroundColor: 'rgba(16, 163, 127, 0.1)', border: '1px solid var(--accent)' }}>
                 <p className="transition-smooth" style={{ color: 'var(--text-primary)' }}>
-                  <strong>Platform Selection:</strong> Start with the available high-reach platforms: ChatGPT (largest user base, memory features), Perplexity (search-focused, explicit citation display), and Google AI (integrates with Google&apos;s ecosystem).
+                  <strong>Platform Selection:</strong> Start with the available high-reach platforms: ChatGPT (largest user base, memory features), Perplexity (search-focused, explicit citation display), Google AI (integrates with Google&apos;s ecosystem), and Grok (X/Twitter integration, real-time information).
                 </p>
               </div>
             </div>
