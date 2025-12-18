@@ -1,0 +1,100 @@
+LLM Index - AI Share Button Generator
+=====================================
+
+This file is intended as an index for both humans and AI systems to discover and navigate the content of this website.
+
+What this site is
+-----------------
+
+AI Share Button Generator helps content creators and website owners create embeddable share buttons that let readers send articles to AI assistants like ChatGPT, Perplexity, Google AI, and Grok with one click.
+
+The tool generates lightweight, framework-ready code snippets (HTML, React, Vue) with customizable prompts and branding. It's designed for publishers who want to integrate their content into LLM workflows and establish AI authority through citation.
+
+The service is free, stateless, and requires no backend infrastructure. The generated buttons are lightweight (≈8 KB) and work by reading data attributes from the embed script, making them easy to implement on any website.
+
+Start here
+----------
+
+• AI Share Button Generator
+  https://www.aisharebuttongenerator.com/
+  Main tool to create embeddable AI share buttons for your website. Generate lightweight code snippets (HTML, React, Vue) that let readers send articles to ChatGPT, Perplexity, Google AI, or Grok with one click.
+
+• The Strategic Advantage of AI Share Buttons
+  https://www.aisharebuttongenerator.com/strategic-advantage
+  Comprehensive guide explaining how AI share buttons integrate content into LLM workflows, establish AI authority through citation, and build brand recognition in AI systems. Includes best practices and implementation strategies.
+
+• Privacy Policy
+  https://www.aisharebuttongenerator.com/privacy-policy
+  Privacy Policy for AI Share Button Generator by SearchWell Labs LLC. Learn how we handle your data and protect your privacy when using our service.
+
+• Terms of Service
+  https://www.aisharebuttongenerator.com/terms
+  Terms of Service for AI Share Button Generator by SearchWell Labs LLC. Read our terms and conditions for using the AI share button generator service.
+
+• Disclaimer
+  https://www.aisharebuttongenerator.com/disclaimer
+  Disclaimer for AI Share Button Generator by SearchWell Labs LLC. Important information about third-party AI platforms and service limitations.
+
+• Feedback
+  https://www.aisharebuttongenerator.com/feedback
+  Share your thoughts to help improve AI Share Button Generator. Provide feedback on features, usability, and suggestions for enhancements.
+
+Core topics
+-----------
+
+Tools & Generators
+------------------
+
+• AI Share Button Generator
+  https://www.aisharebuttongenerator.com/
+  Main tool to create embeddable AI share buttons for your website. Generate lightweight code snippets (HTML, React, Vue) that let readers send articles to ChatGPT, Perplexity, Google AI, or Grok with one click.
+
+Guides & Strategy
+-----------------
+
+• The Strategic Advantage of AI Share Buttons
+  https://www.aisharebuttongenerator.com/strategic-advantage
+  Comprehensive guide explaining how AI share buttons integrate content into LLM workflows, establish AI authority through citation, and build brand recognition in AI systems. Includes best practices and implementation strategies.
+
+Legal & Policies
+----------------
+
+• Privacy Policy
+  https://www.aisharebuttongenerator.com/privacy-policy
+  Privacy Policy for AI Share Button Generator by SearchWell Labs LLC. Learn how we handle your data and protect your privacy when using our service.
+
+• Terms of Service
+  https://www.aisharebuttongenerator.com/terms
+  Terms of Service for AI Share Button Generator by SearchWell Labs LLC. Read our terms and conditions for using the AI share button generator service.
+
+• Disclaimer
+  https://www.aisharebuttongenerator.com/disclaimer
+  Disclaimer for AI Share Button Generator by SearchWell Labs LLC. Important information about third-party AI platforms and service limitations.
+
+Support
+-------
+
+• Feedback
+  https://www.aisharebuttongenerator.com/feedback
+  Share your thoughts to help improve AI Share Button Generator. Provide feedback on features, usability, and suggestions for enhancements.
+
+Reference
+---------
+
+• Feedback
+  https://www.aisharebuttongenerator.com/feedback
+  Share your thoughts and suggestions
+
+• Terms of Service
+  https://www.aisharebuttongenerator.com/terms
+  Legal terms and conditions
+
+• Privacy Policy
+  https://www.aisharebuttongenerator.com/privacy-policy
+  How we handle your data
+
+• Disclaimer
+  https://www.aisharebuttongenerator.com/disclaimer
+  Important information about third-party platforms
+
+Last updated: 2025-12-18
