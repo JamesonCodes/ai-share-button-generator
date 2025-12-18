@@ -18,11 +18,15 @@ const faqItems: FAQItem[] = [
   },
   {
     question: 'Which AI platforms should I include?',
-    answer: 'Start with ChatGPT, Perplexity, and Google AI due to their high visibility and integration capabilities.',
+    answer: 'Start with ChatGPT, Perplexity, Google AI, and Grok due to their high visibility and integration capabilities.',
   },
   {
     question: 'Where should I put these buttons?',
     answer: 'We recommend the sidebar or at the end of articles. Avoid placing them above the fold where they might seem spammy.',
+  },
+  {
+    question: 'Why don\'t I see the share buttons on mobile?',
+    answer: 'The AI share buttons are designed for desktop use and are hidden on mobile devices (screens ≤600px wide) to provide a cleaner mobile experience.',
   },
 ];
 
